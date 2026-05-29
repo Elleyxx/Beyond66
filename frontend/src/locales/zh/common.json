@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "home": "主页",
+    "explore": "探索",
+    "planner": "规划",
+    "community": "社区",
+    "search": "搜索"
+  },
+
+  "menu": {
+    "profile": "个人资料",
+    "darkMode": "深色模式",
+    "lightMode": "浅色模式",
+    "logout": "登出"
+  }
+}

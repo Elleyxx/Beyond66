@@ -1,0 +1,185 @@
+{
+    "countries":  {
+        "iceland":  {
+            "country":  "ICELAND",
+            "slug":  "iceland",
+            "title":  "The Epic of Fire and Ice",
+            "description":  "A raw, primordial landscape forged by volcanoes and glaciers, defined by roaring waterfalls, black sand beaches, and otherworldly lava fields.",
+            "heroImage": "/assets/images/Iceland/iceland_lagoon.jpg",
+            "bestTime":  [
+                {
+                    "season":  "Summer",
+                    "months":  "June - August",
+                    "description":  "Best for ring road trips, waterfalls, and midnight sun."
+                },
+                {
+                    "season":  "Winter",
+                    "months":  "September - March",
+                    "description":  "Perfect for northern lights and ice cave adventures."
+                }
+            ],
+            "quickFacts":  {
+                "capital":  "Reykjavík",
+                "currency":  "Icelandic Króna (ISK)",
+                "language":  "Icelandic",
+                "population":  "390,000+",
+                "timeZone":  "GMT+0"
+                
+            },
+            "highlights":  [
+                {
+                    "title":  "The Golden Circle",
+                    "subtitle":  "Iceland\u0027s Iconic Route",
+                    "description":  "A legendary route featuring Gullfoss waterfall, the erupting Geysir geothermal area, and Þingvellir National Park where tectonic plates visibly separate.",
+                    "image":  "/assets/images/Iceland/goldencircle2.jpeg"
+                },
+                {
+                    "title":  "Jökulsárlón \u0026 Diamond Beach",
+                    "subtitle":  "Glacial Wonders",
+                    "description":  "Electric-blue icebergs drift through a glacier lagoon before washing onto black volcanic sands like scattered diamonds.",
+                    "image":  "/assets/images/Iceland/jokulsarlon1.jpeg"
+                },
+                {
+                    "title":  "Blue Lagoon \u0026 Sky Lagoon",
+                    "subtitle":  "Geothermal Relaxation",
+                    "description":  "Mineral-rich geothermal pools surrounded by lava fields offer Iceland’s signature wellness experience.",
+                    "image":  "/assets/images/Iceland/bluelagoon1.jpeg"
+                }
+            ],
+            "destinations": [
+                {
+                    "name": "Reykjavík",
+                    "description": "Iceland's colorful capital known for Nordic cafés, creative culture, modern architecture, and lively waterfront districts.",
+                    "images": [
+                        "/assets/images/Iceland/Reykjavík1.jpeg",
+                        "/assets/images/Iceland/Reykjavík2.jpeg",
+                        "/assets/images/Iceland/Reykjavík3.jpg"
+                    ]
+                },
+                {
+                    "name": "The Golden Circle",
+                    "description": "Iceland's most famous scenic route featuring Þingvellir National Park, Gullfoss waterfall, and the erupting Geysir geothermal area.",
+                    "images": [
+                        "/assets/images/Iceland/goldencircle1.jpeg",
+                        "/assets/images/Iceland/goldencircle2.jpeg",
+                        "/assets/images/Iceland/goldencircle3.jpeg"
+                    ]
+                },
+                {
+                    "name": "Jökulsárlón Glacier Lagoon",
+                    "description": "A breathtaking glacial lagoon filled with floating blue icebergs drifting toward the Atlantic Ocean.",
+                    "images": [
+                        "/assets/images/Iceland/jokulsarlon1.jpeg",
+                        "/assets/images/Iceland/jokulsarlon2.jpeg",
+                        "/assets/images/Iceland/jokulsarlon3.jpeg"
+                    ]
+                },
+                {
+                    "name": "Diamond Beach",
+                    "description": "A dramatic black sand beach where crystal-clear ice chunks wash ashore like scattered diamonds.",
+                    "images": [
+                        "/assets/images/Iceland/diamondbeach1.jpeg",
+                        "/assets/images/Iceland/diamondbeach2.jpeg",
+                        "/assets/images/Iceland/diamondbeach3.jpeg"
+                    ]
+                },
+                {
+                    "name": "Vík í Mýrdal",
+                    "description": "A charming coastal village famous for black sand beaches, basalt sea stacks, and towering cliffs.",
+                    "images": [
+                        "/assets/images/Iceland/vik1.jpg",
+                        "/assets/images/Iceland/vik2.jpeg",
+                        "/assets/images/Iceland/vik3.jpeg"
+                    ]
+                },
+                {
+                    "name": "Blue Lagoon",
+                    "description": "Iceland's iconic geothermal spa surrounded by volcanic lava fields and mineral-rich milky-blue waters.",
+                    "images": [
+                        "/assets/images/Iceland/bluelagoon1.jpeg",
+                        "/assets/images/Iceland/bluelagoon2.jpeg",
+                        "/assets/images/Iceland/bluelagoon3.jpeg"
+                    ]
+                },
+                {
+                    "name": "Sky Lagoon",
+                    "description": "A luxurious oceanside geothermal spa offering infinity-edge lagoon views and Icelandic wellness rituals.",
+                    "images": [
+                        "/assets/images/Iceland/skylagoon1.jpeg",
+                        "/assets/images/Iceland/skylagoon2.jpeg",
+                        "/assets/images/Iceland/skylagoon3.jpeg"
+                    ]
+                },
+                {
+                    "name": "Skógafoss",
+                    "description": "One of Iceland's most powerful waterfalls, famous for its massive cascade and frequent rainbows.",
+                    "images": [
+                        "/assets/images/Iceland/skogafoss1.jpg",
+                        "/assets/images/Iceland/skogafoss2.jpeg",
+                        "/assets/images/Iceland/skogafoss3.jpeg"
+                    ]
+                },
+                {
+                    "name": "Seljalandsfoss",
+                    "description": "A unique waterfall where visitors can walk behind the cascading curtain of water.",
+                    "images": [
+                        "/assets/images/Iceland/seljalandsfoss1.jpg",
+                        "/assets/images/Iceland/seljalandsfoss2.jpg",
+                        "/assets/images/Iceland/seljalandsfoss3.jpeg"
+                    ]
+                },
+                {
+                    "name": "Snæfellsnes Peninsula",
+                    "description": "Often called 'Iceland in Miniature' for its volcanoes, glaciers, lava fields, cliffs, and fishing villages.",
+                    "images": [
+                        "/assets/images/Iceland/snaefellsnes1.jpg",
+                        "/assets/images/Iceland/snaefellsnes2.jpeg",
+                        "/assets/images/Iceland/snaefellsnes3.jpeg"
+                    ]
+                },
+                {
+                    "name": "Akureyri",
+                    "description": "A scenic northern Iceland town surrounded by fjords, mountains, and whale-watching opportunities.",
+                    "images": [
+                        "/assets/images/Iceland/akureyri1.jpg",
+                        "/assets/images/Iceland/akureyri2.jpeg",
+                        "/assets/images/Iceland/akureyri3.jpeg"
+                    ]
+                },
+                {
+                    "name": "Reynisfjara Black Sand Beach",
+                    "description": "A world-famous volcanic beach known for basalt columns, roaring Atlantic waves, and sea stacks.",
+                    "images": [
+                        "/assets/images/Iceland/reynisfjara1.jpg",
+                        "/assets/images/Iceland/reynisfjara2.jpeg",
+                        "/assets/images/Iceland/reynisfjara3.jpeg"
+                    ]
+                }
+            ],
+            "experiences": [
+                {
+                    "title": "Drive the Ring Road across Iceland",
+                    "image": "/assets/images/Iceland/goldencircle1.jpeg"
+                },
+                {
+                    "title": "Chase the Northern Lights",
+                    "image": "/assets/images/Iceland/snaefellsnes3.jpeg"
+                },
+                {
+                    "title": "Explore Crystal Ice Caves",
+                    "image": "/assets/images/Iceland/jokulsarlon2.jpeg"
+                },
+                {
+                    "title": "Relax in Geothermal Lagoons",
+                    "image": "/assets/images/Iceland/skylagoon1.jpeg"
+                },
+                {
+                    "title": "Photograph Waterfalls and Black Beaches",
+                    "image": "/assets/images/Iceland/vik1.jpg"
+                }
+            ]
+        }   
+    }
+}
+
+

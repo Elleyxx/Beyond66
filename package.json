@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@svg-maps/world": "^2.0.0",
+    "vue-svg-map": "^2.0.0-beta.1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+    "countries":  {
+                      "map":  {
+                                  "clickToExplore":  "Click to explore",
+                                  "topDestinations":  "Top Destinations",
+                                  "experiences":  "Experiences",
+                                  "noSummary":  "No summary yet.",
+                                  "noDescription":  "No description yet.",
+                                  "noDestinations":  "No destinations added yet.",
+                                  "noExperiences":  "No experiences added yet."
+                              }
+                  }
+}

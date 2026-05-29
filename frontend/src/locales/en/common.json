@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "home": "HOME",
+    "explore": "EXPLORE",
+    "planner": "PLANNER",
+    "community": "COMMUNITY",
+    "search": "Search"
+  },
+
+  "menu": {
+    "profile": "Profile",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "logout": "Logout"
+  }
+}

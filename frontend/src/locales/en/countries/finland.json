@@ -1,0 +1,178 @@
+{
+  "country": "FINLAND",
+  "slug": "finland",
+  "title": "Lakes, Saunas & Arctic Magic",
+  "description": "A peaceful northern country of vast forests, clean lakes, sauna culture, design cities, snowy Lapland, and aurora-filled winter skies.",
+  "heroImage": "/assets/images/Finland/finland.jpeg",
+  "bestTime": [
+    {
+      "season": "Summer",
+      "months": "June - August",
+      "description": "Best for lakes, cottages, sauna, kayaking, hiking, and long daylight."
+    },
+    {
+      "season": "Winter",
+      "months": "November - March",
+      "description": "Best for Lapland, snow resorts, reindeer, husky safaris, glass igloos, and northern lights."
+    }
+  ],
+  "quickFacts": {
+    "capital": "Helsinki",
+    "currency": "Euro (EUR)",
+    "language": "Finnish",
+    "population": "5.6 million+",
+    "timeZone": "GMT+2"
+  },
+  "highlights": [
+    {
+      "title": "Rovaniemi & Santa Claus Village",
+      "subtitle": "Arctic Circle",
+      "description": "A Lapland destination known for Santa Claus Village, reindeer, huskies, glass igloos, and snowy adventures.",
+      "image": "/assets/images/Finland/rovaniemi1.jpeg"
+    },
+    {
+      "title": "Finnish Lakeland",
+      "subtitle": "Lakes & Saunas",
+      "description": "A calm region of forests, cottages, lakes, canoeing, and traditional Finnish sauna culture.",
+      "image": "/assets/images/Finland/lakeland1.jpg"
+    },
+    {
+      "title": "Suomenlinna Sea Fortress",
+      "subtitle": "UNESCO Maritime Heritage",
+      "description": "A historic fortress spread across islands near Helsinki, reachable by a short ferry ride.",
+      "image": "/assets/images/Finland/suomenlinna1.jpg"
+    }
+  ],
+  "destinations": [
+    {
+      "name": "Helsinki",
+      "description": "Finland’s seaside capital is known for Nordic design, markets, architecture, islands, cafés, and coastal culture.",
+      "images": [
+        "/assets/images/Finland/helsinki1.jpeg",
+        "/assets/images/Finland/helsinki2.jpeg",
+        "/assets/images/Finland/helsinki3.jpg"
+      ]
+    },
+    {
+      "name": "Rovaniemi",
+      "description": "The capital of Finnish Lapland and gateway to Arctic adventures, Santa Claus Village, and northern lights trips.",
+      "images": [
+        "/assets/images/Finland/rovaniemi1.jpeg",
+        "/assets/images/Finland/rovaniemi2.jpg",
+        "/assets/images/Finland/rovaniemi3.jpg"
+      ]
+    },
+    {
+      "name": "Santa Claus Village",
+      "description": "A famous Arctic Circle attraction near Rovaniemi where visitors can meet Santa and enjoy winter activities.",
+      "images": [
+        "/assets/images/Finland/santaclaus1.jpg",
+        "/assets/images/Finland/santaclaus2.jpg",
+        "/assets/images/Finland/santaclaus3.jpg"
+      ]
+    },
+    {
+      "name": "Suomenlinna Sea Fortress",
+      "description": "An 18th-century sea fortress and UNESCO site across islands outside Helsinki.",
+      "images": [
+        "/assets/images/Finland/suomenlinna1.jpg",
+        "/assets/images/Finland/suomenlinna2.jpeg",
+        "/assets/images/Finland/suomenlinna3.jpeg"
+      ]
+    },
+    {
+      "name": "Lake Saimaa",
+      "description": "Finland’s largest lake region, known for cottages, forests, sauna, kayaking, and peaceful slow travel.",
+      "images": [
+        "/assets/images/Finland/saimaa1.jpg",
+        "/assets/images/Finland/saimaa2.jpeg",
+        "/assets/images/Finland/saimaa3.jpg"
+      ]
+    },
+    {
+      "name": "Levi",
+      "description": "A popular Lapland ski resort offering slopes, snow activities, aurora experiences, and winter lodges.",
+      "images": [
+        "/assets/images/Finland/levi1.jpeg",
+        "/assets/images/Finland/levi2.jpeg",
+        "/assets/images/Finland/levi3.jpg"
+      ]
+    },
+    {
+      "name": "Porvoo",
+      "description": "A charming old town known for colorful riverside warehouses, cobbled streets, cafés, and historic wooden houses.",
+      "images": [
+        "/assets/images/Finland/porvoo1.jpg",
+        "/assets/images/Finland/porvoo2.jpg",
+        "/assets/images/Finland/porvoo3.jpg"
+      ]
+    },
+    {
+      "name": "Turku",
+      "description": "Finland’s oldest city, known for its riverside atmosphere, castle, cathedral, museums, and archipelago access.",
+      "images": [
+        "/assets/images/Finland/turku1.jpg",
+        "/assets/images/Finland/turku2.jpeg",
+        "/assets/images/Finland/turku3.jpg"
+      ]
+    },
+    {
+      "name": "Nuuksio National Park",
+      "description": "A forest-and-lake national park near Helsinki, ideal for short hikes, nature escapes, and quiet scenery.",
+      "images": [
+        "/assets/images/Finland/nuuksio1.jpeg",
+        "/assets/images/Finland/nuuksio2.jpg",
+        "/assets/images/Finland/nuuksio3.jpg"
+      ]
+    },
+    {
+      "name": "Kakslauttanen",
+      "description": "A Lapland resort area famous for glass igloos, aurora viewing, snowy forests, and Arctic stays.",
+      "images": [
+        "/assets/images/Finland/kakslauttanen1.jpg",
+        "/assets/images/Finland/kakslauttanen2.jpg",
+        "/assets/images/Finland/kakslauttanen3.jpg"
+      ]
+    },
+    {
+      "name": "Oulanka National Park",
+      "description": "A scenic national park known for rivers, suspension bridges, waterfalls, and the Karhunkierros hiking trail.",
+      "images": [
+        "/assets/images/Finland/oulanka1.jpeg",
+        "/assets/images/Finland/oulanka2.jpeg",
+        "/assets/images/Finland/oulanka3.jpg"
+      ]
+    },
+    {
+      "name": "Åland Islands",
+      "description": "A Swedish-speaking island region between Finland and Sweden, known for cycling, sea views, and island life.",
+      "images": [
+        "/assets/images/Finland/aland1.jpeg",
+        "/assets/images/Finland/aland2.jpg",
+        "/assets/images/Finland/aland3.jpg"
+      ]
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Sleep Under the Aurora in a Glass Igloo",
+      "image": "/assets/images/Finland/kakslauttanen1.jpg"
+    },
+    {
+      "title": "Try a Traditional Finnish Sauna",
+      "image": "/assets/images/Finland/saimaa1.jpg"
+    },
+    {
+      "title": "Meet Reindeer and Huskies in Lapland",
+      "image": "/assets/images/Finland/rovaniemi2.jpg"
+    },
+    {
+      "title": "Explore the Finnish Lakeland by Canoe",
+      "image": "/assets/images/Finland/saimaa2.jpeg"
+    },
+    {
+      "title": "Take a Ferry to Suomenlinna",
+      "image": "/assets/images/Finland/suomenlinna1.jpg"
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "country": "丹麦",
+  "slug": "denmark",
+  "title": "海格、海岸城市与北欧魅力",
+  "description": "一个充满温馨氛围的北欧国家，拥有色彩缤纷的港湾、自行车城市、皇家城堡、设计文化、海岛、小镇与适合家庭旅行的景点。",
+  "heroImage": "/assets/images/Denmark/denmark1.jpg",
+  "bestTime": [
+    {
+      "season": "夏季",
+      "months": "6月 - 8月",
+      "description": "最适合骑行、海港生活、海滩、群岛、夏季节庆与漫长白昼。"
+    },
+    {
+      "season": "春季与秋季",
+      "months": "4月 - 5月 / 9月 - 10月",
+      "description": "适合城市旅行、博物馆、城堡、咖啡馆与避开旅游高峰。"
+    }
+  ],
+
+  "quickFacts": {
+    "capital": "哥本哈根",
+    "currency": "丹麦克朗（DKK）",
+    "language": "丹麦语",
+    "population": "590万+",
+    "timeZone": "GMT+1"
+  },
+
+  "highlights": [
+    {
+      "title": "新港与哥本哈根运河",
+      "subtitle": "彩色港湾生活",
+      "description": "历史悠久的海滨区，以彩色房屋、木船、咖啡馆与运河风景闻名。",
+      "image": "/assets/images/Denmark/nyhavn1.jpg"
+    },
+    {
+      "title": "趣伏里公园",
+      "subtitle": "历史游乐园",
+      "description": "世界最古老的游乐园之一，以花园、复古游乐设施、灯光与童话氛围著称。",
+      "image": "/assets/images/Denmark/tivoli1.jpg"
+    },
+    {
+      "title": "乐高之家与乐高乐园",
+      "subtitle": "创意丹麦",
+      "description": "比隆作为乐高诞生地，拥有创意空间、乐高艺术作品与家庭娱乐设施。",
+      "image": "/assets/images/Denmark/legoland1.jpg"
+    }
+  ],
+
+  "destinations": [
+    {
+      "name": "哥本哈根",
+      "description": "丹麦首都，以自行车文化、皇家宫殿、北欧设计、美食、运河与海滨社区闻名。",
+      "images": [
+        "/assets/images/Denmark/copenhagen1.jpeg",
+        "/assets/images/Denmark/copenhagen2.jpeg",
+        "/assets/images/Denmark/copenhagen3.jpeg"
+      ]
+    },
+
+    {
+      "name": "新港",
+      "description": "著名17世纪港湾区，以彩色建筑、木船、咖啡馆与经典哥本哈根景观闻名。",
+      "images": [
+        "/assets/images/Denmark/nyhavn1.jpg",
+        "/assets/images/Denmark/nyhavn2.jpg",
+        "/assets/images/Denmark/nyhavn3.jpg"
+      ]
+    },
+
+    {
+      "name": "趣伏里公园",
+      "description": "位于哥本哈根的历史游乐园，以花园、灯光、游乐设施与童话氛围著称。",
+      "images": [
+        "/assets/images/Denmark/tivoli1.jpg",
+        "/assets/images/Denmark/tivoli2.jpg",
+        "/assets/images/Denmark/tivoli3.jpg"
+      ]
+    },
+
+    {
+      "name": "奥胡斯",
+      "description": "丹麦第二大城市，拥有博物馆、创意街区、海岸景观、美食文化与现代建筑。",
+      "images": [
+        "/assets/images/Denmark/aarhus1.jpg",
+        "/assets/images/Denmark/aarhus2.jpg",
+        "/assets/images/Denmark/aarhus3.jpg"
+      ]
+    },
+
+    {
+      "name": "欧登塞",
+      "description": "安徒生故乡，以博物馆、鹅卵石街道与童话文化闻名的历史城市。",
+      "images": [
+        "/assets/images/Denmark/odense1.jpeg",
+        "/assets/images/Denmark/odense2.jpg",
+        "/assets/images/Denmark/odense3.jpg"
+      ]
+    },
+
+    {
+      "name": "斯卡恩",
+      "description": "位于丹麦北端的海滨小镇，以沙丘、海滩、艺术家文化与两海交汇景观闻名。",
+      "images": [
+        "/assets/images/Denmark/skagen1.jpeg",
+        "/assets/images/Denmark/skagen2.jpeg",
+        "/assets/images/Denmark/skagen3.jpeg"
+      ]
+    },
+
+    {
+      "name": "乐高乐园比隆",
+      "description": "位于乐高诞生地的家庭景点，拥有主题设施、迷你世界与创意娱乐体验。",
+      "images": [
+        "/assets/images/Denmark/legoland1.jpg",
+        "/assets/images/Denmark/legoland2.jpeg",
+        "/assets/images/Denmark/legoland3.jpeg"
+      ]
+    },
+
+    {
+      "name": "乐高之家",
+      "description": "位于比隆的互动创意空间，专注于乐高设计、想象力与游戏体验。",
+      "images": [
+        "/assets/images/Denmark/legohouse1.jpg",
+        "/assets/images/Denmark/legohouse2.jpg",
+        "/assets/images/Denmark/legohouse3.jpg"
+      ]
+    },
+
+    {
+      "name": "罗森堡城堡",
+      "description": "位于哥本哈根的文艺复兴城堡，收藏皇家珍宝、王冠与花园景观。",
+      "images": [
+        "/assets/images/Denmark/rosenborg1.jpg",
+        "/assets/images/Denmark/rosenborg2.jpg",
+        "/assets/images/Denmark/rosenborg3.jpg"
+      ]
+    },
+
+    {
+      "name": "克伦堡宫",
+      "description": "位于赫尔辛格的联合国世界遗产城堡，也是莎士比亚《哈姆雷特》的背景地。",
+      "images": [
+        "/assets/images/Denmark/kronborg1.jpeg",
+        "/assets/images/Denmark/kronborg2.jpg",
+        "/assets/images/Denmark/kronborg3.jpeg"
+      ]
+    },
+
+    {
+      "name": "莫恩悬崖",
+      "description": "俯瞰波罗的海的壮丽白色石灰岩悬崖，是热门自然步道与海岸景观地。",
+      "images": [
+        "/assets/images/Denmark/monsklint1.jpg",
+        "/assets/images/Denmark/monsklint2.jpg",
+        "/assets/images/Denmark/monsklint3.jpg"
+      ]
+    },
+
+    {
+      "name": "里伯",
+      "description": "丹麦最古老的小镇，以中世纪街道、维京文化、历史建筑与大教堂闻名。",
+      "images": [
+        "/assets/images/Denmark/ribe1.jpg",
+        "/assets/images/Denmark/ribe2.jpeg",
+        "/assets/images/Denmark/ribe3.jpeg"
+      ]
+    }
+  ],
+
+  "experiences": [
+    {
+      "title": "骑行穿越哥本哈根",
+      "image": "/assets/images/Denmark/copenhagen2.jpeg"
+    },
+    {
+      "title": "在运河咖啡馆体验 Hygge 文化",
+      "image": "/assets/images/Denmark/nyhavn1.jpg"
+    },
+    {
+      "title": "夜晚漫步趣伏里公园",
+      "image": "/assets/images/Denmark/tivoli1.jpg"
+    },
+    {
+      "title": "在比隆探索乐高世界",
+      "image": "/assets/images/Denmark/legoland1.jpg"
+    },
+    {
+      "title": "探访城堡与维京历史遗迹",
+      "image": "/assets/images/Denmark/kronborg3.jpeg"
+    }
+  ]
+}

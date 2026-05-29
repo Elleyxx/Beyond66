@@ -1,0 +1,178 @@
+{
+  "country": "DENMARK",
+  "slug": "denmark",
+  "title": "Hygge, Coastal Cities & Nordic Charm",
+  "description": "A cozy Scandinavian country of colorful harbors, cycling cities, royal castles, design culture, islands, seaside towns, and family-friendly attractions.",
+  "heroImage": "/assets/images/Denmark/denmark1.jpg",
+  "bestTime": [
+    {
+      "season": "Summer",
+      "months": "June - August",
+      "description": "Best for cycling, harbor life, beaches, islands, festivals, and long daylight evenings."
+    },
+    {
+      "season": "Spring & Autumn",
+      "months": "April - May / September - October",
+      "description": "Good for city breaks, museums, castles, cafés, and fewer crowds."
+    }
+  ],
+  "quickFacts": {
+    "capital": "Copenhagen",
+    "currency": "Danish Krone (DKK)",
+    "language": "Danish",
+    "population": "5.9 million+",
+    "timeZone": "GMT+1"
+  },
+  "highlights": [
+    {
+      "title": "Nyhavn & Copenhagen Canals",
+      "subtitle": "Colorful Harbor Life",
+      "description": "A historic waterfront district lined with colorful townhouses, wooden ships, cafés, and canal views.",
+      "image": "/assets/images/Denmark/nyhavn1.jpg"
+    },
+    {
+      "title": "Tivoli Gardens",
+      "subtitle": "Historic Amusement Park",
+      "description": "One of the world’s oldest amusement parks, known for gardens, vintage rides, lights, and fairytale atmosphere.",
+      "image": "/assets/images/Denmark/tivoli1.jpg"
+    },
+    {
+      "title": "LEGO House & LEGOLAND Billund",
+      "subtitle": "Creative Denmark",
+      "description": "Billund celebrates the birthplace of LEGO with creative zones, brick masterpieces, and family attractions.",
+      "image": "/assets/images/Denmark/legoland1.jpg"
+    }
+  ],
+  "destinations": [
+    {
+      "name": "Copenhagen",
+      "description": "Denmark’s capital is known for cycling culture, royal palaces, Nordic design, food, canals, and waterfront neighborhoods.",
+      "images": [
+        "/assets/images/Denmark/copenhagen1.jpeg",
+        "/assets/images/Denmark/copenhagen2.jpeg",
+        "/assets/images/Denmark/copenhagen3.jpeg"
+      ]
+    },
+    {
+      "name": "Nyhavn",
+      "description": "A famous 17th-century harbor area with colorful buildings, wooden ships, cafés, and classic Copenhagen scenery.",
+      "images": [
+        "/assets/images/Denmark/nyhavn1.jpg",
+        "/assets/images/Denmark/nyhavn2.jpg",
+        "/assets/images/Denmark/nyhavn3.jpg"
+      ]
+    },
+    {
+      "name": "Tivoli Gardens",
+      "description": "A historic amusement park in Copenhagen known for gardens, lights, rides, performances, and fairytale charm.",
+      "images": [
+        "/assets/images/Denmark/tivoli1.jpg",
+        "/assets/images/Denmark/tivoli2.jpg",
+        "/assets/images/Denmark/tivoli3.jpg"
+      ]
+    },
+    {
+      "name": "Aarhus",
+      "description": "Denmark’s second-largest city offers museums, creative neighborhoods, coastal views, food culture, and modern architecture.",
+      "images": [
+        "/assets/images/Denmark/aarhus1.jpg",
+        "/assets/images/Denmark/aarhus2.jpg",
+        "/assets/images/Denmark/aarhus3.jpg"
+      ]
+    },
+    {
+      "name": "Odense",
+      "description": "A historic city associated with Hans Christian Andersen, with museums, cobbled streets, and Danish fairytale heritage.",
+      "images": [
+        "/assets/images/Denmark/odense1.jpeg",
+        "/assets/images/Denmark/odense2.jpg",
+        "/assets/images/Denmark/odense3.jpg"
+      ]
+    },
+    {
+      "name": "Skagen",
+      "description": "A northern seaside town where two seas meet, known for beaches, dunes, artists, and distinctive coastal light.",
+      "images": [
+        "/assets/images/Denmark/skagen1.jpeg",
+        "/assets/images/Denmark/skagen2.jpeg",
+        "/assets/images/Denmark/skagen3.jpeg"
+      ]
+    },
+    {
+      "name": "LEGOLAND Billund",
+      "description": "A family attraction in the birthplace of LEGO, featuring themed rides, miniature worlds, and creative experiences.",
+      "images": [
+        "/assets/images/Denmark/legoland1.jpg",
+        "/assets/images/Denmark/legoland2.jpeg",
+        "/assets/images/Denmark/legoland3.jpeg"
+      ]
+    },
+    {
+      "name": "LEGO House",
+      "description": "An interactive creative experience in Billund dedicated to LEGO play, design, and imagination.",
+      "images": [
+        "/assets/images/Denmark/legohouse1.jpg",
+        "/assets/images/Denmark/legohouse2.jpg",
+        "/assets/images/Denmark/legohouse3.jpg"
+      ]
+    },
+    {
+      "name": "Rosenborg Castle",
+      "description": "A Renaissance castle in Copenhagen housing royal collections, gardens, and Denmark’s crown jewels.",
+      "images": [
+        "/assets/images/Denmark/rosenborg1.jpg",
+        "/assets/images/Denmark/rosenborg2.jpg",
+        "/assets/images/Denmark/rosenborg3.jpg"
+      ]
+    },
+    {
+      "name": "Kronborg Castle",
+      "description": "A UNESCO-listed castle in Helsingør, famously associated with Shakespeare’s Hamlet.",
+      "images": [
+        "/assets/images/Denmark/kronborg1.jpeg",
+        "/assets/images/Denmark/kronborg2.jpg",
+        "/assets/images/Denmark/kronborg3.jpeg"
+      ]
+    },
+    {
+      "name": "Møns Klint",
+      "description": "A dramatic stretch of white chalk cliffs overlooking the Baltic Sea, popular for nature walks and coastal views.",
+      "images": [
+        "/assets/images/Denmark/monsklint1.jpg",
+        "/assets/images/Denmark/monsklint2.jpg",
+        "/assets/images/Denmark/monsklint3.jpg"
+      ]
+    },
+    {
+      "name": "Ribe",
+      "description": "Denmark’s oldest town, known for medieval streets, Viking heritage, historic houses, and cathedral views.",
+      "images": [
+        "/assets/images/Denmark/ribe1.jpg",
+        "/assets/images/Denmark/ribe2.jpeg",
+        "/assets/images/Denmark/ribe3.jpeg"
+      ]
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Cycle Through Copenhagen",
+      "image": "/assets/images/Denmark/copenhagen2.jpeg"
+    },
+    {
+      "title": "Experience Hygge in Canal-Side Cafés",
+      "image": "/assets/images/Denmark/nyhavn1.jpg"
+    },
+    {
+      "title": "Spend an Evening at Tivoli Gardens",
+      "image": "/assets/images/Denmark/tivoli1.jpg"
+    },
+    {
+      "title": "Explore LEGO in Billund",
+      "image": "/assets/images/Denmark/legoland1.jpg"
+    },
+    {
+      "title": "Visit Castles and Viking Heritage Sites",
+      "image": "/assets/images/Denmark/kronborg3.jpeg"
+    }
+  ]
+}

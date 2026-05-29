@@ -1,0 +1,194 @@
+{
+  "country": "瑞典",
+  "slug": "sweden",
+  "title": "设计、森林与北欧静谧",
+  "description": "一个融合群岛城市、中世纪古城、北极荒野、设计文化、森林湖泊与海岸群岛的精致北欧国度。",
+  "heroImage": "/assets/images/Sweden/sweden1.jpeg",
+
+  "bestTime": [
+    {
+      "season": "夏季",
+      "months": "6月 - 8月",
+      "description": "最适合探索斯德哥尔摩群岛、户外咖啡馆、跳岛旅行与漫长白昼。"
+    },
+    {
+      "season": "冬季",
+      "months": "12月 - 3月",
+      "description": "最佳瑞典拉普兰雪地活动、极光观赏与冰酒店体验季节。"
+    }
+  ],
+
+  "quickFacts": {
+    "capital": "斯德哥尔摩",
+    "currency": "瑞典克朗（SEK）",
+    "language": "瑞典语",
+    "population": "1050万+",
+    "timeZone": "GMT+1"
+  },
+
+  "highlights": [
+    {
+      "title": "斯德哥尔摩群岛",
+      "subtitle": "三万座群岛",
+      "description": "由岛屿、礁石、渡轮航线、独木舟路线与红色木屋组成的广阔海洋景观。",
+      "image": "/assets/images/Sweden/stockholmarchipelago1.jpg"
+    },
+    {
+      "title": "老城区（Gamla Stan）",
+      "subtitle": "中世纪斯德哥尔摩",
+      "description": "欧洲最具氛围的古城区之一，拥有鹅卵石小巷、彩色建筑与浓厚皇室历史。",
+      "image": "/assets/images/Sweden/gamlastan1.jpeg"
+    },
+    {
+      "title": "瑞典拉普兰与冰酒店",
+      "subtitle": "北极瑞典",
+      "description": "充满萨米文化、驯鹿、极光与雪地景观的北极地区，也是著名冰酒店所在地。",
+      "image": "/assets/images/Sweden/icehotel1.jpeg"
+    }
+  ],
+
+  "destinations": [
+    {
+      "name": "斯德哥尔摩",
+      "description": "瑞典首都建立于群岛之间，融合皇家历史、现代设计、博物馆与海滨生活。",
+      "images": [
+        "/assets/images/Sweden/stockholm1.jpg",
+        "/assets/images/Sweden/stockholm2.jpg",
+        "/assets/images/Sweden/stockholm3.jpeg"
+      ]
+    },
+
+    {
+      "name": "老城区（Gamla Stan）",
+      "description": "斯德哥尔摩古城区拥有中世纪街道、彩色广场、教堂、咖啡馆与皇家宫殿。",
+      "images": [
+        "/assets/images/Sweden/gamlastan1.jpeg",
+        "/assets/images/Sweden/gamlastan2.jpg",
+        "/assets/images/Sweden/gamlastan3.jpeg"
+      ]
+    },
+
+    {
+      "name": "斯德哥尔摩群岛",
+      "description": "由数千座岛屿组成的海域，可搭乘渡轮、划独木舟、徒步与入住宁静海岸村庄。",
+      "images": [
+        "/assets/images/Sweden/stockholmarchipelago1.jpg",
+        "/assets/images/Sweden/stockholmarchipelago2.png",
+        "/assets/images/Sweden/stockholmarchipelago3.jpg"
+      ]
+    },
+
+    {
+      "name": "哥德堡",
+      "description": "一座轻松悠闲的西海岸城市，以运河、海鲜、咖啡馆、公园与群岛风景闻名。",
+      "images": [
+        "/assets/images/Sweden/gothenburg1.jpeg",
+        "/assets/images/Sweden/gothenburg2.jpg",
+        "/assets/images/Sweden/gothenburg3.jpg"
+      ]
+    },
+
+    {
+      "name": "阿比斯库国家公园",
+      "description": "著名北极荒野地区，以极光、徒步路线、山脉与北境景观闻名。",
+      "images": [
+        "/assets/images/Sweden/abisko1.jpg",
+        "/assets/images/Sweden/abisko2.jpg",
+        "/assets/images/Sweden/abisko3.jpg"
+      ]
+    },
+
+    {
+      "name": "基律纳",
+      "description": "位于瑞典拉普兰的小镇，以北极自然、萨米文化、极光与冰酒店闻名。",
+      "images": [
+        "/assets/images/Sweden/kiruna1.jpg",
+        "/assets/images/Sweden/kiruna2.jpg",
+        "/assets/images/Sweden/kiruna3.jpeg"
+      ]
+    },
+
+    {
+      "name": "冰酒店",
+      "description": "位于尤卡斯耶尔维的独特酒店与艺术展，每年以冰雪重新建造。",
+      "images": [
+        "/assets/images/Sweden/icehotel1.jpeg",
+        "/assets/images/Sweden/icehotel2.jpeg",
+        "/assets/images/Sweden/icehotel3.jpg"
+      ]
+    },
+
+    {
+      "name": "维斯比",
+      "description": "位于哥特兰岛的中世纪古城，以城墙、鹅卵石街道、遗迹与波罗的海风情闻名。",
+      "images": [
+        "/assets/images/Sweden/visby1.jpeg",
+        "/assets/images/Sweden/visby2.jpg",
+        "/assets/images/Sweden/visby3.jpg"
+      ]
+    },
+
+    {
+      "name": "马尔默",
+      "description": "瑞典南部城市，以现代建筑、海滨公园、多元美食与通往哥本哈根的便利交通著称。",
+      "images": [
+        "/assets/images/Sweden/malmo1.jpg",
+        "/assets/images/Sweden/malmo2.jpeg",
+        "/assets/images/Sweden/malmo3.jpeg"
+      ]
+    },
+
+    {
+      "name": "达拉纳",
+      "description": "拥有湖泊、红色木屋、森林与传统民俗文化的经典瑞典乡村地区。",
+      "images": [
+        "/assets/images/Sweden/dalarna1.jpg",
+        "/assets/images/Sweden/dalarna2.jpg",
+        "/assets/images/Sweden/dalarna3.jpg"
+      ]
+    },
+
+    {
+      "name": "哥特兰岛",
+      "description": "波罗的海岛屿，以石灰岩海岸、中世纪文化、夏日海滩与维斯比古城闻名。",
+      "images": [
+        "/assets/images/Sweden/gotland1.jpeg",
+        "/assets/images/Sweden/gotland2.jpeg",
+        "/assets/images/Sweden/gotland3.jpg"
+      ]
+    },
+
+    {
+      "name": "乌普萨拉",
+      "description": "历史悠久的大学城，以大教堂、河岸景观、花园与文化遗产闻名。",
+      "images": [
+        "/assets/images/Sweden/uppsala1.jpeg",
+        "/assets/images/Sweden/uppsala2.jpg",
+        "/assets/images/Sweden/uppsala3.jpeg"
+      ]
+    }
+  ],
+
+  "experiences": [
+    {
+      "title": "跳岛探索斯德哥尔摩群岛",
+      "image": "/assets/images/Sweden/stockholmarchipelago1.jpg"
+    },
+    {
+      "title": "漫步老城区（Gamla Stan）",
+      "image": "/assets/images/Sweden/gamlastan1.jpeg"
+    },
+    {
+      "title": "入住冰酒店",
+      "image": "/assets/images/Sweden/icehotel1.jpeg"
+    },
+    {
+      "title": "在阿比斯库观赏北极光",
+      "image": "/assets/images/Sweden/abisko1.jpg"
+    },
+    {
+      "title": "体验瑞典 Fika 咖啡文化",
+      "image": "/assets/images/Sweden/stockholm2.jpg"
+    }
+  ]
+}

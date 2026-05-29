@@ -1,0 +1,193 @@
+{
+  "country": "芬兰",
+  "slug": "finland",
+  "title": "湖泊、桑拿与北极奇境",
+  "description": "一个宁静的北欧国家，拥有广阔森林、纯净湖泊、传统桑拿文化、设计城市、雪白拉普兰与被极光点亮的冬季天空。",
+  "heroImage": "/assets/images/Finland/finland.jpeg",
+  "bestTime": [
+    {
+      "season": "夏季",
+      "months": "6月 - 8月",
+      "description": "最适合湖区旅行、小木屋度假、桑拿、划独木舟、徒步与长时间白昼。"
+    },
+    {
+      "season": "冬季",
+      "months": "11月 - 3月",
+      "description": "最佳拉普兰雪地活动、驯鹿体验、哈士奇雪橇、玻璃冰屋与极光观赏季节。"
+    }
+  ],
+
+  "quickFacts": {
+    "capital": "赫尔辛基",
+    "currency": "欧元（EUR）",
+    "language": "芬兰语",
+    "population": "560万+",
+    "timeZone": "GMT+2"
+  },
+
+  "highlights": [
+    {
+      "title": "罗瓦涅米与圣诞老人村",
+      "subtitle": "北极圈",
+      "description": "拉普兰著名目的地，以圣诞老人村、驯鹿、哈士奇、玻璃冰屋与雪地冒险闻名。",
+      "image": "/assets/images/Finland/rovaniemi1.jpeg"
+    },
+    {
+      "title": "芬兰湖区",
+      "subtitle": "湖泊与桑拿",
+      "description": "一片宁静的森林湖泊地区，以小木屋、划船、湖景与传统芬兰桑拿文化著称。",
+      "image": "/assets/images/Finland/lakeland1.jpg"
+    },
+    {
+      "title": "芬兰堡海上要塞",
+      "subtitle": "联合国海事遗产",
+      "description": "位于赫尔辛基外海群岛上的历史要塞，可搭乘短程渡轮抵达。",
+      "image": "/assets/images/Finland/suomenlinna1.jpg"
+    }
+  ],
+
+  "destinations": [
+    {
+      "name": "赫尔辛基",
+      "description": "芬兰海滨首都，以北欧设计、市集、建筑、群岛、咖啡馆与海岸文化闻名。",
+      "images": [
+        "/assets/images/Finland/helsinki1.jpeg",
+        "/assets/images/Finland/helsinki2.jpeg",
+        "/assets/images/Finland/helsinki3.jpg"
+      ]
+    },
+
+    {
+      "name": "罗瓦涅米",
+      "description": "芬兰拉普兰首府，也是北极冒险、圣诞老人村与极光之旅的门户。",
+      "images": [
+        "/assets/images/Finland/rovaniemi1.jpeg",
+        "/assets/images/Finland/rovaniemi2.jpg",
+        "/assets/images/Finland/rovaniemi3.jpg"
+      ]
+    },
+
+    {
+      "name": "圣诞老人村",
+      "description": "位于北极圈附近的著名景点，可见到圣诞老人并体验各种冬季活动。",
+      "images": [
+        "/assets/images/Finland/santaclaus1.jpg",
+        "/assets/images/Finland/santaclaus2.jpg",
+        "/assets/images/Finland/santaclaus3.jpg"
+      ]
+    },
+
+    {
+      "name": "芬兰堡海上要塞",
+      "description": "建于18世纪的海上堡垒与联合国世界遗产，分布于赫尔辛基外海群岛。",
+      "images": [
+        "/assets/images/Finland/suomenlinna1.jpg",
+        "/assets/images/Finland/suomenlinna2.jpeg",
+        "/assets/images/Finland/suomenlinna3.jpeg"
+      ]
+    },
+
+    {
+      "name": "塞马湖",
+      "description": "芬兰最大湖区，以森林、小木屋、桑拿、划船与慢旅行闻名。",
+      "images": [
+        "/assets/images/Finland/saimaa1.jpg",
+        "/assets/images/Finland/saimaa2.jpeg",
+        "/assets/images/Finland/saimaa3.jpg"
+      ]
+    },
+
+    {
+      "name": "列维",
+      "description": "热门拉普兰滑雪度假区，提供滑雪、雪地活动、极光与冬季度假体验。",
+      "images": [
+        "/assets/images/Finland/levi1.jpeg",
+        "/assets/images/Finland/levi2.jpeg",
+        "/assets/images/Finland/levi3.jpg"
+      ]
+    },
+
+    {
+      "name": "波尔沃",
+      "description": "一座迷人的古镇，以彩色河岸仓库、鹅卵石街道、咖啡馆与木屋闻名。",
+      "images": [
+        "/assets/images/Finland/porvoo1.jpg",
+        "/assets/images/Finland/porvoo2.jpg",
+        "/assets/images/Finland/porvoo3.jpg"
+      ]
+    },
+
+    {
+      "name": "图尔库",
+      "description": "芬兰最古老的城市，以河岸氛围、城堡、大教堂与群岛风景闻名。",
+      "images": [
+        "/assets/images/Finland/turku1.jpg",
+        "/assets/images/Finland/turku2.jpeg",
+        "/assets/images/Finland/turku3.jpg"
+      ]
+    },
+
+    {
+      "name": "努克西奥国家公园",
+      "description": "位于赫尔辛基附近的森林湖泊国家公园，适合短途徒步与自然放松。",
+      "images": [
+        "/assets/images/Finland/nuuksio1.jpeg",
+        "/assets/images/Finland/nuuksio2.jpg",
+        "/assets/images/Finland/nuuksio3.jpg"
+      ]
+    },
+
+    {
+      "name": "卡克斯劳塔宁",
+      "description": "著名拉普兰度假区，以玻璃冰屋、极光与北极森林体验闻名。",
+      "images": [
+        "/assets/images/Finland/kakslauttanen1.jpg",
+        "/assets/images/Finland/kakslauttanen2.jpg",
+        "/assets/images/Finland/kakslauttanen3.jpg"
+      ]
+    },
+
+    {
+      "name": "欧兰卡国家公园",
+      "description": "以河流、吊桥、瀑布与熊之环徒步路线闻名的自然公园。",
+      "images": [
+        "/assets/images/Finland/oulanka1.jpeg",
+        "/assets/images/Finland/oulanka2.jpeg",
+        "/assets/images/Finland/oulanka3.jpg"
+      ]
+    },
+
+    {
+      "name": "奥兰群岛",
+      "description": "位于芬兰与瑞典之间的群岛地区，以骑行、海景与岛屿生活闻名。",
+      "images": [
+        "/assets/images/Finland/aland1.jpeg",
+        "/assets/images/Finland/aland2.jpg",
+        "/assets/images/Finland/aland3.jpg"
+      ]
+    }
+  ],
+
+  "experiences": [
+    {
+      "title": "入住极光玻璃冰屋",
+      "image": "/assets/images/Finland/kakslauttanen1.jpg"
+    },
+    {
+      "title": "体验传统芬兰桑拿",
+      "image": "/assets/images/Finland/saimaa1.jpg"
+    },
+    {
+      "title": "在拉普兰邂逅驯鹿与哈士奇",
+      "image": "/assets/images/Finland/rovaniemi2.jpg"
+    },
+    {
+      "title": "划独木舟探索芬兰湖区",
+      "image": "/assets/images/Finland/saimaa2.jpeg"
+    },
+    {
+      "title": "搭乘渡轮前往芬兰堡",
+      "image": "/assets/images/Finland/suomenlinna1.jpg"
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "country": "挪威",
+  "slug": "norway",
+  "title": "峡湾、极光与北境冒险",
+  "description": "一片由深邃峡湾、北极群岛、山岳公路与海岸城市构成的壮丽北境，也是世界最震撼铁路与徒步路线的所在地。",
+  "heroImage": "/assets/images/Norway/BergenNorway.jpg",
+  "bestTime": [
+    {
+      "season": "夏季",
+      "months": "6月 - 8月",
+      "description": "最适合峡湾巡航、徒步、自驾旅行，以及北部午夜太阳体验。"
+    },
+    {
+      "season": "冬季",
+      "months": "11月 - 3月",
+      "description": "最佳极光观赏季，可体验雪地犬拉雪橇、北极雪景与冬季峡湾风光。"
+    }
+  ],
+
+  "quickFacts": {
+    "capital": "奥斯陆",
+    "currency": "挪威克朗（NOK）",
+    "language": "挪威语",
+    "population": "550万+",
+    "timeZone": "GMT+1"
+  },
+
+  "highlights": [
+    {
+      "title": "盖朗厄尔峡湾与纳柔依峡湾",
+      "subtitle": "联合国世界遗产峡湾",
+      "description": "挪威最具代表性的峡湾景观之一，被陡峭山崖、瀑布与翡翠色海水包围。",
+      "image": "/assets/images/Norway/geirangerfjord1.jpg"
+    },
+    {
+      "title": "罗弗敦群岛",
+      "subtitle": "北极圈群岛",
+      "description": "尖锐山峰、渔村、峡湾、海滩与红色渔夫小屋共同构成极具电影感的北境风光。",
+      "image": "/assets/images/Norway/lofoten1.jpg"
+    },
+    {
+      "title": "弗洛姆铁路",
+      "subtitle": "山岳景观铁路",
+      "description": "一段从峡湾深入高山的壮观火车旅程，沿途经过瀑布、峡谷与山地风景。",
+      "image": "/assets/images/Norway/flamrailway1.jpeg"
+    }
+  ],
+
+  "destinations": [
+    {
+      "name": "奥斯陆",
+      "description": "挪威首都融合海滨建筑、博物馆、公园、北欧美食与便利自然环境。",
+      "images": [
+        "/assets/images/Norway/oslo1.jpg",
+        "/assets/images/Norway/oslo2.jpg",
+        "/assets/images/Norway/oslo3.jpg"
+      ]
+    },
+
+    {
+      "name": "卑尔根",
+      "description": "历史悠久的海岸城市，以布吕根码头、山景观景点与峡湾门户闻名。",
+      "images": [
+        "/assets/images/Norway/bergen1.jpeg",
+        "/assets/images/Norway/bergen2.jpg",
+        "/assets/images/Norway/bergen3.jpeg"
+      ]
+    },
+
+    {
+      "name": "特罗姆瑟",
+      "description": "挪威北极之都，以极光、观鲸、极地文化与冬季冒险活动闻名。",
+      "images": [
+        "/assets/images/Norway/tromso1.jpg",
+        "/assets/images/Norway/tromso2.jpeg",
+        "/assets/images/Norway/tromso3.jpeg"
+      ]
+    },
+
+    {
+      "name": "罗弗敦群岛",
+      "description": "拥有壮观山峰、渔村、海滩、峡湾与午夜太阳的北极群岛。",
+      "images": [
+        "/assets/images/Norway/lofoten1.jpg",
+        "/assets/images/Norway/lofoten2.jpg",
+        "/assets/images/Norway/lofoten3.jpg"
+      ]
+    },
+
+    {
+      "name": "盖朗厄尔峡湾",
+      "description": "联合国世界遗产峡湾，以深蓝海水、悬崖峭壁与七姐妹瀑布闻名。",
+      "images": [
+        "/assets/images/Norway/geirangerfjord1.jpg",
+        "/assets/images/Norway/geirangerfjord2.jpg",
+        "/assets/images/Norway/geirangerfjord3.jpg"
+      ]
+    },
+
+    {
+      "name": "纳柔依峡湾",
+      "description": "一条被高山包围的狭窄峡湾，以宁静景色与壮观地貌著称。",
+      "images": [
+        "/assets/images/Norway/naeroyfjord1.jpeg",
+        "/assets/images/Norway/naeroyfjord2.jpg",
+        "/assets/images/Norway/naeroyfjord3.jpg"
+      ]
+    },
+
+    {
+      "name": "弗洛姆铁路",
+      "description": "挪威最著名的景观铁路之一，连接峡湾村庄与高山景色。",
+      "images": [
+        "/assets/images/Norway/flamrailway1.jpeg",
+        "/assets/images/Norway/flamrailway2.jpg",
+        "/assets/images/Norway/flamrailway3.jpeg"
+      ]
+    },
+
+    {
+      "name": "布道石",
+      "description": "悬于吕瑟峡湾之上的著名巨石平台，是挪威最经典徒步景观之一。",
+      "images": [
+        "/assets/images/Norway/preikestolen1.jpeg",
+        "/assets/images/Norway/preikestolen2.jpeg",
+        "/assets/images/Norway/preikestolen3.jpg"
+      ]
+    },
+
+    {
+      "name": "恶魔之舌",
+      "description": "延伸于湖面之上的巨大岩石平台，是挪威最具挑战性的徒步路线之一。",
+      "images": [
+        "/assets/images/Norway/trolltunga1.jpg",
+        "/assets/images/Norway/trolltunga2.jpg",
+        "/assets/images/Norway/trolltunga3.jpeg"
+      ]
+    },
+
+    {
+      "name": "大西洋公路",
+      "description": "穿越桥梁、岛屿与海岸线的景观公路，被誉为挪威最美自驾路线之一。",
+      "images": [
+        "/assets/images/Norway/atlanticroad1.jpeg",
+        "/assets/images/Norway/atlanticroad2.jpeg",
+        "/assets/images/Norway/atlanticroad3.jpg"
+      ]
+    },
+
+    {
+      "name": "斯瓦尔巴群岛",
+      "description": "位于北极的偏远群岛，以冰川、极夜、野生北极环境与探险旅行闻名。",
+      "images": [
+        "/assets/images/Norway/svalbard1.jpeg",
+        "/assets/images/Norway/svalbard2.jpeg",
+        "/assets/images/Norway/svalbard3.jpg"
+      ]
+    },
+
+    {
+      "name": "奥勒松",
+      "description": "一座以新艺术风格建筑、海岛景观与峡湾门户闻名的海岸小镇。",
+      "images": [
+        "/assets/images/Norway/alesund1.jpg",
+        "/assets/images/Norway/alesund2.jpeg",
+        "/assets/images/Norway/alesund3.jpeg"
+      ]
+    }
+  ],
+
+  "experiences": [
+    {
+      "title": "乘船穿越世界遗产峡湾",
+      "image": "/assets/images/Norway/geirangerfjord1.jpg"
+    },
+    {
+      "title": "在特罗姆瑟追逐北极光",
+      "image": "/assets/images/Norway/tromso1.jpg"
+    },
+    {
+      "title": "入住罗弗敦渔夫小屋",
+      "image": "/assets/images/Norway/lofoten2.jpg"
+    },
+    {
+      "title": "搭乘弗洛姆景观铁路",
+      "image": "/assets/images/Norway/flamrailway1.jpeg"
+    },
+    {
+      "title": "徒步布道石与恶魔之舌",
+      "image": "/assets/images/Norway/preikestolen1.jpeg"
+    }
+  ]
+}

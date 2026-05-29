@@ -1,0 +1,178 @@
+{
+  "country": "SWEDEN",
+  "slug": "sweden",
+  "title": "Design, Forests & Nordic Calm",
+  "description": "A refined Nordic country of island cities, medieval old towns, Arctic wilderness, design culture, forests, lakes, and coastal archipelagos.",
+  "heroImage": "/assets/images/Sweden/sweden1.jpeg",
+  "bestTime": [
+    {
+      "season": "Summer",
+      "months": "June - August",
+      "description": "Best for Stockholm archipelago trips, outdoor cafés, island hopping, and long daylight."
+    },
+    {
+      "season": "Winter",
+      "months": "December - March",
+      "description": "Best for Swedish Lapland, snow activities, northern lights, and the Icehotel."
+    }
+  ],
+  "quickFacts": {
+    "capital": "Stockholm",
+    "currency": "Swedish Krona (SEK)",
+    "language": "Swedish",
+    "population": "10.5 million+",
+    "timeZone": "GMT+1"
+  },
+  "highlights": [
+    {
+      "title": "Stockholm Archipelago",
+      "subtitle": "30,000 Islands",
+      "description": "A vast maritime landscape of islands, skerries, ferries, kayaking routes, and red wooden cottages.",
+      "image": "/assets/images/Sweden/stockholmarchipelago1.jpg"
+    },
+    {
+      "title": "Gamla Stan",
+      "subtitle": "Medieval Stockholm",
+      "description": "One of Europe’s most atmospheric old towns, filled with cobblestone alleys, colorful buildings, and royal history.",
+      "image": "/assets/images/Sweden/gamlastan1.jpeg"
+    },
+    {
+      "title": "Swedish Lapland & Icehotel",
+      "subtitle": "Arctic Sweden",
+      "description": "A northern region of Sámi culture, reindeer, aurora skies, snow landscapes, and the famous Icehotel.",
+      "image": "/assets/images/Sweden/icehotel1.jpeg"
+    }
+  ],
+  "destinations": [
+    {
+      "name": "Stockholm",
+      "description": "Sweden’s capital is built across islands, blending royal history, modern design, museums, and waterfront living.",
+      "images": [
+        "/assets/images/Sweden/stockholm1.jpg",
+        "/assets/images/Sweden/stockholm2.jpg",
+        "/assets/images/Sweden/stockholm3.jpeg"
+      ]
+    },
+    {
+      "name": "Gamla Stan",
+      "description": "Stockholm’s old town features narrow medieval streets, colorful squares, churches, cafés, and the Royal Palace.",
+      "images": [
+        "/assets/images/Sweden/gamlastan1.jpeg",
+        "/assets/images/Sweden/gamlastan2.jpg",
+        "/assets/images/Sweden/gamlastan3.jpeg"
+      ]
+    },
+    {
+      "name": "Stockholm Archipelago",
+      "description": "A sea of thousands of islands where visitors can take ferries, kayak, hike, and stay in peaceful coastal villages.",
+      "images": [
+        "/assets/images/Sweden/stockholmarchipelago1.jpg",
+        "/assets/images/Sweden/stockholmarchipelago2.png",
+        "/assets/images/Sweden/stockholmarchipelago3.jpg"
+      ]
+    },
+    {
+      "name": "Gothenburg",
+      "description": "A relaxed west-coast city known for canals, seafood, cafés, parks, and access to coastal islands.",
+      "images": [
+        "/assets/images/Sweden/gothenburg1.jpeg",
+        "/assets/images/Sweden/gothenburg2.jpg",
+        "/assets/images/Sweden/gothenburg3.jpg"
+      ]
+    },
+    {
+      "name": "Abisko National Park",
+      "description": "A northern wilderness area famous for aurora viewing, hiking trails, mountains, and Arctic scenery.",
+      "images": [
+        "/assets/images/Sweden/abisko1.jpg",
+        "/assets/images/Sweden/abisko2.jpg",
+        "/assets/images/Sweden/abisko3.jpg"
+      ]
+    },
+    {
+      "name": "Kiruna",
+      "description": "A Swedish Lapland town known for Arctic nature, Sámi culture, northern lights, and access to the Icehotel.",
+      "images": [
+        "/assets/images/Sweden/kiruna1.jpg",
+        "/assets/images/Sweden/kiruna2.jpg",
+        "/assets/images/Sweden/kiruna3.jpeg"
+      ]
+    },
+    {
+      "name": "Icehotel",
+      "description": "A unique hotel and art exhibition in Jukkasjärvi, rebuilt with ice and snow each winter.",
+      "images": [
+        "/assets/images/Sweden/icehotel1.jpeg",
+        "/assets/images/Sweden/icehotel2.jpeg",
+        "/assets/images/Sweden/icehotel3.jpg"
+      ]
+    },
+    {
+      "name": "Visby",
+      "description": "A medieval town on Gotland island known for city walls, cobbled streets, ruins, and Baltic Sea charm.",
+      "images": [
+        "/assets/images/Sweden/visby1.jpeg",
+        "/assets/images/Sweden/visby2.jpg",
+        "/assets/images/Sweden/visby3.jpg"
+      ]
+    },
+    {
+      "name": "Malmö",
+      "description": "A southern Swedish city with modern architecture, coastal parks, multicultural food, and easy links to Copenhagen.",
+      "images": [
+        "/assets/images/Sweden/malmo1.jpg",
+        "/assets/images/Sweden/malmo2.jpeg",
+        "/assets/images/Sweden/malmo3.jpeg"
+      ]
+    },
+    {
+      "name": "Dalarna",
+      "description": "A region of lakes, red cottages, forests, folk traditions, and classic Swedish countryside scenery.",
+      "images": [
+        "/assets/images/Sweden/dalarna1.jpg",
+        "/assets/images/Sweden/dalarna2.jpg",
+        "/assets/images/Sweden/dalarna3.jpg"
+      ]
+    },
+    {
+      "name": "Gotland",
+      "description": "A Baltic island known for limestone coastlines, medieval heritage, summer beaches, and the town of Visby.",
+      "images": [
+        "/assets/images/Sweden/gotland1.jpeg",
+        "/assets/images/Sweden/gotland2.jpeg",
+        "/assets/images/Sweden/gotland3.jpg"
+      ]
+    },
+    {
+      "name": "Uppsala",
+      "description": "A historic university city with a grand cathedral, riverfront, gardens, and cultural heritage.",
+      "images": [
+        "/assets/images/Sweden/uppsala1.jpeg",
+        "/assets/images/Sweden/uppsala2.jpg",
+        "/assets/images/Sweden/uppsala3.jpeg"
+      ]
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Island-Hop Through Stockholm Archipelago",
+      "image": "/assets/images/Sweden/stockholmarchipelago1.jpg"
+    },
+    {
+      "title": "Walk Through Gamla Stan",
+      "image": "/assets/images/Sweden/gamlastan1.jpeg"
+    },
+    {
+      "title": "Sleep Inside the Icehotel",
+      "image": "/assets/images/Sweden/icehotel1.jpeg"
+    },
+    {
+      "title": "Watch the Northern Lights in Abisko",
+      "image": "/assets/images/Sweden/abisko1.jpg"
+    },
+    {
+      "title": "Experience Swedish Fika Culture",
+      "image": "/assets/images/Sweden/stockholm2.jpg"
+    }
+  ]
+}

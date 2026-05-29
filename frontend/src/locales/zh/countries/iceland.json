@@ -1,0 +1,198 @@
+{
+  "countries": {
+    "iceland": {
+      "country": "冰岛",
+      "slug": "iceland",
+      "title": "火与冰的史诗之境",
+      "description": "一片由火山与冰川塑造而成的原始大地，以震撼瀑布、黑沙海滩与超现实熔岩地貌闻名于世。",
+      "heroImage": "/assets/images/Iceland/iceland_lagoon.jpg",
+      "bestTime": [
+        {
+          "season": "夏季",
+          "months": "6月 - 8月",
+          "description": "最适合环岛自驾、探索瀑布与体验午夜太阳。"
+        },
+        {
+          "season": "冬季",
+          "months": "9月 - 3月",
+          "description": "最佳极光观赏与冰洞探险季节。"
+        }
+      ],
+
+      "quickFacts": {
+        "capital": "雷克雅未克",
+        "currency": "冰岛克朗（ISK）",
+        "language": "冰岛语",
+        "population": "39万+",
+        "timeZone": "GMT+0"
+      },
+
+      "highlights": [
+        {
+          "title": "黄金圈",
+          "subtitle": "冰岛最经典路线",
+          "description": "汇集黄金瀑布、盖歇尔间歇泉地热区，以及可亲眼见证板块分裂的辛格维利尔国家公园。",
+          "image": "/assets/images/Iceland/goldencircle2.jpeg"
+        },
+        {
+          "title": "杰古沙龙冰河湖与钻石海滩",
+          "subtitle": "冰川奇境",
+          "description": "晶蓝冰山漂浮于冰河湖中，最终冲上海岸，在黑沙滩上宛如散落的钻石。",
+          "image": "/assets/images/Iceland/jokulsarlon1.jpeg"
+        },
+        {
+          "title": "蓝湖与天空之境温泉",
+          "subtitle": "地热疗愈体验",
+          "description": "被熔岩原野包围的矿物温泉，是冰岛最具代表性的地热放松体验。",
+          "image": "/assets/images/Iceland/bluelagoon1.jpeg"
+        }
+      ],
+
+      "destinations": [
+        {
+          "name": "雷克雅未克",
+          "description": "冰岛色彩缤纷的首都，以北欧咖啡文化、现代建筑与热闹海滨闻名。",
+          "images": [
+            "/assets/images/Iceland/Reykjavík1.jpeg",
+            "/assets/images/Iceland/Reykjavík2.jpeg",
+            "/assets/images/Iceland/Reykjavík3.jpg"
+          ]
+        },
+
+        {
+          "name": "黄金圈",
+          "description": "冰岛最著名的观光路线，涵盖辛格维利尔国家公园、黄金瀑布与盖歇尔间歇泉。",
+          "images": [
+            "/assets/images/Iceland/goldencircle1.jpeg",
+            "/assets/images/Iceland/goldencircle2.jpeg",
+            "/assets/images/Iceland/goldencircle3.jpeg"
+          ]
+        },
+
+        {
+          "name": "杰古沙龙冰河湖",
+          "description": "壮丽冰河湖中漂浮着湛蓝冰山，最终流向大西洋。",
+          "images": [
+            "/assets/images/Iceland/jokulsarlon1.jpeg",
+            "/assets/images/Iceland/jokulsarlon2.jpeg",
+            "/assets/images/Iceland/jokulsarlon3.jpeg"
+          ]
+        },
+
+        {
+          "name": "钻石海滩",
+          "description": "透明冰块被海浪冲上海岸，在黑色火山沙滩上宛如钻石般闪耀。",
+          "images": [
+            "/assets/images/Iceland/diamondbeach1.jpeg",
+            "/assets/images/Iceland/diamondbeach2.jpeg",
+            "/assets/images/Iceland/diamondbeach3.jpeg"
+          ]
+        },
+
+        {
+          "name": "维克小镇",
+          "description": "以黑沙海滩、玄武岩海蚀柱与壮观海岸悬崖闻名的南岸小镇。",
+          "images": [
+            "/assets/images/Iceland/vik1.jpg",
+            "/assets/images/Iceland/vik2.jpeg",
+            "/assets/images/Iceland/vik3.jpeg"
+          ]
+        },
+
+        {
+          "name": "蓝湖温泉",
+          "description": "被熔岩地形包围的著名地热温泉，以乳蓝色矿物温泉闻名。",
+          "images": [
+            "/assets/images/Iceland/bluelagoon1.jpeg",
+            "/assets/images/Iceland/bluelagoon2.jpeg",
+            "/assets/images/Iceland/bluelagoon3.jpeg"
+          ]
+        },
+
+        {
+          "name": "天空之境温泉",
+          "description": "面向海洋的奢华地热温泉，拥有无边际景观与冰岛传统疗愈体验。",
+          "images": [
+            "/assets/images/Iceland/skylagoon1.jpeg",
+              "/assets/images/Iceland/skylagoon2.jpeg",
+              "/assets/images/Iceland/skylagoon3.jpeg"
+          ]
+        },
+
+        {
+          "name": "斯科加瀑布",
+          "description": "冰岛最壮观的瀑布之一，以巨大水势和彩虹景观闻名。",
+          "images": [
+            "/assets/images/Iceland/skogafoss1.jpg",
+            "/assets/images/Iceland/skogafoss2.jpeg",
+            "/assets/images/Iceland/skogafoss3.jpeg"
+          ]
+        },
+
+        {
+          "name": "塞里雅兰瀑布",
+          "description": "独特的瀑布景点，游客可以步行至瀑布后方欣赏景色。",
+          "images": [
+            "/assets/images/Iceland/seljalandsfoss1.jpg",
+            "/assets/images/Iceland/seljalandsfoss2.jpg",
+            "/assets/images/Iceland/seljalandsfoss3.jpeg"
+          ]
+        },
+
+        {
+          "name": "斯奈山半岛",
+          "description": "被誉为“冰岛缩影”，拥有火山、冰川、熔岩原、海崖与渔村景观。",
+          "images": [
+             "/assets/images/Iceland/snaefellsnes1.jpg",
+            "/assets/images/Iceland/snaefellsnes2.jpeg",
+            "/assets/images/Iceland/snaefellsnes3.jpeg"
+          ]
+        },
+
+        {
+          "name": "阿克雷里",
+          "description": "位于冰岛北部的风景小镇，被峡湾与群山环绕，也是观鲸热点。",
+          "images": [
+            "/assets/images/Iceland/akureyri1.jpg",
+            "/assets/images/Iceland/akureyri2.jpeg",
+            "/assets/images/Iceland/akureyri3.jpeg"
+          ]
+        },
+
+        {
+          "name": "雷尼斯黑沙滩",
+          "description": "世界著名的火山黑沙海滩，以玄武岩柱、巨浪与海蚀柱景观闻名。",
+          "images": [
+            "/assets/images/Iceland/reynisfjara1.jpg",
+            "/assets/images/Iceland/reynisfjara2.jpeg",
+            "/assets/images/Iceland/reynisfjara3.jpeg"
+          ]
+        }
+      ],
+
+      "experiences": 
+      [
+                {
+                    "title": "环岛一号公路自驾",
+                    "image": "/assets/images/Iceland/goldencircle1.jpeg"
+                },
+                {
+                    "title": "追逐北极光",
+                    "image": "/assets/images/Iceland/snaefellsnes3.jpeg"
+                },
+                {
+                    "title": "探索水晶冰洞",
+                    "image": "/assets/images/Iceland/jokulsarlon2.jpeg"
+                },
+                {
+                    "title": "体验地热温泉",
+                    "image": "/assets/images/Iceland/skylagoon1.jpeg"
+                },
+                {
+                    "title": "拍摄瀑布与黑沙海岸",
+                    "image": "/assets/images/Iceland/vik1.jpg"
+                }
+            ]
+    }
+  }
+}

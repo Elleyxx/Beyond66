@@ -1,0 +1,178 @@
+{
+  "country": "NORWAY",
+  "slug": "norway",
+  "title": "Fjords, Arctic Light & Nordic Adventure",
+  "description": "A dramatic northern landscape of deep fjords, Arctic islands, mountain roads, coastal cities, and some of the world’s most scenic rail and hiking routes.",
+  "heroImage": "/assets/images/Norway/BergenNorway.jpg",
+  "bestTime": [
+    {
+      "season": "Summer",
+      "months": "June - August",
+      "description": "Best for fjord cruises, hiking, road trips, and midnight sun in the north."
+    },
+    {
+      "season": "Winter",
+      "months": "November - March",
+      "description": "Best for northern lights, snowy Arctic landscapes, dog sledding, and winter fjord views."
+    }
+  ],
+  "quickFacts": {
+    "capital": "Oslo",
+    "currency": "Norwegian Krone (NOK)",
+    "language": "Norwegian",
+    "population": "5.5 million+",
+    "timeZone": "GMT+1"
+  },
+  "highlights": [
+    {
+      "title": "Geirangerfjord & Nærøyfjord",
+      "subtitle": "UNESCO Fjords",
+      "description": "Two of Norway’s most iconic fjords, surrounded by steep mountains, waterfalls, and emerald waters.",
+      "image": "/assets/images/Norway/geirangerfjord1.jpg"
+    },
+    {
+      "title": "Lofoten Islands",
+      "subtitle": "Arctic Archipelago",
+      "description": "Sharp peaks, fishing villages, fjords, beaches, and red rorbu cabins create one of Norway’s most cinematic landscapes.",
+      "image": "/assets/images/Norway/lofoten1.jpg"
+    },
+    {
+      "title": "The Flåm Railway",
+      "subtitle": "Scenic Mountain Railway",
+      "description": "A spectacular train journey from fjord level into mountain scenery, waterfalls, and deep valleys.",
+      "image": "/assets/images/Norway/flamrailway1.jpeg"
+    }
+  ],
+  "destinations": [
+    {
+      "name": "Oslo",
+      "description": "Norway’s capital combines waterfront architecture, museums, parks, Nordic food, and easy access to nature.",
+      "images": [
+        "/assets/images/Norway/oslo1.jpg",
+        "/assets/images/Norway/oslo2.jpg",
+        "/assets/images/Norway/oslo3.jpg"
+      ]
+    },
+    {
+      "name": "Bergen",
+      "description": "A historic coastal city known for Bryggen, mountain viewpoints, seafood, and its gateway access to the fjords.",
+      "images": [
+        "/assets/images/Norway/bergen1.jpeg",
+        "/assets/images/Norway/bergen2.jpg",
+        "/assets/images/Norway/bergen3.jpeg"
+      ]
+    },
+    {
+      "name": "Tromsø",
+      "description": "The Arctic capital of Norway, famous for northern lights, whale watching, polar history, and winter adventures.",
+      "images": [
+        "/assets/images/Norway/tromso1.jpg",
+        "/assets/images/Norway/tromso2.jpeg",
+        "/assets/images/Norway/tromso3.jpeg"
+      ]
+    },
+    {
+      "name": "Lofoten Islands",
+      "description": "An Arctic island chain with dramatic peaks, fishing villages, beaches, fjords, and midnight sun.",
+      "images": [
+        "/assets/images/Norway/lofoten1.jpg",
+        "/assets/images/Norway/lofoten2.jpg",
+        "/assets/images/Norway/lofoten3.jpg"
+      ]
+    },
+    {
+      "name": "Geirangerfjord",
+      "description": "A UNESCO-listed fjord famous for steep cliffs, deep blue water, and waterfalls such as the Seven Sisters.",
+      "images": [
+        "/assets/images/Norway/geirangerfjord1.jpg",
+        "/assets/images/Norway/geirangerfjord2.jpg",
+        "/assets/images/Norway/geirangerfjord3.jpg"
+      ]
+    },
+    {
+      "name": "Nærøyfjord",
+      "description": "A narrow UNESCO-listed fjord surrounded by towering mountains and calm scenic waters.",
+      "images": [
+        "/assets/images/Norway/naeroyfjord1.jpeg",
+        "/assets/images/Norway/naeroyfjord2.jpg",
+        "/assets/images/Norway/naeroyfjord3.jpg"
+      ]
+    },
+    {
+      "name": "Flåm Railway",
+      "description": "One of Norway’s most famous scenic railway journeys, connecting fjord villages with mountain landscapes.",
+      "images": [
+        "/assets/images/Norway/flamrailway1.jpeg",
+        "/assets/images/Norway/flamrailway2.jpg",
+        "/assets/images/Norway/flamrailway3.jpeg"
+      ]
+    },
+    {
+      "name": "Preikestolen",
+      "description": "A famous cliff plateau rising above Lysefjord, offering one of Norway’s most iconic hiking views.",
+      "images": [
+        "/assets/images/Norway/preikestolen1.jpeg",
+        "/assets/images/Norway/preikestolen2.jpeg",
+        "/assets/images/Norway/preikestolen3.jpg"
+      ]
+    },
+    {
+      "name": "Trolltunga",
+      "description": "A dramatic rock formation extending over Ringedalsvatnet lake, popular with experienced hikers.",
+      "images": [
+        "/assets/images/Norway/trolltunga1.jpg",
+        "/assets/images/Norway/trolltunga2.jpg",
+        "/assets/images/Norway/trolltunga3.jpeg"
+      ]
+    },
+    {
+      "name": "Atlantic Ocean Road",
+      "description": "A scenic coastal drive crossing bridges, islands, and open-sea landscapes along Norway’s rugged coast.",
+      "images": [
+        "/assets/images/Norway/atlanticroad1.jpeg",
+        "/assets/images/Norway/atlanticroad2.jpeg",
+        "/assets/images/Norway/atlanticroad3.jpg"
+      ]
+    },
+    {
+      "name": "Svalbard",
+      "description": "A remote Arctic archipelago known for polar wilderness, glaciers, polar night, and expedition travel.",
+      "images": [
+        "/assets/images/Norway/svalbard1.jpeg",
+        "/assets/images/Norway/svalbard2.jpeg",
+        "/assets/images/Norway/svalbard3.jpg"
+      ]
+    },
+    {
+      "name": "Ålesund",
+      "description": "A coastal town known for Art Nouveau architecture, island views, and access to fjord landscapes.",
+      "images": [
+        "/assets/images/Norway/alesund1.jpg",
+        "/assets/images/Norway/alesund2.jpeg",
+        "/assets/images/Norway/alesund3.jpeg"
+      ]
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Cruise Through UNESCO Fjords",
+      "image": "/assets/images/Norway/geirangerfjord1.jpg"
+    },
+    {
+      "title": "Chase the Northern Lights in Tromsø",
+      "image": "/assets/images/Norway/tromso1.jpg"
+    },
+    {
+      "title": "Stay in a Lofoten Fisherman Cabin",
+      "image": "/assets/images/Norway/lofoten2.jpg"
+    },
+    {
+      "title": "Ride the Flåm Railway",
+      "image": "/assets/images/Norway/flamrailway1.jpeg"
+    },
+    {
+      "title": "Hike Preikestolen or Trolltunga",
+      "image": "/assets/images/Norway/preikestolen1.jpeg"
+    }
+  ]
+}
