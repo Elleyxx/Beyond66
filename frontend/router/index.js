@@ -16,6 +16,12 @@ import { isAuthenticated } from '../utils/auth'
 
 const router = createRouter({
   history: createWebHistory(),
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0, left: 0, behavior: 'auto' }
+  },
   routes: [
     { path: '/', name: 'landing', component: Landing, meta: { hideLayout: true } },
     { path: '/home', name: 'home', component: HomeView },

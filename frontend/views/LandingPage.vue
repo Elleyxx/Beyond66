@@ -343,11 +343,11 @@ const destinations = [
 }
 
 .top-nav {
-  position: absolute;
+  position: fixed;
   top: 34px;
   left: 42px;
   right: 42px;
-  z-index: 3;
+  z-index: 50;
   display: flex;
   justify-content: flex-end;
   align-items: center;

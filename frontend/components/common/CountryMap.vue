@@ -118,9 +118,22 @@ const loadCountries = async () => {
 
 const findCountry = (countryId) => countries.value.find((c) => c.id === countryId)
 
-const resolveCountryId = (payload) => {
+const resolveCountryId = (...args) => {
+  const payload = args[0]
+  const second = args[1]
+
   if (payload?.id) return String(payload.id).toLowerCase()
   if (payload?.location?.id) return String(payload.location.id).toLowerCase()
+  if (second?.id) return String(second.id).toLowerCase()
+
+  const evtTarget = payload?.event?.target || payload?.target
+  if (evtTarget?.classList) {
+    const marker = countryMarkers.find((item) =>
+      evtTarget.classList.contains(`country-${item.slug}`),
+    )
+    if (marker?.id) return marker.id
+  }
+
   return ''
 }
 
@@ -134,6 +147,21 @@ const updatePopupPosition = (eventLike) => {
 
   popup.value.x = point.clientX - sectionRect.left + 14
   popup.value.y = point.clientY - sectionRect.top - 14
+}
+
+const setPopupAtCountryPin = (countryId) => {
+  const panelRect = mapPanelRef.value?.getBoundingClientRect?.()
+  const sectionRect = heroSectionRef.value?.getBoundingClientRect?.()
+  const position = pinPositions.value[countryId]
+  if (!panelRect || !sectionRect || !position) return false
+
+  const pinLeft = Number.parseFloat(position.left)
+  const pinTop = Number.parseFloat(position.top)
+  if (!Number.isFinite(pinLeft) || !Number.isFinite(pinTop)) return false
+
+  popup.value.x = panelRect.left - sectionRect.left + pinLeft
+  popup.value.y = panelRect.top - sectionRect.top + pinTop
+  return true
 }
 
 const measureCountryPins = () => {
@@ -267,31 +295,38 @@ const onMapClick = (event) => {
   goToCountryBySlug(slug)
 }
 
-const onCountryEnter = (payload) => {
-  const countryId = resolveCountryId(payload)
+const onCountryEnter = (...args) => {
+  const countryId = resolveCountryId(...args)
   const country = findCountry(countryId)
   if (!country) return
 
   hoveredCountry.value = countryId
   popup.value.visible = true
   popup.value.country = country
-  updatePopupPosition(payload)
+  // Prefer anchoring popup to the country's pin for stable positioning.
+  if (!setPopupAtCountryPin(countryId)) {
+    updatePopupPosition(args[0])
+  }
 }
 
-const onCountryMove = (payload) => {
+const onCountryMove = (...args) => {
   if (!popup.value.visible) return
-  updatePopupPosition(payload)
+
+  const countryId = resolveCountryId(...args)
+  if (countryId) hoveredCountry.value = countryId
+
+  // Keep popup anchored on pin when available; otherwise follow cursor.
+  if (!setPopupAtCountryPin(hoveredCountry.value)) {
+    updatePopupPosition(args[0])
+  }
 }
 
 const onMarkerEnter = (marker) => {
   const country = findCountry(marker.id) || marker
-  const position = pinPositions.value[marker.id]
-  if (!position) return
 
   popup.value.visible = true
   popup.value.country = country
-  popup.value.x = parseFloat(position.left)
-  popup.value.y = parseFloat(position.top)
+  setPopupAtCountryPin(marker.id)
 }
 
 const onCountryLeave = () => {
@@ -351,8 +386,7 @@ onBeforeUnmount(() => {
   height: 100%;
   object-fit: cover;
   z-index: 1;
-
-  clip-path: polygon(56% 0, 100% 0, 100% 100%, 34% 100%);
+  clip-path: polygon(56% 0, 100% 0, 100% 100%, 37% 100%);
 }
 
 /* black overlay on image side */
@@ -366,7 +400,7 @@ onBeforeUnmount(() => {
     rgba(0, 0, 0, 0.28)
   );
 
-  clip-path: polygon(56% 0, 100% 0, 100% 100%, 34% 100%);
+  clip-path: polygon(56% 0, 100% 0, 100% 100%, 37% 100%);
 }
 
 .hero-bottom-blend {
@@ -484,14 +518,60 @@ onBeforeUnmount(() => {
 }
 
 /* Nordic countries */
-:deep(.country-iceland),
-:deep(.country-norway),
-:deep(.country-sweden),
-:deep(.country-finland),
-:deep(.country-denmark) {
-  fill: rgba(var(--v-theme-primary), 0.55) !important;
+:deep(.country-iceland) {
+  fill: rgba(var(--v-theme-countryIceland), 0.55) !important;
   stroke: rgba(var(--v-theme-on-surface), 0.85);
   cursor: pointer;
+}
+
+:deep(.country-norway) {
+  fill: rgba(var(--v-theme-countryNorway), 0.55) !important;
+  stroke: rgba(var(--v-theme-on-surface), 0.85);
+  cursor: pointer;
+}
+
+:deep(.country-sweden) {
+  fill: rgba(var(--v-theme-countrySweden), 0.55) !important;
+  stroke: rgba(var(--v-theme-on-surface), 0.85);
+  cursor: pointer;
+}
+
+:deep(.country-finland) {
+  fill: rgba(var(--v-theme-countryFinland), 0.55) !important;
+  stroke: rgba(var(--v-theme-on-surface), 0.85);
+  cursor: pointer;
+}
+
+:deep(.country-denmark) {
+  fill: rgba(var(--v-theme-countryDenmark), 0.55) !important;
+  stroke: rgba(var(--v-theme-on-surface), 0.85);
+  cursor: pointer;
+}
+
+/* Nordic countries hover */
+:deep(.country-iceland:hover) {
+  fill: rgba(var(--v-theme-primary), 0.9) !important;
+  filter: drop-shadow(0 0 10px rgba(var(--v-theme-primary), 0.7));
+}
+
+:deep(.country-norway:hover) {
+  fill: rgba(var(--v-theme-primary), 0.9) !important;
+  filter: drop-shadow(0 0 10px rgba(var(--v-theme-primary), 0.7));
+}
+
+:deep(.country-sweden:hover) {
+  fill: rgba(var(--v-theme-primary), 0.9) !important;
+  filter: drop-shadow(0 0 10px rgba(var(--v-theme-primary), 0.7));
+}
+
+:deep(.country-finland:hover) {
+  fill: rgba(var(--v-theme-primary), 0.9) !important;
+  filter: drop-shadow(0 0 10px rgba(var(--v-theme-primary), 0.7));
+}
+
+:deep(.country-denmark:hover) {
+  fill: rgba(var(--v-theme-primary), 0.9) !important;
+  filter: drop-shadow(0 0 10px rgba(var(--v-theme-primary), 0.7));
 }
 
 /* hover */

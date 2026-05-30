@@ -1,5 +1,5 @@
 <template>
-  <footer class="nordic-footer">
+  <footer class="nordic-footer" :class="{ 'nordic-footer-home': isHome }">
     <v-container fluid class="footer-content px-6 px-md-10 px-lg-14">
         <v-row class="footer-top" dense>
           <v-col cols="12" sm="6" md="3">
@@ -76,6 +76,12 @@
 </template>
 
 <script setup>
+defineProps({
+  isHome: {
+    type: Boolean,
+    default: false,
+  },
+})
 </script>
 
 <style scoped>
@@ -83,6 +89,7 @@
   position: relative;
   isolation: isolate;
   min-height: 550px;
+  background: rgb(var(--v-theme-background));
 }
 
 .nordic-footer::before {
@@ -109,6 +116,12 @@
       rgba(0, 0, 0, 0.82) 62%,
       rgba(0, 0, 0, 0.96) 100%
     );
+}
+
+/* Home page: keep one continuous background from App shell through footer */
+.nordic-footer-home {
+  background: transparent;
+  margin-top: -1px;
 }
 
 .footer-overlay,
@@ -283,5 +296,3 @@
   }
 }
 </style>
-
-

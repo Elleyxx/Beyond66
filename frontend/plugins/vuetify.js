@@ -20,7 +20,7 @@ export default createVuetify({
           "on-surface": "#102033",
           header: "#d9ecff",       // soft sky blue
           footer: "#f4fbff",
-          primary: "#9ed8ff",      // Nordic sky blue
+          primary: "#76c6fc",      // Nordic sky blue
           secondary: "#eaf7ff",    // icy blue
           accent: "#c7eaff",       // snow shadow blue
           text: "#102033",         // deep blue text

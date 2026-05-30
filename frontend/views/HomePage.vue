@@ -26,6 +26,7 @@ const countries = [
     name: 'Norway',
     slug: 'norway',
     hero: '/assets/images/Norway/Geirangerfjord.jpg',
+    video: '/assets/videos/norway_vid.mp4',
     places: [
       {
         title: 'Geirangerfjord',
@@ -58,6 +59,7 @@ const countries = [
     name: 'Sweden',
     slug: 'sweden',
     hero: '/assets/images/Sweden/sweden.jpg',
+    video: '/assets/videos/sweden_vid.mp4',
     places: [
       {
         title: 'Stockholm',
@@ -90,6 +92,7 @@ const countries = [
     name: 'Finland',
     slug: 'finland',
     hero: '/assets/images/Finland/finland.jpg',
+    video: '/assets/videos/finland_vid.mp4',
     places: [
       {
         title: 'Rovaniemi',
@@ -122,6 +125,7 @@ const countries = [
     name: 'Iceland',
     slug: 'iceland',
     hero: '/assets/images/Iceland/iceland_lagoon.jpg',
+    video: '/assets/videos/iceland_vid.mp4',
     places: [
       {
         title: 'Jokulsarlon',
@@ -154,6 +158,7 @@ const countries = [
     name: 'Denmark',
     slug: 'denmark',
     hero: '/assets/images/Denmark/denmark.jpg',
+    video: '/assets/videos/denmark_vid.mp4',
     places: [
       {
         title: 'Copenhagen',
@@ -217,13 +222,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .home-page {
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(var(--v-theme-background), 0.94),
-      rgba(var(--v-theme-background), 0.98)
-    ),
-    url('/assets/images/snow.jpg') center/cover fixed;
+  background: transparent;
   color: rgb(var(--v-theme-text));
   overflow-x: hidden;
 }
