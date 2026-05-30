@@ -13,11 +13,13 @@ const router = useRouter()
 const route = useRoute()
 
 const isScrolled = ref(false)
+const isInHeroScroll = ref(false)
 const mobileDrawer = ref(false)
 const isLoggedIn = ref(isAuthenticated())
 const isDark = computed(() => theme.global.current.value.dark)
 
 const currentLogo = computed(() => {
+  if (isInHeroScroll.value) return logo
   return isDark.value ? logo : logo_black
 })
 
@@ -55,7 +57,19 @@ function syncAuthState() {
 }
 
 function handleScroll() {
-  isScrolled.value = window.scrollY > 60
+  const scrollY = window.scrollY
+  isScrolled.value = scrollY > 60
+
+  const heroEl = document.querySelector('.home-hero, .country-hero, .explore-hero-section')
+  if (!heroEl) {
+    isInHeroScroll.value = false
+    return
+  }
+
+  const heroRect = heroEl.getBoundingClientRect()
+  const headerHeight = 96
+  const isOverHero = heroRect.top <= headerHeight && heroRect.bottom > headerHeight
+  isInHeroScroll.value = scrollY > 0 && isOverHero
 }
 
 onMounted(() => {
@@ -125,7 +139,7 @@ onBeforeUnmount(() => {
     </v-list>
   </v-navigation-drawer>
 
-  <v-app-bar flat class="site-header" :class="{ scrolled: isScrolled }">
+  <v-app-bar flat class="site-header" :class="{ scrolled: isScrolled, 'hero-contrast': isInHeroScroll }">
     <div class="header-inner">
       <div class="header-side header-left">
         <v-btn to="/home" variant="text" class="nav-link">
@@ -196,20 +210,22 @@ onBeforeUnmount(() => {
 
           <div class="profile-actions">
               <v-btn
-                icon
-                class="profile-action-btn"
+                class="profile-action-btn profile-action-expand-btn"
                 :to="isLoggedIn ? '/dashboard' : undefined"
                 @click="!isLoggedIn && goToLogin()"
               >
                 <i class="bi bi-person"></i>
+                <span class="profile-action-label">{{ isLoggedIn ? 'Dashboard' : 'Login' }}</span>
               </v-btn>
 
-              <v-btn icon class="profile-action-btn" @click="toggleLanguage">
+              <v-btn class="profile-action-btn profile-action-expand-btn" @click="toggleLanguage">
                 <i class="bi bi-translate"></i>
+                <span class="profile-action-label">{{ currentLanguageLabel }}</span>
               </v-btn>
 
-              <v-btn v-if="isLoggedIn" icon class="profile-action-btn" @click="logout">
+              <v-btn v-if="isLoggedIn" class="profile-action-btn profile-action-expand-btn" @click="logout">
                 <i class="bi bi-box-arrow-right"></i>
+                <span class="profile-action-label">Log Out</span>
               </v-btn>
             </div>
         </v-menu>
@@ -231,33 +247,6 @@ onBeforeUnmount(() => {
           <v-btn icon variant="text" @click="toggleTheme" class="theme-toggle-btn mobile-icon-btn">
             <i :class="isDark ? 'bi bi-sun' : 'bi bi-moon-stars'"></i>
           </v-btn>
-
-          <v-menu location="bottom end" offset="14" content-class="profile-fab-menu">
-            <template #activator="{ props }">
-              <v-btn icon v-bind="props" class="profile-main-btn mobile-icon-btn">
-                <i class="bi bi-gear"></i>
-              </v-btn>
-            </template>
-
-            <div class="profile-actions">
-              <v-btn
-                icon
-                class="profile-action-btn"
-                :to="isLoggedIn ? '/dashboard' : undefined"
-                @click="!isLoggedIn && goToLogin()"
-              >
-                <i class="bi bi-person"></i>
-              </v-btn>
-
-              <v-btn icon class="profile-action-btn" @click="toggleLanguage">
-                <i class="bi bi-translate"></i>
-              </v-btn>
-
-              <v-btn v-if="isLoggedIn" icon class="profile-action-btn" @click="logout">
-                <i class="bi bi-box-arrow-right"></i>
-              </v-btn>
-            </div>
-          </v-menu>
         </div>
       </div>
       <div>
@@ -307,9 +296,20 @@ onBeforeUnmount(() => {
 }
 
 .site-header.scrolled {
-  background: transparent !important;
-  backdrop-filter: blur(10px);
+  background: rgba(var(--v-theme-surface), 0.88) !important;
+  backdrop-filter: blur(20px);
   box-shadow: 0 8px 20px rgba(var(--v-theme-background), 0.28);
+}
+
+.site-header.hero-contrast,
+.site-header.scrolled.hero-contrast {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.38),
+    rgba(0, 0, 0, 0.12),
+    transparent
+  ) !important;
+  box-shadow: none !important;
 }
 
 .site-header :deep(.v-toolbar__content) {
@@ -385,7 +385,8 @@ onBeforeUnmount(() => {
 }
 
 .site-header.scrolled .brand-title {
-  color: rgb(var(--v-theme-headerTextScrolled));
+  color: rgb(var(--v-theme-text)) !important;
+  text-shadow: none;
 }
 
 .search-box {
@@ -417,16 +418,26 @@ onBeforeUnmount(() => {
 }
 
 .nav-link :deep(.v-icon) {
-  color: rgb(var(--v-theme-headerText)) !important;
+  color: inherit !important;
   transition: color 0.35s ease;
 }
 
 .site-header.scrolled .nav-link {
-  color: rgb(var(--v-theme-headerTextScrolled)) !important;
+  color: rgb(var(--v-theme-text)) !important;
+  text-shadow: none;
 }
 
 .site-header.scrolled .nav-link :deep(.v-icon) {
-  color: rgb(var(--v-theme-headerTextScrolled)) !important;
+  color: inherit !important;
+}
+
+.mobile-icon-btn {
+  color: rgb(var(--v-theme-headerText)) !important;
+}
+
+.site-header.scrolled .mobile-icon-btn {
+  color: rgb(var(--v-theme-text)) !important;
+  text-shadow: none;
 }
 
 .nav-link :deep(.v-btn__overlay) {
@@ -475,7 +486,8 @@ onBeforeUnmount(() => {
 }
 
 .site-header.scrolled .theme-toggle-btn {
-  color: rgb(var(--v-theme-headerTextScrolled)) !important;
+  color: rgb(var(--v-theme-text)) !important;
+  text-shadow: none;
 }
 
 .menu-bi {
@@ -492,7 +504,17 @@ onBeforeUnmount(() => {
 }
 
 .site-header.scrolled .profile-main-btn {
-  color: rgb(var(--v-theme-headerTextScrolled)) !important;
+  color: rgb(var(--v-theme-text)) !important;
+  text-shadow: none;
+}
+
+.site-header.hero-contrast .nav-link,
+.site-header.hero-contrast .brand-title,
+.site-header.hero-contrast .theme-toggle-btn,
+.site-header.hero-contrast .profile-main-btn,
+.site-header.hero-contrast .mobile-icon-btn {
+  color: white !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
 }
 
 .profile-main-btn i {
@@ -510,7 +532,7 @@ onBeforeUnmount(() => {
 .profile-actions {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 16px;
   padding-top: 8px;
 }
@@ -522,6 +544,57 @@ onBeforeUnmount(() => {
   background: rgb(var(--v-theme-surface)) !important;
   color: rgb(var(--v-theme-text)) !important;
   box-shadow: 0 4px 9px rgba(var(--v-theme-background), 0.2) !important;
+}
+
+.profile-action-expand-btn {
+  align-self: flex-end;
+  margin-left: auto;
+  border-radius: 50% !important;
+  position: relative;
+  justify-content: center !important;
+  gap: 0;
+  padding: 0 !important;
+  overflow: hidden;
+  transition:
+    width 0.28s ease,
+    border-radius 0.28s ease,
+    box-shadow 0.28s ease,
+    padding 0.28s ease,
+    gap 0.28s ease;
+}
+
+.profile-action-expand-btn:hover {
+  width: 165px !important;
+  border-radius: 30px !important;
+  justify-content: center !important;
+  padding: 0 18px !important;
+  box-shadow: 0 8px 18px rgba(var(--v-theme-background), 0.28) !important;
+}
+
+.profile-action-expand-btn:hover i {
+  position: absolute;
+  left: 16px;
+}
+
+.profile-action-label {
+  white-space: nowrap;
+  opacity: 0;
+  max-width: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity 0.2s ease,
+    max-width 0.2s ease,
+    transform 0.2s ease;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.profile-action-expand-btn:hover .profile-action-label {
+  position: absolute;
+  left: 50%;
+  opacity: 1;
+  max-width: 130px;
+  transform: translateX(-50%);
 }
 
 .site-header.scrolled .search-box :deep(.v-field) {
@@ -635,6 +708,3 @@ onBeforeUnmount(() => {
   }
 }
 </style>
-
-
-

@@ -5,7 +5,6 @@
     <div class="tours-header">
       <div class="title-block">
         <h2>DEST</h2>
-
         <p>
           Explore Nordic destinations, from snowy villages to aurora skies,
           fjords, lakes, mountains and historical cities.
@@ -118,11 +117,9 @@ const scrollCards = (direction) => {
   position: absolute;
   left: 100%;
   bottom: -15px;
-
   width: 320px;
-
   color: rgb(var(--v-theme-text));
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   line-height: 1.7;
 }
 
@@ -138,7 +135,7 @@ const scrollCards = (direction) => {
   border: none;
   padding: 0 0 6px;
   color: rgb(var(--v-theme-subtleText));
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 800;
   text-transform: uppercase;
   cursor: pointer;
