@@ -106,33 +106,40 @@
                     transform: `translateX(-${destinationImageIndex(index, destination.images.length) * 100}%)`,
                     transition: isDestinationTransitionEnabled(index) ? 'transform 0.55s ease' : 'none',
                   }"
+                  @mouseenter="startDestinationHoverAutoplay(index, destination.images.length)"
+                  @mouseleave="stopDestinationHoverAutoplay"
                   @transitionend="onDestinationSlideTransitionEnd(index, destination.images.length)"
                 >
-                  <img
+                  <div
                     v-for="(img, imgIndex) in destination.images"
                     :key="`${destination.name}-${imgIndex}`"
-                    :src="img"
-                    :alt="`${destination.name} ${imgIndex + 1}`"
-                  />
-                  <img
-                    v-if="destination.images.length > 1"
-                    :src="destination.images[0]"
-                    :alt="`${destination.name} loop`"
-                  />
+                    class="destination-slide"
+                  >
+                    <img
+                      :src="img"
+                      :alt="`${destination.name} ${imgIndex + 1}`"
+                    />
+                  </div>
+                  <div v-if="destination.images.length > 1" class="destination-slide">
+                    <img
+                      :src="destination.images[0]"
+                      :alt="`${destination.name} loop`"
+                    />
+                  </div>
                 </div>
                 <button
                   v-if="destination.images.length > 1"
                   class="slide-btn prev"
                   @click="prevDestinationImage(index, destination.images.length)"
                 >
-                  ‹
+                  <span class="slide-btn-icon" aria-hidden="true">&#8249;</span>
                 </button>
                 <button
                   v-if="destination.images.length > 1"
                   class="slide-btn next"
                   @click="nextDestinationImage(index, destination.images.length)"
                 >
-                  ›
+                  <span class="slide-btn-icon" aria-hidden="true">&#8250;</span>
                 </button>
               </div>
               <h3>{{ destination.name }}</h3>
@@ -372,7 +379,7 @@ const destinationSlideIndex = ref({})
 const destinationTransitionEnabled = ref({})
 const savedDestinationSlugs = ref(new Set())
 const savingDestinationSlugs = ref(new Set())
-let destinationAutoplayId = 0
+let destinationHoverAutoplayId = 0
 
 function slugify(value) {
   return String(value || '')
@@ -473,14 +480,19 @@ function prevDestinationImage(cardIndex, total) {
   destinationSlideIndex.value[cardIndex] = (current - 1 + total) % total
 }
 
-function autoplayDestinationImages() {
-  destinationsList.value.forEach((destination, cardIndex) => {
-    const total = destination.images.length
-    if (total > 1) {
-      const current = destinationSlideIndex.value[cardIndex] || 0
-      destinationSlideIndex.value[cardIndex] = current + 1
-    }
-  })
+function startDestinationHoverAutoplay(cardIndex, total) {
+  stopDestinationHoverAutoplay()
+  if (!total || total <= 1) return
+  destinationHoverAutoplayId = window.setInterval(() => {
+    const current = destinationSlideIndex.value[cardIndex] || 0
+    destinationSlideIndex.value[cardIndex] = current + 1
+  }, 2400)
+}
+
+function stopDestinationHoverAutoplay() {
+  if (!destinationHoverAutoplayId) return
+  window.clearInterval(destinationHoverAutoplayId)
+  destinationHoverAutoplayId = 0
 }
 
 function onDestinationSlideTransitionEnd(cardIndex, total) {
@@ -593,7 +605,6 @@ onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
   updateActiveTabOnScroll()
   loadSavedDestinationSlugs()
-  destinationAutoplayId = window.setInterval(autoplayDestinationImages, 4800)
   experienceAutoplayId = window.setInterval(autoplayExperiences, 5200)
   resumeGalleryAutoscroll()
 })
@@ -601,7 +612,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
   if (scrollRafId) window.cancelAnimationFrame(scrollRafId)
-  if (destinationAutoplayId) window.clearInterval(destinationAutoplayId)
+  stopDestinationHoverAutoplay()
   if (experienceAutoplayId) window.clearInterval(experienceAutoplayId)
   pauseGalleryAutoscroll()
   if (galleryResumeTimeoutId) window.clearTimeout(galleryResumeTimeoutId)
@@ -657,7 +668,6 @@ watch(experiencesList, (list) => {
   align-items: center;
   justify-content: center;
   padding: clamp(22px, 3.5vw, 40px) clamp(38px, 6vw, 72px);
-  background: rgba(var(--v-theme-surface), 0.28);
   border-radius: 20px;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -668,10 +678,10 @@ watch(experiencesList, (list) => {
   margin: 0;
   font-family: 'Times New Roman', Times, Georgia, serif;
   font-size: clamp(2.8rem, 8vw, 6.3rem);
-  line-height: 1;
+  line-height: 0;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgb(var(--v-theme-text));
+  color: rgb(var(--v-theme-primary));
 }
 
 .country-page.is-dark .title-blob {
@@ -809,6 +819,7 @@ watch(experiencesList, (list) => {
 }
 
 .quickfact-inline-icon {
+  margin: 8px 0 0;
   padding-left: 10px;
   font-size: 25px;
   opacity: 0.9;
@@ -965,6 +976,7 @@ watch(experiencesList, (list) => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.35s ease;
 }
 
 .destination-slider-track {
@@ -973,8 +985,22 @@ watch(experiencesList, (list) => {
   height: 100%;
 }
 
-.destination-slider-track img {
+.destination-slide {
   flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.destination-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center;
+}
+
+.destination-slider:hover img {
+  transform: scale(1.06);
 }
 
 .destination-card h3,
@@ -999,16 +1025,23 @@ watch(experiencesList, (list) => {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  border: 1px solid rgba(var(--v-theme-text), 0.16);
-  background: rgba(var(--v-theme-on-surface), 0.78);
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.16);
+  background: rgba(var(--v-theme-surface), 0.78);
   color: rgb(var(--v-theme-text));
   cursor: pointer;
-  font-size: 1.4rem;
+  font-size: 0;
   padding: 0;
-  line-height: 1;
+  line-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.slide-btn-icon {
+  display: block;
+  font-size: 1.55rem;
+  line-height: 1;
+  transform: translateY(-1px);
 }
 
 .country-page.is-dark .slide-btn {
@@ -1055,7 +1088,7 @@ watch(experiencesList, (list) => {
 
 .experience-overlay h3 {
   font-size: clamp(2rem, 4vw, 4rem);
-  line-height: 1;
+  line-height: 0;
   margin-bottom: 16px;
 }
 
@@ -1200,5 +1233,6 @@ watch(experiencesList, (list) => {
   }
 }
 </style>
+
 
 
