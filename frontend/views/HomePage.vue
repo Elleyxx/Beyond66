@@ -6,22 +6,20 @@
       @change-country="setActiveCountry"
     />
 
-    <HomeTours
-      :countries="countries"
-      :active-country="activeCountry"
-      @change-country="setActiveCountry"
-    />
+    <HomeTours :countries="countries" />
 
     <HomeAbout />
+    <HomeInfo />
   </main>
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import HomeHero from '@/components/home/homeHero.vue'
 import HomeTours from '@/components/home/homeTopDest.vue'
-import HomeAbout from '@/components/home/HomeAbout.vue'
+import HomeAbout from '@/components/home/homeAbout.vue'
+import HomeInfo from '@/components/home/homeInfo.vue'
 
 const countries = [
   {
@@ -43,6 +41,16 @@ const countries = [
         title: 'Tromso',
         desc: 'Northern lights, winter adventures, and Arctic culture.',
         image: '/assets/images/Norway/tromso1.jpg',
+      },
+      {
+        title: 'Bergen',
+        desc: 'Historic harbor fronts, mountain funicular views, and fjord gateways.',
+        image: '/assets/images/Norway/bergen1.jpeg',
+      },
+      {
+        title: 'Preikestolen',
+        desc: 'Hike to a dramatic cliff plateau above the Lysefjord.',
+        image: '/assets/images/Norway/preikestolen1.jpeg',
       },
     ],
   },
@@ -66,6 +74,16 @@ const countries = [
         desc: 'Medieval streets, coastlines, and slow island summers.',
         image: '/assets/images/Sweden/gotland1.jpeg',
       },
+      {
+        title: 'Gothenburg',
+        desc: 'Canals, seafood markets, and a creative west-coast city vibe.',
+        image: '/assets/images/Sweden/gothenburg1.jpeg',
+      },
+      {
+        title: 'Kiruna',
+        desc: 'Arctic landscapes, snowy trails, and winter sky experiences.',
+        image: '/assets/images/Sweden/kiruna1.jpg',
+      },
     ],
   },
   {
@@ -87,6 +105,16 @@ const countries = [
         title: 'Lake Saimaa',
         desc: 'Quiet lake routes, cabins, forests, and open water.',
         image: '/assets/images/Finland/saimaa1.jpg',
+      },
+      {
+        title: 'Turku',
+        desc: 'Riverside culture, medieval landmarks, and coastal archipelago routes.',
+        image: '/assets/images/Finland/turku1.jpg',
+      },
+      {
+        title: 'Porvoo',
+        desc: 'Storybook old town lanes and colorful riverside warehouses.',
+        image: '/assets/images/Finland/porvoo1.jpg',
       },
     ],
   },
@@ -110,6 +138,16 @@ const countries = [
         desc: 'Geothermal water surrounded by volcanic lava fields.',
         image: '/assets/images/Iceland/bluelagoon1.jpeg',
       },
+      {
+        title: 'Golden Circle',
+        desc: 'Geysers, waterfalls, and rift-valley landscapes in one route.',
+        image: '/assets/images/Iceland/goldencircle1.jpeg',
+      },
+      {
+        title: 'Reykjavik',
+        desc: 'Colorful streets, modern Nordic culture, and seaside city walks.',
+        image: '/assets/images/Iceland/Reykjavík1.jpeg',
+      },
     ],
   },
   {
@@ -132,21 +170,40 @@ const countries = [
         desc: 'White chalk cliffs above the Baltic coast.',
         image: '/assets/images/Denmark/monsklint1.jpg',
       },
+      {
+        title: 'Aarhus',
+        desc: 'Contemporary art, cozy quarters, and vibrant Danish city life.',
+        image: '/assets/images/Denmark/aarhus1.jpg',
+      },
+      {
+        title: 'Odense',
+        desc: 'Fairytale history, walkable streets, and relaxed local culture.',
+        image: '/assets/images/Denmark/odense1.jpeg',
+      },
     ],
   },
 ]
 
-const activeCountry = ref(countries[0])
+const activeCountrySlug = ref(countries[0].slug)
+const activeCountry = computed(
+  () => countries.find((country) => country.slug === activeCountrySlug.value) || countries[0]
+)
 let heroRotationTimer = 0
 
 function setActiveCountry(country) {
-  activeCountry.value = country
+  const targetSlug = typeof country === 'string' ? country : country?.slug
+  if (!targetSlug) return
+
+  const matchedCountry = countries.find((item) => item.slug === targetSlug)
+  if (matchedCountry) {
+    activeCountrySlug.value = matchedCountry.slug
+  }
 }
 
 function rotateHeroCountry() {
   const currentIndex = countries.findIndex((country) => country.slug === activeCountry.value.slug)
   const nextIndex = (currentIndex + 1) % countries.length
-  activeCountry.value = countries[nextIndex]
+  activeCountrySlug.value = countries[nextIndex].slug
 }
 
 onMounted(() => {
@@ -160,7 +217,13 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .home-page {
-  background: rgb(var(--v-theme-background));
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(var(--v-theme-background), 0.94),
+      rgba(var(--v-theme-background), 0.98)
+    ),
+    url('/assets/images/snow.jpg') center/cover fixed;
   color: rgb(var(--v-theme-text));
   overflow-x: hidden;
 }

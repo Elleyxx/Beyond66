@@ -82,7 +82,7 @@
 .nordic-footer {
   position: relative;
   isolation: isolate;
-  min-height: 560px;
+  min-height: 550px;
 }
 
 .nordic-footer::before {

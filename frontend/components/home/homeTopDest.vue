@@ -1,7 +1,5 @@
 <template>
   <section class="tours-section">
-    <div class="tours-bg"></div>
-
     <div class="tours-header">
       <div class="title-block">
         <h2>DEST</h2>
@@ -10,13 +8,12 @@
           fjords, lakes, mountains and historical cities.
         </p>
       </div>
-
       <div class="tour-tabs">
         <button
           v-for="country in countries"
           :key="country.slug"
-          :class="{ active: activeCountry.slug === country.slug }"
-          @click="$emit('change-country', country)"
+          :class="{ active: selectedCountry.slug === country.slug }"
+          @click="setSelectedCountry(country.slug)"
         >
           {{ country.name }}
         </button>
@@ -26,7 +23,7 @@
     <div class="cards-wrap">
       <div ref="cardsRef" class="tour-cards">
         <article
-          v-for="place in activeCountry.places"
+          v-for="place in selectedCountry.places"
           :key="place.title"
           class="tour-card"
         >
@@ -49,14 +46,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-defineProps({
+const props = defineProps({
   countries: Array,
-  activeCountry: Object,
 })
 
-defineEmits(['change-country'])
+const selectedSlug = ref('norway')
+
+const selectedCountry = computed(() => {
+  return (
+    props.countries?.find((country) => country.slug === selectedSlug.value) ||
+    props.countries?.find((country) => country.slug === 'norway') ||
+    props.countries?.[0] ||
+    { slug: 'norway', places: [] }
+  )
+})
+
+function setSelectedCountry(slug) {
+  selectedSlug.value = slug
+}
 
 const cardsRef = ref(null)
 
@@ -74,21 +83,8 @@ const scrollCards = (direction) => {
 .tours-section {
   position: relative;
   padding: 90px 8vw 110px;
-  background: rgb(var(--v-theme-surface));
+  background: transparent;
   overflow: hidden;
-}
-
-.tours-bg {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      rgba(var(--v-theme-surface), 0.88),
-      rgba(var(--v-theme-surface), 0.95)
-    ),
-    url('/assets/images/snow.jpg') center/cover;
-  opacity: 0.9;
-  pointer-events: none;
 }
 
 .tours-header {
@@ -241,7 +237,7 @@ const scrollCards = (direction) => {
 
 .card-overlay h3 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 800;
 }
 
@@ -250,7 +246,7 @@ const scrollCards = (direction) => {
   margin: 0;
   overflow: hidden;
   opacity: 0;
-  font-size: 0.74rem;
+  font-size: 1rem;
   line-height: 1.5;
   transition: 0.3s ease;
 }
@@ -262,7 +258,7 @@ const scrollCards = (direction) => {
   overflow: hidden;
   opacity: 0;
   color: rgb(var(--v-theme-primary));
-  font-size: 0.72rem;
+  font-size: 0.9rem;
   font-weight: 900;
   letter-spacing: 0.08em;
   transition: 0.3s ease;
