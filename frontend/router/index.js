@@ -11,12 +11,12 @@ import IcelandView from '../views/IcelandPage.vue'
 import DenmarkView from '../views/DenmarkPage.vue'
 import ForumView from '../views/Forum.vue'
 import ProfileView from '../views/Profile.vue'
-import ItineraryView from '../views/ItineraryPage.vue'
+import ItineraryView from '../views/PlannerPage.vue'
 import { isAuthenticated } from '../utils/auth'
 
 const router = createRouter({
   history: createWebHistory(),
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(savedPosition) {
     if (savedPosition) {
       return savedPosition
     }
