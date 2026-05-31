@@ -52,8 +52,8 @@ function isSessionExpired() {
 
 function redirectToLoginOnExpiry() {
   const path = window.location.pathname
-  if (path === '/login' || path === '/register' || path === '/' || path === '/landing') return
-  window.location.href = '/landing?expired=1'
+  if (path === '/') return
+  window.location.href = '/'
 }
 
 function handlePossibleSessionExpiry() {

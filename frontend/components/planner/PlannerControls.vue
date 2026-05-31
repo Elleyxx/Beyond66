@@ -1,6 +1,7 @@
 <template>
   <section class="planner-card controls-card">
-    <h2>Plan Basics</h2>
+    <h2>Start Your Journey</h2>
+    <p>Choose your travel preferences to begin planning.</p>
     <div class="grid">
       <label>
         Country
