@@ -15,6 +15,7 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@svg-maps/world": "^2.0.0",
+    "@vuepic/vue-datepicker": "^14.0.0",
     "axios": "^1.16.1",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",

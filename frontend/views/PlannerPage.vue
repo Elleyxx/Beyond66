@@ -1,116 +1,60 @@
 <template>
   <main class="planner-page" :class="{ 'is-dark': isDark }">
     <header class="planner-header">
-      <h1>Nordic Trip Planner</h1>
-      <img
-        class="planner-border-image"
-        src="/assets/images/plan_border.png"
-        alt="Planner border"
-      />
+      <h1 :style="{ color: plannerTitleColor }">Nordic Trip Planner</h1>
+      <img class="planner-border-image" src="/assets/images/plan_border.png" alt="Planner border" />
     </header>
 
-    <div class="planner-layout">
-      <section class="planning-column">
-        <div class="stepper-header" :style="{ '--step-count': steps.length }">
-          <div class="progress-timeline">
-            <div
-              v-for="(step, index) in steps"
-              :key="step.title"
-              class="timeline-step"
-              :class="{
-                completed: index < currentStep,
-                active: index === currentStep,
-                pending: index > currentStep,
-              }"
-              role="button"
-              tabindex="0"
-              :aria-label="`Go to step ${index + 1}: ${step.title}`"
-              @click="goToStep(index)"
-              @keydown.enter="goToStep(index)"
-              @keydown.space.prevent="goToStep(index)"
-            >
-              <span class="timeline-icon-ring" aria-hidden="true">
-                <i :class="['bi', step.iconClass, 'timeline-icon-bi']"></i>
-              </span>
-              <div class="timeline-dot"></div>
-              <p>{{ step.title }}</p>
-            </div>
-          </div>
+    <div class="planner-layout" :class="{ 'is-split': isSplitLayout }">
+      <PlannerTripListPanel
+        :trips="trips"
+        :selected-trip-id="selectedTripId"
+        @add="startAddTrip"
+        @select="selectTrip"
+      />
 
-          <div class="timeline-line-track">
-            <div class="timeline-line-fill" :style="{ width: `${progressPercent}%` }"></div>
-          </div>
-          <p class="stepper-count">Step {{ currentStep + 1 }} of {{ steps.length }}</p>
-        </div>
+      <PlannerCreatePanel
+        v-if="mode === 'create'"
+        :steps="steps"
+        :current-step="currentStep"
+        :progress-percent="progressPercent"
+        :trip-meta="tripMeta"
+        :timeline-days="timelineDays"
+        :budget-estimate="budgetEstimate"
+        :weather-forecast="weatherForecast"
+        :aurora-forecast="auroraForecast"
+        :packing-list="packingList"
+        :total-activities="totalActivities"
+        :checked-packing-count="checkedPackingCount"
+        :ai-summary="aiSummary"
+        :ai-error="aiError"
+        :is-generating-ai="isGeneratingAi"
+        @go-step="goToStep"
+        @next-step="nextStep"
+        @prev-step="prevStep"
+        @open-save-modal="isSaveModalOpen = true"
+        @generate-ai-plan="generatePlannerFromAi"
+        @toggle-packing="togglePackingItem"
+        @print-checklist="printChecklist"
+        @update:trip-meta="tripMeta = $event"
+        @update:timeline-days="timelineDays = $event"
+        @update:budget-estimate="updateBudgetEstimate"
+      />
 
-        <div class="planning-grid">
-          <PlannerControls
-            v-if="currentStep === 0"
-            v-model="tripMeta"
-          />
+      <PlannerTripDetailPanel
+        v-else-if="mode === 'view'"
+        :trip="selectedTrip"
+        @edit="editSelectedTrip"
+        @add="startAddTrip"
+      />
 
-          <PlannerTimeline
-            v-if="currentStep === 1"
-            :timeline="timelineDays"
-            @update:timeline="timelineDays = $event"
-          />
-
-          <PlannerBudget
-            v-if="currentStep === 2"
-            :estimate="budgetEstimate"
-          />
-
-          <PlannerWeatherAurora
-            v-if="currentStep === 3"
-            :weather="weatherForecast"
-            :aurora="auroraForecast"
-          />
-
-          <PlannerChecklist
-            v-if="currentStep === 4"
-            :items="packingList"
-            @toggle="togglePackingItem"
-            @print="printChecklist"
-          />
-
-          <PlannerSummary
-            v-if="currentStep === 5"
-            :meta="tripMeta"
-            :total-activities="totalActivities"
-            :checked-count="checkedPackingCount"
-            :checklist-count="packingList.length"
-            @save="saveTrip"
-          />
-        </div>
-
-        <div class="stepper-actions">
-          <button
-            class="step-btn secondary"
-            :disabled="currentStep === 0"
-            @click="prevStep"
-          >
-            Back
-          </button>
-          <button
-            v-if="currentStep < steps.length - 1"
-            class="step-btn primary"
-            @click="nextStep"
-          >
-            Next
-          </button>
-          <button
-            v-else
-            class="step-btn primary"
-            @click="saveTrip"
-          >
-            Save Trip
-          </button>
-        </div>
-      </section>
-
-      <aside class="route-aside">
-        <PlannerRouteMap :timeline="timelineDays" />
-      </aside>
+      <PlannerSaveModal
+        v-if="isSaveModalOpen"
+        :default-title="defaultSaveTitle"
+        :default-description="aiSummary"
+        @close="isSaveModalOpen = false"
+        @save-trip="saveTrip"
+      />
     </div>
 
     <p v-if="saveMessage" class="save-msg">{{ saveMessage }}</p>
@@ -118,18 +62,21 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useTheme } from 'vuetify'
-import PlannerControls from '@/components/planner/PlannerControls.vue'
-import PlannerTimeline from '@/components/planner/PlannerTimeline.vue'
-import PlannerRouteMap from '@/components/planner/PlannerRouteMap.vue'
-import PlannerBudget from '@/components/planner/PlannerBudget.vue'
-import PlannerWeatherAurora from '@/components/planner/PlannerWeatherAurora.vue'
-import PlannerChecklist from '@/components/planner/PlannerChecklist.vue'
-import PlannerSummary from '@/components/planner/PlannerSummary.vue'
+import PlannerTripListPanel from '@/components/planner/PlannerTripListPanel.vue'
+import PlannerCreatePanel from '@/components/planner/PlannerCreatePanel.vue'
+import PlannerTripDetailPanel from '@/components/planner/PlannerTripDetailPanel.vue'
+import PlannerSaveModal from '@/components/planner/PlannerSaveModal.vue'
+import { generateAiPlanner, loadLatestPlannerDraft, savePlannerDraft } from '@/services/plannerService'
+import { getAuroraPrediction, getTripWeather } from '@/services/weatherService'
 
 const theme = useTheme()
 const isDark = computed(() => theme.global.current.value.dark)
+const plannerTitleColor = computed(() =>
+  isDark.value ? 'rgb(var(--v-theme-primary))' : 'rgb(var(--v-theme-headerText))',
+)
+
 const steps = [
   { title: 'Basics', iconClass: 'bi-passport' },
   { title: 'Timeline', iconClass: 'bi-signpost-split' },
@@ -138,18 +85,42 @@ const steps = [
   { title: 'Checklist', iconClass: 'bi-list-check' },
   { title: 'Save', iconClass: 'bi-journal-check' },
 ]
+
 const currentStep = ref(0)
+const mode = ref('list')
+const selectedTripId = ref(null)
+const trips = ref([])
+const saveMessage = ref('')
+const aiError = ref('')
+const aiSummary = ref('')
+const isGeneratingAi = ref(false)
+const isSaveModalOpen = ref(false)
+const aiBudgetEstimate = ref(null)
+const aiWeatherForecast = ref(null)
+const aiAuroraForecast = ref(null)
 
 const tripMeta = ref({
   country: 'Norway',
+  countryRoute: ['Norway'],
+  startDate: '2027-01-15',
+  endDate: '2027-01-19',
+  dateRange: ['2027-01-15', '2027-01-19'],
+  pax: 2,
   duration: 5,
   style: 'Adventure',
   budget: 'Medium',
+  accommodation: 'Hotel',
+  transport: 'Train',
   season: 'Winter',
+  tripType: 'Couple',
+  activityLevel: 'Moderate',
+  interests: ['Northern Lights', 'Nature'],
 })
 
-const timelineDays = ref(buildDays(tripMeta.value.duration))
-const saveMessage = ref('')
+tripMeta.value.duration = calculateDuration(tripMeta.value.startDate, tripMeta.value.endDate)
+tripMeta.value.season = deriveSeason(tripMeta.value.startDate)
+
+const timelineDays = ref(buildDays(tripMeta.value.duration, tripMeta.value.startDate))
 
 const packingList = ref([
   { id: 1, name: 'Thermal base layers', checked: false },
@@ -160,39 +131,61 @@ const packingList = ref([
 ])
 
 watch(
-  () => tripMeta.value.duration,
-  (days) => {
-    const safeDays = Math.min(30, Math.max(1, Number(days) || 1))
+  () => [tripMeta.value.startDate, tripMeta.value.endDate],
+  ([startDate, endDate]) => {
+    const safeDays = calculateDuration(startDate, endDate)
     const existing = timelineDays.value
+    tripMeta.value.duration = safeDays
+    tripMeta.value.season = deriveSeason(startDate)
+    tripMeta.value.dateRange = startDate && endDate ? [startDate, endDate] : []
     timelineDays.value = Array.from({ length: safeDays }, (_, i) => ({
+      ...existing[i],
       day: i + 1,
+      date: addDays(startDate, i),
       items: existing[i]?.items ? [...existing[i].items] : [],
     }))
   },
+  { immediate: true },
 )
 
 const totalActivities = computed(() => timelineDays.value.reduce((sum, day) => sum + day.items.length, 0))
 const checkedPackingCount = computed(() => packingList.value.filter((item) => item.checked).length)
 
 const weatherForecast = computed(() => {
+  if (Array.isArray(aiWeatherForecast.value) && aiWeatherForecast.value.length) {
+    return withForecastDates(aiWeatherForecast.value)
+  }
+
   return Array.from({ length: Math.min(tripMeta.value.duration, 7) }, (_, idx) => ({
+    date: addDays(tripMeta.value.startDate, idx),
     temp: temperatureByCountry(tripMeta.value.country) + idx,
     condition: ['Cloudy', 'Snow', 'Clear', 'Windy'][idx % 4],
   }))
 })
 
 const auroraForecast = computed(() => {
+  if (Array.isArray(aiAuroraForecast.value) && aiAuroraForecast.value.length) {
+    return withForecastDates(aiAuroraForecast.value)
+  }
+
+  if (aiAuroraForecast.value) {
+    if (!aiAuroraForecast.value.date && !aiAuroraForecast.value.bestDate) {
+      return { ...aiAuroraForecast.value, date: tripMeta.value.startDate || 'Best available night' }
+    }
+    return aiAuroraForecast.value
+  }
+
   const winterBoost = tripMeta.value.season === 'Winter' ? 20 : 0
   const nordicBoost = ['Norway', 'Sweden', 'Finland', 'Iceland'].includes(tripMeta.value.country) ? 15 : 0
   const chance = Math.min(95, 35 + winterBoost + nordicBoost)
-  return {
+  return auroraArrayFromPrediction({
     kp: Math.max(2.5, (chance / 20).toFixed(1)),
     chance,
     window: '22:00 - 02:30 local time',
-  }
+  })
 })
 
-const budgetEstimate = computed(() => {
+const fallbackBudgetEstimate = computed(() => {
   const baseByBudget = { Low: 90, Medium: 180, High: 320 }
   const styleFactor = { Adventure: 1.1, Relax: 1.25, Culture: 1.0, Nature: 0.95 }
   const perDay = Math.round((baseByBudget[tripMeta.value.budget] || 180) * (styleFactor[tripMeta.value.style] || 1))
@@ -204,21 +197,235 @@ const budgetEstimate = computed(() => {
     transport: Math.round(total * 0.18),
     activities: Math.round(total * 0.2),
     total,
+    currency: 'USD',
+    pax: tripMeta.value.pax || 1,
+    duration: tripMeta.value.duration,
+    country: tripMeta.value.countryRoute?.join(', ') || tripMeta.value.country,
   }
 })
+const budgetEstimate = computed(() => aiBudgetEstimate.value || fallbackBudgetEstimate.value)
+const defaultSaveTitle = computed(() => {
+  const route = Array.isArray(tripMeta.value.countryRoute) && tripMeta.value.countryRoute.length
+    ? tripMeta.value.countryRoute.join(' → ')
+    : tripMeta.value.country || 'Nordic'
+
+  return `${route} Trip Plan`
+})
+
+const countryCoordinates = {
+  Norway: { lat: 69.6492, lon: 18.9553 },
+  Sweden: { lat: 67.8558, lon: 20.2253 },
+  Finland: { lat: 66.5039, lon: 25.7294 },
+  Iceland: { lat: 64.1466, lon: -21.9426 },
+  Denmark: { lat: 55.6761, lon: 12.5683 },
+}
 
 const progressPercent = computed(() => {
   if (steps.length <= 1) return 100
   return (currentStep.value / (steps.length - 1)) * 100
 })
 
-function buildDays(days) {
-  return Array.from({ length: days }, (_, i) => ({ day: i + 1, items: [] }))
+const selectedTrip = computed(() => trips.value.find((trip) => trip.id === selectedTripId.value) || null)
+const isSplitLayout = computed(() => mode.value === 'create' || mode.value === 'view')
+
+function buildDays(days, startDate = tripMeta.value?.startDate) {
+  return Array.from({ length: days }, (_, i) => ({ day: i + 1, date: addDays(startDate, i), items: [] }))
+}
+
+function calculateDuration(startDate, endDate) {
+  if (!startDate || !endDate) return 1
+
+  const start = new Date(`${startDate}T00:00:00`)
+  const end = new Date(`${endDate}T00:00:00`)
+  const diff = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1
+
+  if (!Number.isFinite(diff)) return 1
+  return Math.min(30, Math.max(1, diff))
+}
+
+function deriveSeason(startDate) {
+  if (!startDate) return 'Winter'
+
+  const month = new Date(`${startDate}T00:00:00`).getMonth() + 1
+  if ([12, 1, 2].includes(month)) return 'Winter'
+  if ([3, 4, 5].includes(month)) return 'Spring'
+  if ([6, 7, 8].includes(month)) return 'Summer'
+  return 'Autumn'
+}
+
+function addDays(startDate, offset) {
+  if (!startDate) return ''
+
+  const date = new Date(`${startDate}T00:00:00`)
+  date.setDate(date.getDate() + offset)
+  return date.toISOString().slice(0, 10)
 }
 
 function temperatureByCountry(country) {
   const map = { Norway: -4, Sweden: -3, Finland: -6, Iceland: 0, Denmark: 3 }
   return map[country] ?? 2
+}
+
+function auroraArrayFromPrediction(aurora) {
+  const days = Math.min(tripMeta.value.duration, 7)
+  const baseChance = Number(aurora?.chance || 0)
+  const kp = aurora?.kp || 0
+  const window = aurora?.window || '10:00 PM - 2:00 AM'
+
+  return Array.from({ length: days }, (_, index) => ({
+    date: addDays(tripMeta.value.startDate, index),
+    chance: Math.max(0, Math.min(95, Math.round(baseChance - Math.abs(index - Math.floor(days / 2)) * 4))),
+    kp,
+    window,
+  }))
+}
+
+function withForecastDates(items) {
+  return items.map((item, index) => ({
+    ...item,
+    date: item.date || addDays(tripMeta.value.startDate, index),
+  }))
+}
+
+async function loadLiveWeatherAurora() {
+  const primaryCountry = tripMeta.value.countryRoute?.[0] || tripMeta.value.country
+  const coords = countryCoordinates[primaryCountry] || countryCoordinates.Norway
+
+  try {
+    const weather = await getTripWeather(
+      coords.lat,
+      coords.lon,
+      tripMeta.value.startDate,
+      tripMeta.value.endDate,
+      primaryCountry,
+      tripMeta.value.season,
+    )
+    const aurora = await getAuroraPrediction(coords.lat, coords.lon)
+
+    aiWeatherForecast.value = weather
+    aiAuroraForecast.value = auroraArrayFromPrediction(aurora)
+  } catch {
+    // Keep generated or local fallback weather when live APIs are unavailable.
+  }
+}
+
+function buildAiPayload() {
+  return {
+    countryRoute: tripMeta.value.countryRoute || [tripMeta.value.country],
+    startDate: tripMeta.value.startDate,
+    endDate: tripMeta.value.endDate,
+    duration: tripMeta.value.duration,
+    budget: tripMeta.value.budget,
+    season: tripMeta.value.season,
+    pax: tripMeta.value.pax || 1,
+    style: tripMeta.value.style,
+    interests: tripMeta.value.interests || [],
+    tripType: tripMeta.value.tripType,
+    transport: tripMeta.value.transport,
+    accommodation: tripMeta.value.accommodation,
+    activityLevel: tripMeta.value.activityLevel,
+  }
+}
+
+function normalizeTimelineDays(days) {
+  if (!Array.isArray(days)) return []
+
+  return days.map((day, index) => ({
+    day: Number(day.day || index + 1),
+    date: day.date || addDays(tripMeta.value.startDate, index),
+    country: day.country || '',
+    destination: day.destination || '',
+    imageSearchQuery: day.imageSearchQuery || '',
+    items: Array.isArray(day.items)
+      ? day.items.map((item) => (typeof item === 'string' ? item : item?.name || item?.title || String(item))).filter(Boolean)
+      : Array.isArray(day.activities)
+        ? day.activities.map((item) => item?.name || item?.title || String(item)).filter(Boolean)
+        : [],
+  }))
+}
+
+function normalizePackingList(items) {
+  if (!Array.isArray(items)) return []
+
+  return items.map((item, index) => ({
+    id: Number(item.id || index + 1),
+    name: String(item.name || item.item || item.title || 'Item'),
+    checked: Boolean(item.checked),
+  }))
+}
+
+function normalizeBudgetEstimate(estimate, options = {}) {
+  if (!estimate || typeof estimate !== 'object') return null
+
+  const stay = Number(estimate.stay ?? estimate.accommodation ?? 0)
+  const food = Number(estimate.food ?? 0)
+  const transport = Number(estimate.transport ?? estimate.transportation ?? 0)
+  const activities = Number(estimate.activities ?? 0)
+  const total = Number(estimate.total ?? stay + food + transport + activities)
+  const shouldKeepSuggestedTotals =
+    options.includeSuggestedTotals ||
+    estimate.suggestedTotal !== undefined ||
+    estimate.originalTotal !== undefined
+
+  const normalized = {
+    stay,
+    food,
+    transport,
+    activities,
+    total,
+    currency: estimate.currency || 'USD',
+    pax: Number(estimate.pax || tripMeta.value.pax || 1),
+    duration: Number(estimate.duration || tripMeta.value.duration || 0),
+    country: estimate.country || tripMeta.value.countryRoute?.join(', ') || tripMeta.value.country,
+  }
+
+  if (shouldKeepSuggestedTotals) {
+    normalized.suggestedTotal = Number(estimate.suggestedTotal ?? total)
+    normalized.originalTotal = Number(estimate.originalTotal ?? estimate.suggestedTotal ?? total)
+  }
+
+  return normalized
+}
+
+function updateBudgetEstimate(estimate) {
+  const nextBudget = normalizeBudgetEstimate(estimate)
+  if (nextBudget) aiBudgetEstimate.value = nextBudget
+}
+
+async function generatePlannerFromAi() {
+  if (isGeneratingAi.value) return false
+
+  aiError.value = ''
+  isGeneratingAi.value = true
+
+  try {
+    const result = await generateAiPlanner(buildAiPayload())
+    const nextTimeline = normalizeTimelineDays(result.timelineDays)
+    const nextPackingList = normalizePackingList(result.packingList)
+    const nextBudget = normalizeBudgetEstimate(result.budgetEstimate, {
+      includeSuggestedTotals: true,
+    })
+
+    if (nextTimeline.length) timelineDays.value = nextTimeline
+    if (nextPackingList.length) packingList.value = nextPackingList
+    if (nextBudget) aiBudgetEstimate.value = nextBudget
+    if (Array.isArray(result.weatherForecast)) aiWeatherForecast.value = result.weatherForecast
+    if (
+      Array.isArray(result.auroraForecast) ||
+      (result.auroraForecast && typeof result.auroraForecast === 'object')
+    ) {
+      aiAuroraForecast.value = result.auroraForecast
+    }
+    await loadLiveWeatherAurora()
+    aiSummary.value = String(result.summary || '')
+    currentStep.value = 1
+    return true
+  } catch (error) {
+    aiError.value = error?.message || 'Failed to generate AI planner.'
+    return false
+  } finally {
+    isGeneratingAi.value = false
+  }
 }
 
 function togglePackingItem(id) {
@@ -231,8 +438,14 @@ function printChecklist() {
   window.print()
 }
 
-function nextStep() {
+async function nextStep() {
   if (currentStep.value >= steps.length - 1) return
+
+  if (currentStep.value === 0) {
+    await generatePlannerFromAi()
+    return
+  }
+
   currentStep.value += 1
 }
 
@@ -246,29 +459,204 @@ function goToStep(index) {
   currentStep.value = index
 }
 
-function saveTrip() {
+function selectTrip(id) {
+  selectedTripId.value = id
+  mode.value = 'view'
+}
+
+function startAddTrip() {
+  mode.value = 'create'
+  selectedTripId.value = null
+  currentStep.value = 0
+}
+
+function editSelectedTrip() {
+  if (!selectedTrip.value) return
+
+  tripMeta.value = {
+    ...tripMeta.value,
+    ...selectedTrip.value.tripMeta,
+    country: selectedTrip.value.country,
+    duration: selectedTrip.value.duration,
+    style: selectedTrip.value.style,
+    season: selectedTrip.value.season,
+  }
+
+  timelineDays.value = selectedTrip.value.timelineDays.map((day) => ({
+    ...day,
+    day: day.day,
+    items: [...day.items],
+  }))
+
+  if (Array.isArray(selectedTrip.value.packingList) && selectedTrip.value.packingList.length) {
+    packingList.value = selectedTrip.value.packingList.map((item) => ({ ...item }))
+  }
+
+  mode.value = 'create'
+  currentStep.value = 0
+}
+
+function upsertTrip(nextTrip) {
+  const index = trips.value.findIndex((trip) => trip.id === nextTrip.id)
+  if (index >= 0) {
+    trips.value.splice(index, 1, nextTrip)
+    return
+  }
+  trips.value.unshift(nextTrip)
+}
+
+async function saveTrip(saveOptions = {}) {
+  const title = saveOptions.title || defaultSaveTitle.value
+  const description = saveOptions.description || ''
+  const visibility = saveOptions.visibility || 'private'
+  const coverImage = saveOptions.coverImage || ''
+
   const payload = {
     tripMeta: tripMeta.value,
     timelineDays: timelineDays.value,
     budgetEstimate: budgetEstimate.value,
     packingList: packingList.value,
+    weatherForecast: weatherForecast.value,
+    auroraForecast: auroraForecast.value,
+    summary: aiSummary.value,
+    title,
+    description,
+    visibility,
+    coverImage,
     savedAt: new Date().toISOString(),
   }
 
-  localStorage.setItem('trip_planner_draft', JSON.stringify(payload))
-  saveMessage.value = 'Trip saved locally.'
+  try {
+    const result = await savePlannerDraft(payload)
+    const tripRecord = {
+      id: Number(result?.plan_id || Date.now()),
+      title,
+      country: tripMeta.value.country,
+      duration: tripMeta.value.duration,
+      startDate: tripMeta.value.startDate,
+      endDate: tripMeta.value.endDate,
+      style: tripMeta.value.style,
+      season: tripMeta.value.season,
+      tripType: tripMeta.value.tripType,
+      tripMeta: { ...tripMeta.value },
+      timelineDays: timelineDays.value.map((day) => ({ ...day, items: [...day.items] })),
+      packingList: packingList.value.map((item) => ({ ...item })),
+      summary: aiSummary.value,
+      description,
+      visibility,
+      coverImage,
+      savedAt: result?.savedAt || new Date().toISOString(),
+    }
+
+    upsertTrip(tripRecord)
+    selectedTripId.value = tripRecord.id
+    mode.value = 'view'
+    isSaveModalOpen.value = false
+    saveMessage.value = visibility === 'public' ? 'Trip published to community.' : 'Trip saved privately.'
+  } catch {
+    localStorage.setItem('trip_planner_draft', JSON.stringify(payload))
+    isSaveModalOpen.value = false
+    saveMessage.value = 'Saved locally (backend unavailable).'
+  }
+
   window.setTimeout(() => {
     saveMessage.value = ''
-  }, 2000)
+  }, 2200)
 }
+
+onMounted(async () => {
+  try {
+    const latest = await loadLatestPlannerDraft()
+    if (!latest) return
+
+    if (latest.tripMeta) tripMeta.value = { ...tripMeta.value, ...latest.tripMeta }
+    if (Array.isArray(latest.timelineDays) && latest.timelineDays.length) {
+      timelineDays.value = latest.timelineDays.map((day, index) => ({
+        ...day,
+        day: Number(day.day || index + 1),
+        items: Array.isArray(day.items) ? day.items : [],
+      }))
+    }
+    if (Array.isArray(latest.packingList) && latest.packingList.length) {
+      packingList.value = latest.packingList.map((item, index) => ({
+        id: Number(item.id || index + 1),
+        name: String(item.name || 'Item'),
+        checked: Boolean(item.checked),
+      }))
+    }
+    if (latest.budgetEstimate) aiBudgetEstimate.value = normalizeBudgetEstimate(latest.budgetEstimate)
+    if (Array.isArray(latest.weatherForecast)) aiWeatherForecast.value = latest.weatherForecast
+    if (latest.auroraForecast) aiAuroraForecast.value = latest.auroraForecast
+    if (latest.summary) aiSummary.value = String(latest.summary)
+
+    const latestTrip = {
+      id: Number(latest.plan_id || Date.now()),
+      title: `${latest.tripMeta?.country || 'Nordic'} Trip Plan`,
+      country: latest.tripMeta?.country || 'Norway',
+      duration: Number(latest.tripMeta?.duration || 1),
+      startDate: latest.tripMeta?.startDate || '',
+      endDate: latest.tripMeta?.endDate || '',
+      style: latest.tripMeta?.style || 'Adventure',
+      season: latest.tripMeta?.season || 'Winter',
+      tripType: latest.tripMeta?.tripType || 'Couple',
+      tripMeta: latest.tripMeta || {},
+      timelineDays: Array.isArray(latest.timelineDays) ? latest.timelineDays : [],
+      packingList: Array.isArray(latest.packingList) ? latest.packingList : [],
+      summary: latest.summary || '',
+      savedAt: latest.savedAt || new Date().toISOString(),
+    }
+
+    trips.value = [latestTrip]
+    selectedTripId.value = null
+    mode.value = 'list'
+  } catch {
+    const local = localStorage.getItem('trip_planner_draft')
+    if (!local) return
+
+    try {
+      const parsed = JSON.parse(local)
+      if (parsed.tripMeta) tripMeta.value = { ...tripMeta.value, ...parsed.tripMeta }
+      if (Array.isArray(parsed.timelineDays) && parsed.timelineDays.length) timelineDays.value = parsed.timelineDays
+      if (Array.isArray(parsed.packingList) && parsed.packingList.length) packingList.value = parsed.packingList
+      if (parsed.budgetEstimate) aiBudgetEstimate.value = normalizeBudgetEstimate(parsed.budgetEstimate)
+      if (Array.isArray(parsed.weatherForecast)) aiWeatherForecast.value = parsed.weatherForecast
+      if (parsed.auroraForecast) aiAuroraForecast.value = parsed.auroraForecast
+      if (parsed.summary) aiSummary.value = String(parsed.summary)
+
+      const localTrip = {
+        id: Date.now(),
+        title: `${parsed.tripMeta?.country || 'Nordic'} Trip Plan`,
+        country: parsed.tripMeta?.country || 'Norway',
+        duration: Number(parsed.tripMeta?.duration || 1),
+        startDate: parsed.tripMeta?.startDate || '',
+        endDate: parsed.tripMeta?.endDate || '',
+        style: parsed.tripMeta?.style || 'Adventure',
+        season: parsed.tripMeta?.season || 'Winter',
+        tripType: parsed.tripMeta?.tripType || 'Couple',
+        tripMeta: parsed.tripMeta || {},
+        timelineDays: Array.isArray(parsed.timelineDays) ? parsed.timelineDays : [],
+        packingList: Array.isArray(parsed.packingList) ? parsed.packingList : [],
+        summary: parsed.summary || '',
+        savedAt: parsed.savedAt || new Date().toISOString(),
+      }
+
+      trips.value = [localTrip]
+      selectedTripId.value = null
+      mode.value = 'list'
+    } catch {
+      // ignore invalid local cache
+    }
+  }
+})
 </script>
 
 <style scoped>
 .planner-page {
-  padding: 50px 18px 40px;
+  padding: 75px clamp(28px, 5vw, 72px) 110px;
   background: rgb(var(--v-theme-background));
-  height: calc(100vh - 24px);
-  overflow: hidden;
+  min-height: calc(100vh - 24px);
+  height: auto;
+  overflow: visible;
 }
 
 .planner-header {
@@ -286,11 +674,6 @@ function saveTrip() {
   font-size: clamp(1.8rem, 3.2vw, 2.7rem);
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: rgb(var(--v-theme-menuText));
-}
-
-.planner-page.is-dark .planner-header h1 {
-  color: rgb(var(--v-theme-primary));
 }
 
 .planner-border-image {
@@ -299,185 +682,18 @@ function saveTrip() {
   height: auto;
   margin-top: -30px;
 }
-
 .planner-layout {
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(320px, 3fr);
-  gap: 14px;
+  grid-template-columns: 1fr;
+  gap: 24px;
   align-items: start;
-  height: calc(100% - 130px);
-  min-height: 0;
+  min-height: fit-content;
+  overflow: visible;
+  padding-bottom: 8px;
 }
 
-.planning-column {
-  min-height: 0;
-  height: 100%;
-  overflow-y: auto;
-  padding-right: 8px;
-}
-
-.planning-column::-webkit-scrollbar {
-  width: 8px;
-}
-
-.planning-column::-webkit-scrollbar-thumb {
-  background: rgba(var(--v-theme-on-surface), 0.25);
-  border-radius: 999px;
-}
-
-.planning-column::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.planning-grid {
-  display: grid;
-  gap: 12px;
-}
-
-.stepper-header {
-  margin-bottom: 12px;
-  position: relative;
-}
-
-.progress-timeline {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 6px;
-  align-items: end;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 2;
-}
-
-.timeline-step {
-  text-align: center;
-  cursor: pointer;
-  outline: none;
-}
-
-.timeline-step:focus-visible {
-  border-radius: 10px;
-  box-shadow: 0 0 0 2px rgba(var(--v-theme-primary), 0.35);
-}
-
-.timeline-icon-ring {
-  width: 46px;
-  height: 46px;
-  margin: 0 auto;
-  border-radius: 50%;
-  border: 2px solid rgba(var(--v-theme-primary), 0.5);
-  display: grid;
-  place-items: center;
-  background: rgba(var(--v-theme-primary), 0.08);
-}
-
-.timeline-icon-bi {
-  font-size: 1.35rem;
-  line-height: 1;
-  color: rgb(var(--v-theme-primary));
-}
-
-.timeline-dot {
-  width: 14px;
-  height: 14px;
-  margin: 8px auto 6px;
-  border-radius: 50%;
-  border: 2px solid rgba(var(--v-theme-on-surface), 0.25);
-  background: rgba(var(--v-theme-surface), 1);
-  position: relative;
-  z-index: 3;
-}
-
-.timeline-step p {
-  margin: 0;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: rgba(var(--v-theme-text), 0.42);
-}
-
-.timeline-step.pending .timeline-icon-ring {
-  border-color: rgba(var(--v-theme-on-surface), 0.24);
-  background: rgba(var(--v-theme-on-surface), 0.04);
-}
-
-.timeline-step.pending .timeline-icon-bi {
-  color: rgba(var(--v-theme-on-surface), 0.42);
-}
-
-.timeline-step.completed .timeline-dot,
-.timeline-step.active .timeline-dot {
-  border-color: rgba(var(--v-theme-primary), 0.95);
-  background: rgba(var(--v-theme-primary), 0.95);
-}
-
-.timeline-step.completed p,
-.timeline-step.active p {
-  color: rgb(var(--v-theme-text));
-}
-
-.timeline-step.active p {
-  color: rgb(var(--v-theme-primary));
-}
-
-.timeline-line-track {
-  position: absolute;
-  left: calc(100% / (var(--step-count) * 2));
-  right: calc(100% / (var(--step-count) * 2));
-  top: 61px;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(var(--v-theme-on-surface), 0.18);
-  overflow: hidden;
-  z-index: 1;
-}
-
-.timeline-line-fill {
-  height: 100%;
-  background: linear-gradient(90deg, rgba(var(--v-theme-primary), 0.55), rgba(var(--v-theme-primary), 1));
-  transition: width 0.3s ease;
-}
-
-.stepper-count {
-  margin: 8px 0 0;
-  font-size: 0.82rem;
-  color: rgba(var(--v-theme-text), 0.75);
-}
-
-.stepper-actions {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.step-btn {
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-weight: 700;
-  cursor: pointer;
-  border: 1px solid transparent;
-}
-
-.step-btn.primary {
-  color: rgb(var(--v-theme-background));
-  background: rgb(var(--v-theme-primary));
-}
-
-.step-btn.secondary {
-  color: rgb(var(--v-theme-text));
-  background: rgba(var(--v-theme-surface), 0.9);
-  border-color: rgba(var(--v-theme-on-surface), 0.2);
-}
-
-.step-btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.route-aside {
-  position: sticky;
-  top: 12px;
-  align-self: start;
+.planner-layout.is-split {
+  grid-template-columns: minmax(300px, 3fr) minmax(0, 7fr);
 }
 
 .save-msg {
@@ -492,19 +708,10 @@ function saveTrip() {
     overflow: visible;
   }
 
-  .planner-layout {
+  .planner-layout,
+  .planner-layout.is-split {
     grid-template-columns: 1fr;
     height: auto;
-  }
-
-  .planning-column {
-    height: auto;
-    overflow: visible;
-    padding-right: 0;
-  }
-
-  .route-aside {
-    position: static;
   }
 }
 
@@ -514,7 +721,8 @@ function saveTrip() {
     color: #000;
   }
 
-  .planner-layout {
+  .planner-layout,
+  .planner-layout.is-split {
     grid-template-columns: 1fr;
   }
 }

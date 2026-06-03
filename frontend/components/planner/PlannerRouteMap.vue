@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section class="planner-card route-card">
     <h2>Journey Preview</h2>
 
@@ -85,3 +85,5 @@ h2 {
   );
 }
 </style>
+
+

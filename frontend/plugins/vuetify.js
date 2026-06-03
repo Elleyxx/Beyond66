@@ -21,7 +21,7 @@ export default createVuetify({
           header: "#d9ecff",       // soft sky blue
           footer: "#f4fbff",
           primary: "#76c6fc",      // Nordic sky blue
-          secondary: "#eaf7ff",    // icy blue
+          secondary: "#c7e4f7",    // icy blue
           accent: "#c7eaff",       // snow shadow blue
           text: "#102033",         // deep blue text
           muted: "#6f8499",
