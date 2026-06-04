@@ -3,6 +3,7 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $backend = Join-Path $root 'backend'
 $frontend = Join-Path $root 'frontend'
+$logs = Join-Path $root '.logs'
 $venvPython = Join-Path $backend 'venv\Scripts\python.exe'
 $python = if (Test-Path $venvPython) { $venvPython } else { 'python' }
 $xamppPhp = 'C:\xampp\php\php.exe'
@@ -14,11 +15,15 @@ $php = if (Get-Command php -ErrorAction SilentlyContinue) {
   throw 'PHP was not found. Install PHP or check that C:\xampp\php\php.exe exists.'
 }
 
+New-Item -ItemType Directory -Force $logs | Out-Null
+
 Write-Host 'Starting PHP API on http://127.0.0.1:8000'
 $phpApi = Start-Process `
   -FilePath $php `
   -ArgumentList @('-S', '127.0.0.1:8000', '-t', 'public') `
   -WorkingDirectory $backend `
+  -RedirectStandardOutput (Join-Path $logs 'php-api.log') `
+  -RedirectStandardError (Join-Path $logs 'php-api-error.log') `
   -PassThru
 
 Write-Host 'Starting AI API on http://127.0.0.1:5000'
@@ -26,6 +31,8 @@ $aiApi = Start-Process `
   -FilePath $python `
   -ArgumentList @('ai_app.py') `
   -WorkingDirectory $backend `
+  -RedirectStandardOutput (Join-Path $logs 'ai-api.log') `
+  -RedirectStandardError (Join-Path $logs 'ai-api-error.log') `
   -PassThru
 
 Write-Host 'Starting Vue frontend'
@@ -33,6 +40,8 @@ $frontendApp = Start-Process `
   -FilePath 'npm' `
   -ArgumentList @('run', 'dev') `
   -WorkingDirectory $frontend `
+  -RedirectStandardOutput (Join-Path $logs 'frontend.log') `
+  -RedirectStandardError (Join-Path $logs 'frontend-error.log') `
   -PassThru
 
 Write-Host ''
@@ -40,6 +49,7 @@ Write-Host 'All services are running.'
 Write-Host 'Frontend:   http://127.0.0.1:5173'
 Write-Host 'PHP health: http://127.0.0.1:8000/api/health'
 Write-Host 'AI health:  http://127.0.0.1:5000/api/health'
+Write-Host "Logs:       $logs"
 Write-Host 'Close this window or press Ctrl+C to stop all services.'
 
 try {
