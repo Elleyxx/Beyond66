@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "backend": "powershell -ExecutionPolicy Bypass -File ./start-backend.ps1",
+    "dev": "powershell -ExecutionPolicy Bypass -File ./start-all.ps1"
+  },
   "dependencies": {
     "@svg-maps/world": "^2.0.0",
     "vue-svg-map": "^2.0.0-beta.1"

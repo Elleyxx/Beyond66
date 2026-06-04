@@ -21,6 +21,11 @@ class PlannerController
         $weatherForecast = is_array($payload['weatherForecast'] ?? null) ? $payload['weatherForecast'] : [];
         $auroraForecast = is_array($payload['auroraForecast'] ?? null) ? $payload['auroraForecast'] : [];
         $summary = is_string($payload['summary'] ?? null) ? $payload['summary'] : '';
+        $planId = isset($payload['plan_id']) ? (int) $payload['plan_id'] : null;
+        $title = is_string($payload['title'] ?? null) ? $payload['title'] : '';
+        $description = is_string($payload['description'] ?? null) ? $payload['description'] : '';
+        $visibility = is_string($payload['visibility'] ?? null) ? $payload['visibility'] : 'private';
+        $coverImage = is_string($payload['coverImage'] ?? null) ? $payload['coverImage'] : '';
 
         if (!$tripMeta || !$timelineDays) {
             Response::json(['success' => false, 'message' => 'tripMeta and timelineDays are required'], 422);
@@ -37,7 +42,12 @@ class PlannerController
                 $packingList,
                 $weatherForecast,
                 $auroraForecast,
-                $summary
+                $summary,
+                $planId,
+                $title,
+                $description,
+                $visibility,
+                $coverImage
             );
 
             Response::json([
@@ -75,6 +85,30 @@ class PlannerController
             Response::json([
                 'success' => false,
                 'message' => 'Failed to fetch latest planner draft',
+            ], 500);
+        }
+    }
+
+    public function list(): void
+    {
+        $userId = $this->currentUserId();
+        if (!$userId) {
+            Response::json(['success' => false, 'message' => 'Authentication required'], 401);
+            return;
+        }
+
+        try {
+            $planner = new Planner();
+            $result = $planner->getPlansByUser($userId);
+
+            Response::json([
+                'success' => true,
+                'data' => $result,
+            ]);
+        } catch (\Throwable $e) {
+            Response::json([
+                'success' => false,
+                'message' => 'Failed to fetch planner drafts',
             ], 500);
         }
     }

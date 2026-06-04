@@ -68,6 +68,16 @@ function ensureDatabaseReady(): void
 
     $dbConn->set_charset($charset);
 
+    $oldCommunityColumn = $dbConn->query("SHOW COLUMNS FROM community_posts LIKE 'trip_id'");
+    $hasNewCommunitySchema = $oldCommunityColumn && $oldCommunityColumn->num_rows > 0;
+    $oldCommunityExists = $dbConn->query("SHOW TABLES LIKE 'community_posts'");
+    if ($oldCommunityExists && $oldCommunityExists->num_rows > 0 && !$hasNewCommunitySchema) {
+        $dbConn->query("DROP TABLE IF EXISTS forum_likes");
+        $dbConn->query("DROP TABLE IF EXISTS post_images");
+        $dbConn->query("DROP TABLE IF EXISTS community_comments");
+        $dbConn->query("DROP TABLE IF EXISTS community_posts");
+    }
+
     $tables = [
 
         // USERS
@@ -83,163 +93,142 @@ function ensureDatabaseReady(): void
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) ENGINE=InnoDB",
 
-        // USER PREFERENCES
-        "CREATE TABLE IF NOT EXISTS user_preferences (
-            user_id BIGINT UNSIGNED PRIMARY KEY,
-            preferred_travel_style ENUM('budget','balanced','comfort','luxury') DEFAULT 'balanced',
-            preferred_season ENUM('spring','summer','autumn','winter') NULL,
-            budget_min DECIMAL(10,2) NULL,
-            budget_max DECIMAL(10,2) NULL,
-            interests JSON NULL,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            CONSTRAINT fk_pref_user
-                FOREIGN KEY (user_id) REFERENCES users(id)
-                ON DELETE CASCADE
-        ) ENGINE=InnoDB",
-
-        // PLANNER PLANS
-        "CREATE TABLE IF NOT EXISTS planner_plans (
+        // TRIPS
+        "CREATE TABLE IF NOT EXISTS trips (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id BIGINT UNSIGNED NOT NULL,
-            country_slug VARCHAR(120) NULL,
-            title VARCHAR(180) NOT NULL,
-            travel_style ENUM('budget','balanced','comfort','luxury') DEFAULT 'balanced',
-            total_days TINYINT UNSIGNED NOT NULL,
-            estimated_budget_min DECIMAL(10,2) NULL,
-            estimated_budget_max DECIMAL(10,2) NULL,
-            notes TEXT NULL,
-            is_public TINYINT(1) DEFAULT 0,
+            title VARCHAR(255) NULL,
+            description TEXT NULL,
+            cover_image VARCHAR(500) NULL,
+            visibility ENUM('private','public') DEFAULT 'private',
+            trip_data JSON NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-            CONSTRAINT fk_planner_user
+            CONSTRAINT fk_trip_user
                 FOREIGN KEY (user_id) REFERENCES users(id)
                 ON DELETE CASCADE,
 
-            INDEX idx_planner_user_created (user_id, created_at),
-            INDEX idx_planner_country_slug (country_slug)
-        ) ENGINE=InnoDB",
-
-        // PLANNER DAYS
-        "CREATE TABLE IF NOT EXISTS planner_days (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            planner_plan_id BIGINT UNSIGNED NOT NULL,
-            day_number TINYINT UNSIGNED NOT NULL,
-            base_destination_slug VARCHAR(180) NULL,
-            day_title VARCHAR(180) NULL,
-            notes TEXT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
-            CONSTRAINT fk_planday_plan
-                FOREIGN KEY (planner_plan_id) REFERENCES planner_plans(id)
-                ON DELETE CASCADE,
-
-            UNIQUE KEY uk_planner_day (planner_plan_id, day_number)
-        ) ENGINE=InnoDB",
-
-        // PLANNER ITEMS
-        "CREATE TABLE IF NOT EXISTS planner_items (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            planner_day_id BIGINT UNSIGNED NOT NULL,
-            attraction_slug VARCHAR(180) NULL,
-            item_type ENUM('attraction','transport','meal','free_time','custom') DEFAULT 'custom',
-            title VARCHAR(200) NOT NULL,
-            start_time TIME NULL,
-            end_time TIME NULL,
-            est_cost DECIMAL(10,2) NULL,
-            notes TEXT NULL,
-            sort_order SMALLINT UNSIGNED DEFAULT 1,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
-            CONSTRAINT fk_planitem_day
-                FOREIGN KEY (planner_day_id) REFERENCES planner_days(id)
-                ON DELETE CASCADE,
-
-            INDEX idx_planitem_day_order (planner_day_id, sort_order),
-            INDEX idx_planitem_attraction_slug (attraction_slug)
+            INDEX idx_trips_user_updated (user_id, updated_at),
+            INDEX idx_trips_visibility_updated (visibility, updated_at)
         ) ENGINE=InnoDB",
 
         // COMMUNITY POSTS
         "CREATE TABLE IF NOT EXISTS community_posts (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            trip_id BIGINT UNSIGNED NOT NULL,
             user_id BIGINT UNSIGNED NOT NULL,
-            country_slug VARCHAR(120) NULL,
-            title VARCHAR(220) NOT NULL,
-            body MEDIUMTEXT NOT NULL,
-            tags JSON NULL,
-            like_count INT UNSIGNED DEFAULT 0,
-            comment_count INT UNSIGNED DEFAULT 0,
+            title VARCHAR(255) NULL,
+            description TEXT NULL,
+            cover_image VARCHAR(500) NULL,
+            status ENUM('public','private') DEFAULT 'public',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+            CONSTRAINT fk_post_trip
+                FOREIGN KEY (trip_id) REFERENCES trips(id)
+                ON DELETE CASCADE,
 
             CONSTRAINT fk_post_user
                 FOREIGN KEY (user_id) REFERENCES users(id)
                 ON DELETE CASCADE,
 
-            INDEX idx_post_country_created (country_slug, created_at),
+            UNIQUE KEY uk_community_trip (trip_id),
+            INDEX idx_post_status_created (status, created_at),
             INDEX idx_post_user_created (user_id, created_at)
         ) ENGINE=InnoDB",
 
-        // COMMUNITY COMMENTS
-        "CREATE TABLE IF NOT EXISTS community_comments (
+        // POST PORTFOLIOS
+        "CREATE TABLE IF NOT EXISTS post_portfolios (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             post_id BIGINT UNSIGNED NOT NULL,
             user_id BIGINT UNSIGNED NOT NULL,
-            body TEXT NOT NULL,
-            parent_comment_id BIGINT UNSIGNED NULL,
+            title VARCHAR(255) NULL,
+            content TEXT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-            CONSTRAINT fk_comment_post
+            CONSTRAINT fk_portfolio_post
                 FOREIGN KEY (post_id) REFERENCES community_posts(id)
                 ON DELETE CASCADE,
 
-            CONSTRAINT fk_comment_user
+            CONSTRAINT fk_portfolio_user
                 FOREIGN KEY (user_id) REFERENCES users(id)
                 ON DELETE CASCADE,
 
-            CONSTRAINT fk_comment_parent
-                FOREIGN KEY (parent_comment_id) REFERENCES community_comments(id)
+            INDEX idx_portfolio_post_created (post_id, created_at)
+        ) ENGINE=InnoDB",
+
+        // PORTFOLIO IMAGES
+        "CREATE TABLE IF NOT EXISTS portfolio_images (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            portfolio_id BIGINT UNSIGNED NOT NULL,
+            image_url VARCHAR(500) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+            CONSTRAINT fk_portfolio_image
+                FOREIGN KEY (portfolio_id) REFERENCES post_portfolios(id)
                 ON DELETE CASCADE,
 
-            INDEX idx_comment_post_created (post_id, created_at)
+            INDEX idx_portfolio_images_portfolio_id (portfolio_id)
         ) ENGINE=InnoDB",
 
         // POST LIKES
-        "CREATE TABLE IF NOT EXISTS forum_likes (
+        "CREATE TABLE IF NOT EXISTS post_likes (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id BIGINT UNSIGNED NOT NULL,
             post_id BIGINT UNSIGNED NOT NULL,
+            user_id BIGINT UNSIGNED NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-            CONSTRAINT fk_like_user
-                FOREIGN KEY (user_id) REFERENCES users(id)
-                ON DELETE CASCADE,
 
             CONSTRAINT fk_like_post
                 FOREIGN KEY (post_id) REFERENCES community_posts(id)
                 ON DELETE CASCADE,
 
-            UNIQUE KEY uk_user_post_like (user_id, post_id)
+            CONSTRAINT fk_like_user
+                FOREIGN KEY (user_id) REFERENCES users(id)
+                ON DELETE CASCADE,
+
+            UNIQUE KEY unique_like (post_id, user_id)
         ) ENGINE=InnoDB",
 
-        // POST IMAGES
-        "CREATE TABLE IF NOT EXISTS post_images (
+        // POST COMMENTS
+        "CREATE TABLE IF NOT EXISTS post_comments (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             post_id BIGINT UNSIGNED NOT NULL,
-            image_url VARCHAR(500) NOT NULL,
+            user_id BIGINT UNSIGNED NOT NULL,
+            comment TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-            CONSTRAINT fk_post_image
+            CONSTRAINT fk_post_comment_post
                 FOREIGN KEY (post_id) REFERENCES community_posts(id)
                 ON DELETE CASCADE,
 
-            INDEX idx_post_images_post_id (post_id)
+            CONSTRAINT fk_post_comment_user
+                FOREIGN KEY (user_id) REFERENCES users(id)
+                ON DELETE CASCADE,
+
+            INDEX idx_post_comment_created (post_id, created_at)
+        ) ENGINE=InnoDB",
+
+        // SAVED POSTS
+        "CREATE TABLE IF NOT EXISTS saved_posts (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            post_id BIGINT UNSIGNED NOT NULL,
+            user_id BIGINT UNSIGNED NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+            CONSTRAINT fk_saved_post_post
+                FOREIGN KEY (post_id) REFERENCES community_posts(id)
+                ON DELETE CASCADE,
+
+            CONSTRAINT fk_saved_post_user
+                FOREIGN KEY (user_id) REFERENCES users(id)
+                ON DELETE CASCADE,
+
+            UNIQUE KEY unique_save (post_id, user_id)
         ) ENGINE=InnoDB",
 
         // SAVED ITEMS
+        // Kept for destination/country/attraction saves used outside community posts.
         "CREATE TABLE IF NOT EXISTS saved_items (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id BIGINT UNSIGNED NOT NULL,
@@ -267,6 +256,154 @@ function ensureDatabaseReady(): void
                 'error' => $dbConn->error
             ]);
             exit;
+        }
+    }
+
+    $oldPlannerExists = $dbConn->query("SHOW TABLES LIKE 'planner_plans'");
+    if ($oldPlannerExists && $oldPlannerExists->num_rows > 0) {
+        $oldPlans = $dbConn->query("SELECT * FROM planner_plans ORDER BY id ASC");
+        if ($oldPlans) {
+            while ($plan = $oldPlans->fetch_assoc()) {
+                $tripExistsStmt = $dbConn->prepare("SELECT id FROM trips WHERE id = ? LIMIT 1");
+                $oldPlanId = (int) $plan['id'];
+                $tripExistsStmt->bind_param('i', $oldPlanId);
+                $tripExistsStmt->execute();
+                $tripExistsResult = $tripExistsStmt->get_result();
+                $tripExists = $tripExistsResult && $tripExistsResult->num_rows > 0;
+                $tripExistsStmt->close();
+
+                if ($tripExists) {
+                    continue;
+                }
+
+                $decodedNotes = json_decode((string) ($plan['notes'] ?? '{}'), true);
+                if (!is_array($decodedNotes)) {
+                    $decodedNotes = [];
+                }
+
+                $days = [];
+                $daysStmt = $dbConn->prepare(
+                    "SELECT id, day_number FROM planner_days WHERE planner_plan_id = ? ORDER BY day_number ASC"
+                );
+                $daysStmt->bind_param('i', $oldPlanId);
+                $daysStmt->execute();
+                $daysResult = $daysStmt->get_result();
+                while ($day = $daysResult->fetch_assoc()) {
+                    $dayId = (int) $day['id'];
+                    $items = [];
+                    $itemsStmt = $dbConn->prepare(
+                        "SELECT title FROM planner_items WHERE planner_day_id = ? ORDER BY sort_order ASC"
+                    );
+                    $itemsStmt->bind_param('i', $dayId);
+                    $itemsStmt->execute();
+                    $itemsResult = $itemsStmt->get_result();
+                    while ($item = $itemsResult->fetch_assoc()) {
+                        $items[] = (string) $item['title'];
+                    }
+                    $itemsStmt->close();
+
+                    $days[] = [
+                        'day' => (int) $day['day_number'],
+                        'items' => $items,
+                    ];
+                }
+                $daysStmt->close();
+
+                $tripMeta = is_array($decodedNotes['tripMeta'] ?? null) ? $decodedNotes['tripMeta'] : [
+                    'country' => ucfirst(str_replace('-', ' ', (string) ($plan['country_slug'] ?? 'Nordic'))),
+                    'duration' => (int) ($plan['total_days'] ?? max(1, count($days))),
+                    'style' => (string) ($plan['travel_style'] ?? 'balanced'),
+                ];
+
+                $tripData = json_encode([
+                    'meta' => $tripMeta,
+                    'timeline' => is_array($decodedNotes['timelineDays'] ?? null) ? $decodedNotes['timelineDays'] : $days,
+                    'budget' => is_array($decodedNotes['budgetEstimate'] ?? null) ? $decodedNotes['budgetEstimate'] : [],
+                    'weather' => is_array($decodedNotes['weatherForecast'] ?? null) ? $decodedNotes['weatherForecast'] : [],
+                    'aurora' => $decodedNotes['auroraForecast'] ?? [],
+                    'checklist' => is_array($decodedNotes['packingList'] ?? null) ? $decodedNotes['packingList'] : [],
+                    'summary' => (string) ($decodedNotes['summary'] ?? ''),
+                ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+                $visibility = ((int) ($plan['is_public'] ?? 0) === 1) ? 'public' : 'private';
+                $description = (string) ($decodedNotes['description'] ?? '');
+                $coverImage = (string) ($decodedNotes['coverImage'] ?? '');
+                $title = (string) ($plan['title'] ?? 'Nordic Trip Plan');
+                $userId = (int) $plan['user_id'];
+                $createdAt = (string) ($plan['created_at'] ?? date('Y-m-d H:i:s'));
+                $updatedAt = (string) ($plan['updated_at'] ?? $createdAt);
+
+                $insertTrip = $dbConn->prepare(
+                    "INSERT INTO trips (id, user_id, title, description, cover_image, visibility, trip_data, created_at, updated_at)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                );
+                $insertTrip->bind_param(
+                    'iisssssss',
+                    $oldPlanId,
+                    $userId,
+                    $title,
+                    $description,
+                    $coverImage,
+                    $visibility,
+                    $tripData,
+                    $createdAt,
+                    $updatedAt
+                );
+                $insertTrip->execute();
+                $insertTrip->close();
+            }
+        }
+
+        $dbConn->query("DROP TABLE IF EXISTS planner_items");
+        $dbConn->query("DROP TABLE IF EXISTS planner_days");
+        $dbConn->query("DROP TABLE IF EXISTS planner_plans");
+    }
+
+    $dbConn->query("DROP TABLE IF EXISTS forum_likes");
+    $dbConn->query("DROP TABLE IF EXISTS post_images");
+    $dbConn->query("DROP TABLE IF EXISTS community_comments");
+
+    $portfolioImagesColumn = $dbConn->query("SHOW COLUMNS FROM post_portfolios LIKE 'images'");
+    if ($portfolioImagesColumn && $portfolioImagesColumn->num_rows > 0) {
+        $portfolioRows = $dbConn->query("SELECT id, images FROM post_portfolios WHERE images IS NOT NULL AND images != ''");
+        if ($portfolioRows) {
+            $insertPortfolioImage = $dbConn->prepare(
+                "INSERT INTO portfolio_images (portfolio_id, image_url) VALUES (?, ?)"
+            );
+
+            while ($portfolio = $portfolioRows->fetch_assoc()) {
+                $portfolioId = (int) $portfolio['id'];
+                $images = json_decode((string) $portfolio['images'], true);
+                if (!is_array($images)) {
+                    continue;
+                }
+
+                foreach ($images as $image) {
+                    $imageUrl = is_array($image)
+                        ? (string) ($image['image_url'] ?? $image['url'] ?? '')
+                        : (string) $image;
+                    $imageUrl = trim($imageUrl);
+                    if ($imageUrl === '') {
+                        continue;
+                    }
+
+                    $insertPortfolioImage->bind_param('is', $portfolioId, $imageUrl);
+                    $insertPortfolioImage->execute();
+                }
+            }
+
+            $insertPortfolioImage->close();
+        }
+
+        $dbConn->query("ALTER TABLE post_portfolios DROP COLUMN images");
+    }
+
+    $oldPrefs = $dbConn->query("SHOW TABLES LIKE 'user_preferences'");
+    if ($oldPrefs && $oldPrefs->num_rows > 0) {
+        $prefRows = $dbConn->query("SELECT COUNT(*) AS count_rows FROM user_preferences");
+        $prefCount = $prefRows ? (int) ($prefRows->fetch_assoc()['count_rows'] ?? 0) : 0;
+        if ($prefCount === 0) {
+            $dbConn->query("DROP TABLE IF EXISTS user_preferences");
         }
     }
 

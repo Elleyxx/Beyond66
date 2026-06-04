@@ -10,13 +10,15 @@
             completed: index < currentStep,
             active: index === currentStep,
             pending: index > currentStep,
+            locked: index > maxUnlockedStep,
           }"
           role="button"
-          tabindex="0"
+          :tabindex="index <= maxUnlockedStep ? 0 : -1"
+          :aria-disabled="index > maxUnlockedStep"
           :aria-label="`Go to step ${index + 1}: ${step.title}`"
-          @click="$emit('go-step', index)"
-          @keydown.enter="$emit('go-step', index)"
-          @keydown.space.prevent="$emit('go-step', index)"
+          @click="index <= maxUnlockedStep && $emit('go-step', index)"
+          @keydown.enter="index <= maxUnlockedStep && $emit('go-step', index)"
+          @keydown.space.prevent="index <= maxUnlockedStep && $emit('go-step', index)"
         >
           <span class="timeline-icon-ring" aria-hidden="true">
             <i :class="['bi', step.iconClass, 'timeline-icon-bi']"></i>
@@ -82,7 +84,9 @@
       <button v-if="currentStep < steps.length - 1" class="step-btn primary" :disabled="isGeneratingAi" @click="$emit('next-step')">
         {{ currentStep === 0 && isGeneratingAi ? 'Generating Trip Plan...' : 'Next' }}
       </button>
-      <button v-else class="step-btn primary" @click="$emit('open-save-modal')">Save Trip</button>
+      <button v-else class="step-btn primary" @click="$emit('open-save-modal')">
+        {{ isEditing ? 'Save Edit' : 'Save Trip' }}
+      </button>
     </div>
     <p v-if="aiError" class="ai-error">{{ aiError }}</p>
   </section>
@@ -99,6 +103,7 @@ import PlannerSummary from '@/components/planner/PlannerSummary.vue'
 defineProps({
   steps: { type: Array, required: true },
   currentStep: { type: Number, required: true },
+  maxUnlockedStep: { type: Number, default: 0 },
   progressPercent: { type: Number, required: true },
   tripMeta: { type: Object, required: true },
   timelineDays: { type: Array, required: true },
@@ -111,6 +116,7 @@ defineProps({
   aiSummary: { type: String, default: '' },
   aiError: { type: String, default: '' },
   isGeneratingAi: { type: Boolean, default: false },
+  isEditing: { type: Boolean, default: false },
 })
 
 defineEmits([
@@ -170,6 +176,11 @@ defineEmits([
   text-align: center;
   cursor: pointer;
   outline: none;
+}
+
+.timeline-step.locked {
+  cursor: not-allowed;
+  opacity: 0.62;
 }
 
 .timeline-step:focus-visible {

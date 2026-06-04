@@ -38,6 +38,7 @@ export default createVuetify({
           countryFinland: "#b8d1ff",
           countryDenmark: "#ffd6a8",
           subtleText: "#6b7280",
+          communityHeader: "#f4fbff"
         },
       },
 
@@ -67,6 +68,7 @@ export default createVuetify({
           countryFinland: "#8ea8d4",
           countryDenmark: "#d7a974",
           subtleText: "#a8bed1",
+          communityHeader: "#f4fbff"
         },
       },
     },

@@ -5,7 +5,7 @@
         <div class="modal-head">
           <div>
             <p class="eyebrow">Share Your Trip Plan</p>
-            <h2>Save Trip</h2>
+            <h2>{{ isEditing ? 'Save Edit' : 'Save Trip' }}</h2>
           </div>
 
           <button class="icon-btn" type="button" @click="$emit('close')">
@@ -49,7 +49,7 @@
           </div>
         </label>
 
-        <div class="visibility-options">
+        <div v-if="!isEditing" class="visibility-options">
           <span>Visibility</span>
 
           <label>
@@ -69,7 +69,7 @@
           </button>
 
           <button class="primary" type="button" @click="emitSave">
-            {{ visibility === 'public' ? 'Publish Trip' : 'Save Draft' }}
+            {{ isEditing ? 'Save Edit' : visibility === 'public' ? 'Publish Trip' : 'Save Draft' }}
           </button>
         </div>
       </section>
@@ -86,13 +86,15 @@ const coverPreview = ref('')
 const props = defineProps({
   defaultTitle: { type: String, default: 'Nordic Trip Plan' },
   defaultDescription: { type: String, default: '' },
+  defaultVisibility: { type: String, default: 'private' },
+  isEditing: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['close', 'save-trip'])
 
 const title = ref(props.defaultTitle)
 const description = ref(props.defaultDescription)
-const visibility = ref('private')
+const visibility = ref(props.defaultVisibility)
 
 watch(
   () => props.defaultTitle,
@@ -108,11 +110,18 @@ watch(
   },
 )
 
+watch(
+  () => props.defaultVisibility,
+  (nextVisibility) => {
+    visibility.value = nextVisibility
+  },
+)
+
 function emitSave() {
   emit('save-trip', {
     title: title.value.trim() || props.defaultTitle,
     description: description.value.trim(),
-    visibility: visibility.value,
+    visibility: props.isEditing ? props.defaultVisibility : visibility.value,
     coverImage: coverImage.value,
   })
 }

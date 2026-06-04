@@ -9,17 +9,23 @@ import SwedenView from '../views/SwedenPage.vue'
 import FinlandView from '../views/FinlandPage.vue'
 import IcelandView from '../views/IcelandPage.vue'
 import DenmarkView from '../views/DenmarkPage.vue'
-import ForumView from '../views/Forum.vue'
+import ForumView from '../views/CommunityPage.vue'
+import CommunityPostDetailView from '../views/CommunityPostDetail.vue'
 import ProfileView from '../views/Profile.vue'
 import ItineraryView from '../views/PlannerPage.vue'
 import { isAuthenticated } from '../utils/auth'
 
 const router = createRouter({
   history: createWebHistory(),
-  scrollBehavior(savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
+    if (to.name === 'trip-planner') {
+      return { top: 0, left: 0, behavior: 'auto' }
+    }
+
     if (savedPosition) {
       return savedPosition
     }
+
     return { top: 0, left: 0, behavior: 'auto' }
   },
   routes: [
@@ -34,6 +40,7 @@ const router = createRouter({
     { path: '/country/iceland', name: 'country-iceland', component: IcelandView },
     { path: '/country/denmark', name: 'country-denmark', component: DenmarkView },
     { path: '/community', name: 'community', component: ForumView, meta: { requiresAuth: true } },
+    { path: '/community/:id', name: 'community-post-detail', component: CommunityPostDetailView, meta: { requiresAuth: true } },
     { path: '/profile', name: 'profile', component: ProfileView, meta: { requiresAuth: true } },
     { path: '/dashboard', redirect: '/profile' },
     { path: '/trip-planner', name: 'trip-planner', component: ItineraryView, meta: { requiresAuth: true } },

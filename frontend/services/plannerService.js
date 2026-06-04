@@ -42,6 +42,22 @@ export async function loadLatestPlannerDraft() {
   return result.data
 }
 
+export async function loadPlannerDrafts() {
+  const response = await fetch(`${API_BASE}/api/planner/list`, {
+    method: 'GET',
+    headers: {
+      ...authHeaders(),
+    },
+  })
+
+  const result = await response.json()
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || 'Failed to load planner drafts')
+  }
+
+  return Array.isArray(result.data) ? result.data : []
+}
+
 export async function generateAiPlanner(payload) {
   const response = await fetch(`${AI_API_BASE}/api/planner/ai/generate`, {
     method: 'POST',

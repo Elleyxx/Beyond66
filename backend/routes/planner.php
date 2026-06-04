@@ -17,6 +17,11 @@ if ($uri === '/api/planner/latest' && $method === 'GET') {
     exit;
 }
 
+if ($uri === '/api/planner/list' && $method === 'GET') {
+    $controller->list();
+    exit;
+}
+
 if ($uri === '/api/planner/save' && $method === 'POST') {
     $controller->save();
     exit;

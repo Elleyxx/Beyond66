@@ -17,6 +17,7 @@
         v-if="mode === 'create'"
         :steps="steps"
         :current-step="currentStep"
+        :max-unlocked-step="maxUnlockedStep"
         :progress-percent="progressPercent"
         :trip-meta="tripMeta"
         :timeline-days="timelineDays"
@@ -29,6 +30,7 @@
         :ai-summary="aiSummary"
         :ai-error="aiError"
         :is-generating-ai="isGeneratingAi"
+        :is-editing="isEditing"
         @go-step="goToStep"
         @next-step="nextStep"
         @prev-step="prevStep"
@@ -51,7 +53,9 @@
       <PlannerSaveModal
         v-if="isSaveModalOpen"
         :default-title="defaultSaveTitle"
-        :default-description="aiSummary"
+        :default-description="defaultSaveDescription"
+        :default-visibility="defaultSaveVisibility"
+        :is-editing="isEditing"
         @close="isSaveModalOpen = false"
         @save-trip="saveTrip"
       />
@@ -62,13 +66,13 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useTheme } from 'vuetify'
 import PlannerTripListPanel from '@/components/planner/PlannerTripListPanel.vue'
 import PlannerCreatePanel from '@/components/planner/PlannerCreatePanel.vue'
 import PlannerTripDetailPanel from '@/components/planner/PlannerTripDetailPanel.vue'
 import PlannerSaveModal from '@/components/planner/PlannerSaveModal.vue'
-import { generateAiPlanner, loadLatestPlannerDraft, savePlannerDraft } from '@/services/plannerService'
+import { generateAiPlanner, loadPlannerDrafts, savePlannerDraft } from '@/services/plannerService'
 import { getAuroraPrediction, getTripWeather } from '@/services/weatherService'
 
 const theme = useTheme()
@@ -87,8 +91,10 @@ const steps = [
 ]
 
 const currentStep = ref(0)
+const maxUnlockedStep = ref(0)
 const mode = ref('list')
 const selectedTripId = ref(null)
+const editingTripId = ref(null)
 const trips = ref([])
 const saveMessage = ref('')
 const aiError = ref('')
@@ -99,36 +105,44 @@ const aiBudgetEstimate = ref(null)
 const aiWeatherForecast = ref(null)
 const aiAuroraForecast = ref(null)
 
-const tripMeta = ref({
-  country: 'Norway',
-  countryRoute: ['Norway'],
-  startDate: '2027-01-15',
-  endDate: '2027-01-19',
-  dateRange: ['2027-01-15', '2027-01-19'],
-  pax: 2,
-  duration: 5,
-  style: 'Adventure',
-  budget: 'Medium',
-  accommodation: 'Hotel',
-  transport: 'Train',
-  season: 'Winter',
-  tripType: 'Couple',
-  activityLevel: 'Moderate',
-  interests: ['Northern Lights', 'Nature'],
-})
+const tripMeta = ref(createDefaultTripMeta())
+
+function createDefaultTripMeta() {
+  return {
+    country: 'Norway',
+    countryRoute: ['Norway'],
+    startDate: '2027-01-15',
+    endDate: '2027-01-19',
+    dateRange: ['2027-01-15', '2027-01-19'],
+    pax: 2,
+    duration: 5,
+    style: 'Adventure',
+    budget: 'Medium',
+    accommodation: 'Hotel',
+    transport: 'Train',
+    season: 'Winter',
+    tripType: 'Couple',
+    activityLevel: 'Moderate',
+    interests: ['Northern Lights', 'Nature'],
+  }
+}
 
 tripMeta.value.duration = calculateDuration(tripMeta.value.startDate, tripMeta.value.endDate)
 tripMeta.value.season = deriveSeason(tripMeta.value.startDate)
 
 const timelineDays = ref(buildDays(tripMeta.value.duration, tripMeta.value.startDate))
 
-const packingList = ref([
-  { id: 1, name: 'Thermal base layers', checked: false },
-  { id: 2, name: 'Waterproof jacket', checked: false },
-  { id: 3, name: 'Power bank', checked: false },
-  { id: 4, name: 'Travel documents', checked: false },
-  { id: 5, name: 'Camera / phone tripod', checked: false },
-])
+const packingList = ref(createDefaultPackingList())
+
+function createDefaultPackingList() {
+  return [
+    { id: 1, name: 'Thermal base layers', checked: false },
+    { id: 2, name: 'Waterproof jacket', checked: false },
+    { id: 3, name: 'Power bank', checked: false },
+    { id: 4, name: 'Travel documents', checked: false },
+    { id: 5, name: 'Camera / phone tripod', checked: false },
+  ]
+}
 
 watch(
   () => [tripMeta.value.startDate, tripMeta.value.endDate],
@@ -205,11 +219,19 @@ const fallbackBudgetEstimate = computed(() => {
 })
 const budgetEstimate = computed(() => aiBudgetEstimate.value || fallbackBudgetEstimate.value)
 const defaultSaveTitle = computed(() => {
+  if (isEditing.value && selectedTrip.value?.title) return selectedTrip.value.title
+
   const route = Array.isArray(tripMeta.value.countryRoute) && tripMeta.value.countryRoute.length
     ? tripMeta.value.countryRoute.join(' → ')
     : tripMeta.value.country || 'Nordic'
 
   return `${route} Trip Plan`
+})
+const defaultSaveDescription = computed(() => {
+  return isEditing.value ? selectedTrip.value?.description || aiSummary.value : aiSummary.value
+})
+const defaultSaveVisibility = computed(() => {
+  return isEditing.value ? selectedTrip.value?.visibility || 'private' : 'private'
 })
 
 const countryCoordinates = {
@@ -226,7 +248,14 @@ const progressPercent = computed(() => {
 })
 
 const selectedTrip = computed(() => trips.value.find((trip) => trip.id === selectedTripId.value) || null)
+const isEditing = computed(() => editingTripId.value !== null)
 const isSplitLayout = computed(() => mode.value === 'create' || mode.value === 'view')
+
+function scrollPlannerToTop(behavior = 'smooth') {
+  nextTick(() => {
+    window.scrollTo({ top: 0, left: 0, behavior })
+  })
+}
 
 function buildDays(days, startDate = tripMeta.value?.startDate) {
   return Array.from({ length: days }, (_, i) => ({ day: i + 1, date: addDays(startDate, i), items: [] }))
@@ -418,6 +447,7 @@ async function generatePlannerFromAi() {
     }
     await loadLiveWeatherAurora()
     aiSummary.value = String(result.summary || '')
+    maxUnlockedStep.value = Math.max(maxUnlockedStep.value, 1)
     currentStep.value = 1
     return true
   } catch (error) {
@@ -441,12 +471,14 @@ function printChecklist() {
 async function nextStep() {
   if (currentStep.value >= steps.length - 1) return
 
-  if (currentStep.value === 0) {
+  if (currentStep.value === 0 && !isEditing.value) {
     await generatePlannerFromAi()
     return
   }
 
-  currentStep.value += 1
+  const nextIndex = currentStep.value + 1
+  maxUnlockedStep.value = Math.max(maxUnlockedStep.value, nextIndex)
+  currentStep.value = nextIndex
 }
 
 function prevStep() {
@@ -456,18 +488,25 @@ function prevStep() {
 
 function goToStep(index) {
   if (index < 0 || index > steps.length - 1) return
+  if (index > maxUnlockedStep.value) return
   currentStep.value = index
 }
 
 function selectTrip(id) {
   selectedTripId.value = id
+  editingTripId.value = null
   mode.value = 'view'
+  scrollPlannerToTop()
 }
 
 function startAddTrip() {
+  resetTripForm()
   mode.value = 'create'
   selectedTripId.value = null
+  editingTripId.value = null
   currentStep.value = 0
+  maxUnlockedStep.value = 0
+  scrollPlannerToTop()
 }
 
 function editSelectedTrip() {
@@ -492,8 +531,35 @@ function editSelectedTrip() {
     packingList.value = selectedTrip.value.packingList.map((item) => ({ ...item }))
   }
 
+  aiBudgetEstimate.value = selectedTrip.value.budgetEstimate
+    ? normalizeBudgetEstimate(selectedTrip.value.budgetEstimate)
+    : null
+  aiWeatherForecast.value = Array.isArray(selectedTrip.value.weatherForecast)
+    ? selectedTrip.value.weatherForecast.map((item) => ({ ...item }))
+    : null
+  aiAuroraForecast.value = Array.isArray(selectedTrip.value.auroraForecast)
+    ? selectedTrip.value.auroraForecast.map((item) => ({ ...item }))
+    : selectedTrip.value.auroraForecast || null
+  aiSummary.value = selectedTrip.value.summary || ''
+  editingTripId.value = selectedTrip.value.id
   mode.value = 'create'
   currentStep.value = 0
+  maxUnlockedStep.value = steps.length - 1
+  scrollPlannerToTop()
+}
+
+function resetTripForm() {
+  tripMeta.value = createDefaultTripMeta()
+  tripMeta.value.duration = calculateDuration(tripMeta.value.startDate, tripMeta.value.endDate)
+  tripMeta.value.season = deriveSeason(tripMeta.value.startDate)
+  timelineDays.value = buildDays(tripMeta.value.duration, tripMeta.value.startDate)
+  packingList.value = createDefaultPackingList()
+  aiBudgetEstimate.value = null
+  aiWeatherForecast.value = null
+  aiAuroraForecast.value = null
+  aiSummary.value = ''
+  aiError.value = ''
+  isSaveModalOpen.value = false
 }
 
 function upsertTrip(nextTrip) {
@@ -506,12 +572,14 @@ function upsertTrip(nextTrip) {
 }
 
 async function saveTrip(saveOptions = {}) {
+  const wasEditing = isEditing.value
   const title = saveOptions.title || defaultSaveTitle.value
   const description = saveOptions.description || ''
   const visibility = saveOptions.visibility || 'private'
   const coverImage = saveOptions.coverImage || ''
 
   const payload = {
+    ...(wasEditing ? { plan_id: editingTripId.value } : {}),
     tripMeta: tripMeta.value,
     timelineDays: timelineDays.value,
     budgetEstimate: budgetEstimate.value,
@@ -541,6 +609,11 @@ async function saveTrip(saveOptions = {}) {
       tripMeta: { ...tripMeta.value },
       timelineDays: timelineDays.value.map((day) => ({ ...day, items: [...day.items] })),
       packingList: packingList.value.map((item) => ({ ...item })),
+      budgetEstimate: { ...budgetEstimate.value },
+      weatherForecast: weatherForecast.value.map((item) => ({ ...item })),
+      auroraForecast: Array.isArray(auroraForecast.value)
+        ? auroraForecast.value.map((item) => ({ ...item }))
+        : auroraForecast.value,
       summary: aiSummary.value,
       description,
       visibility,
@@ -550,9 +623,16 @@ async function saveTrip(saveOptions = {}) {
 
     upsertTrip(tripRecord)
     selectedTripId.value = tripRecord.id
+    editingTripId.value = null
     mode.value = 'view'
+    currentStep.value = 0
+    maxUnlockedStep.value = 0
     isSaveModalOpen.value = false
-    saveMessage.value = visibility === 'public' ? 'Trip published to community.' : 'Trip saved privately.'
+    saveMessage.value = wasEditing
+      ? 'Trip edit saved.'
+      : visibility === 'public'
+        ? 'Trip published to community.'
+        : 'Trip saved privately.'
   } catch {
     localStorage.setItem('trip_planner_draft', JSON.stringify(payload))
     isSaveModalOpen.value = false
@@ -565,48 +645,13 @@ async function saveTrip(saveOptions = {}) {
 }
 
 onMounted(async () => {
+  scrollPlannerToTop('auto')
+
   try {
-    const latest = await loadLatestPlannerDraft()
-    if (!latest) return
+    const drafts = await loadPlannerDrafts()
+    if (!drafts.length) return
 
-    if (latest.tripMeta) tripMeta.value = { ...tripMeta.value, ...latest.tripMeta }
-    if (Array.isArray(latest.timelineDays) && latest.timelineDays.length) {
-      timelineDays.value = latest.timelineDays.map((day, index) => ({
-        ...day,
-        day: Number(day.day || index + 1),
-        items: Array.isArray(day.items) ? day.items : [],
-      }))
-    }
-    if (Array.isArray(latest.packingList) && latest.packingList.length) {
-      packingList.value = latest.packingList.map((item, index) => ({
-        id: Number(item.id || index + 1),
-        name: String(item.name || 'Item'),
-        checked: Boolean(item.checked),
-      }))
-    }
-    if (latest.budgetEstimate) aiBudgetEstimate.value = normalizeBudgetEstimate(latest.budgetEstimate)
-    if (Array.isArray(latest.weatherForecast)) aiWeatherForecast.value = latest.weatherForecast
-    if (latest.auroraForecast) aiAuroraForecast.value = latest.auroraForecast
-    if (latest.summary) aiSummary.value = String(latest.summary)
-
-    const latestTrip = {
-      id: Number(latest.plan_id || Date.now()),
-      title: `${latest.tripMeta?.country || 'Nordic'} Trip Plan`,
-      country: latest.tripMeta?.country || 'Norway',
-      duration: Number(latest.tripMeta?.duration || 1),
-      startDate: latest.tripMeta?.startDate || '',
-      endDate: latest.tripMeta?.endDate || '',
-      style: latest.tripMeta?.style || 'Adventure',
-      season: latest.tripMeta?.season || 'Winter',
-      tripType: latest.tripMeta?.tripType || 'Couple',
-      tripMeta: latest.tripMeta || {},
-      timelineDays: Array.isArray(latest.timelineDays) ? latest.timelineDays : [],
-      packingList: Array.isArray(latest.packingList) ? latest.packingList : [],
-      summary: latest.summary || '',
-      savedAt: latest.savedAt || new Date().toISOString(),
-    }
-
-    trips.value = [latestTrip]
+    trips.value = drafts.map((draft) => buildTripRecordFromDraft(draft))
     selectedTripId.value = null
     mode.value = 'list'
   } catch {
@@ -636,7 +681,13 @@ onMounted(async () => {
         tripMeta: parsed.tripMeta || {},
         timelineDays: Array.isArray(parsed.timelineDays) ? parsed.timelineDays : [],
         packingList: Array.isArray(parsed.packingList) ? parsed.packingList : [],
+        budgetEstimate: parsed.budgetEstimate || null,
+        weatherForecast: Array.isArray(parsed.weatherForecast) ? parsed.weatherForecast : [],
+        auroraForecast: parsed.auroraForecast || null,
         summary: parsed.summary || '',
+        description: parsed.description || '',
+        visibility: parsed.visibility || 'private',
+        coverImage: parsed.coverImage || '',
         savedAt: parsed.savedAt || new Date().toISOString(),
       }
 
@@ -648,6 +699,40 @@ onMounted(async () => {
     }
   }
 })
+
+watch(currentStep, () => {
+  scrollPlannerToTop()
+})
+
+watch(mode, () => {
+  scrollPlannerToTop()
+})
+
+function buildTripRecordFromDraft(draft) {
+  return {
+    id: Number(draft.plan_id || Date.now()),
+    title: draft.title || `${draft.tripMeta?.country || 'Nordic'} Trip Plan`,
+    country: draft.tripMeta?.country || 'Norway',
+    duration: Number(draft.tripMeta?.duration || 1),
+    startDate: draft.tripMeta?.startDate || '',
+    endDate: draft.tripMeta?.endDate || '',
+    style: draft.tripMeta?.style || 'Adventure',
+    season: draft.tripMeta?.season || 'Winter',
+    tripType: draft.tripMeta?.tripType || 'Couple',
+    tripMeta: draft.tripMeta || {},
+    timelineDays: Array.isArray(draft.timelineDays) ? draft.timelineDays : [],
+    packingList: Array.isArray(draft.packingList) ? draft.packingList : [],
+    budgetEstimate: draft.budgetEstimate || null,
+    weatherForecast: Array.isArray(draft.weatherForecast) ? draft.weatherForecast : [],
+    auroraForecast: draft.auroraForecast || null,
+    summary: draft.summary || '',
+    description: draft.description || '',
+    visibility: draft.visibility || 'private',
+    coverImage: draft.coverImage || '',
+    savedAt: draft.savedAt || new Date().toISOString(),
+    updatedAt: draft.updatedAt || draft.savedAt || new Date().toISOString(),
+  }
+}
 </script>
 
 <style scoped>

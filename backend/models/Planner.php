@@ -31,74 +31,80 @@ class Planner
         array $packingList,
         array $weatherForecast = [],
         array $auroraForecast = [],
-        string $summary = ''
+        string $summary = '',
+        ?int $planId = null,
+        string $title = '',
+        string $description = '',
+        string $visibility = 'private',
+        string $coverImage = ''
     ): int
     {
         $this->pdo->beginTransaction();
+
         try {
-            $title = trim((string) ($tripMeta['country'] ?? 'Nordic Trip')) . ' Trip Plan';
-            $countrySlug = $this->slugify((string) ($tripMeta['country'] ?? ''));
-            $style = $this->mapTravelStyle((string) ($tripMeta['style'] ?? 'balanced'));
-            $days = max(1, min(30, (int) ($tripMeta['duration'] ?? 1)));
-            $budgetMin = isset($budgetEstimate['total']) ? (float) $budgetEstimate['total'] * 0.9 : null;
-            $budgetMax = isset($budgetEstimate['total']) ? (float) $budgetEstimate['total'] * 1.1 : null;
-            $notes = json_encode([
-                'tripMeta' => $tripMeta,
-                'budgetEstimate' => $budgetEstimate,
-                'packingList' => $packingList,
-                'weatherForecast' => $weatherForecast,
-                'auroraForecast' => $auroraForecast,
-                'summary' => $summary,
-            ]);
-
-            $insertPlan = $this->pdo->prepare(
-                'INSERT INTO planner_plans (user_id, country_slug, title, travel_style, total_days, estimated_budget_min, estimated_budget_max, notes)
-                 VALUES (:user_id, :country_slug, :title, :travel_style, :total_days, :budget_min, :budget_max, :notes)'
-            );
-            $insertPlan->execute([
-                'user_id' => $userId,
-                'country_slug' => $countrySlug ?: null,
-                'title' => $title,
-                'travel_style' => $style,
-                'total_days' => $days,
-                'budget_min' => $budgetMin,
-                'budget_max' => $budgetMax,
-                'notes' => $notes,
-            ]);
-
-            $planId = (int) $this->pdo->lastInsertId();
-
-            $insertDay = $this->pdo->prepare(
-                'INSERT INTO planner_days (planner_plan_id, day_number, day_title, notes)
-                 VALUES (:plan_id, :day_number, :day_title, :notes)'
+            $title = trim($title) ?: trim((string) ($tripMeta['country'] ?? 'Nordic Trip')) . ' Trip Plan';
+            $description = trim($description);
+            $coverImage = trim($coverImage);
+            $visibility = strtolower($visibility) === 'public' ? 'public' : 'private';
+            $tripData = $this->encodeTripData(
+                $tripMeta,
+                $timelineDays,
+                $budgetEstimate,
+                $packingList,
+                $weatherForecast,
+                $auroraForecast,
+                $summary
             );
 
-            $insertItem = $this->pdo->prepare(
-                "INSERT INTO planner_items (planner_day_id, item_type, title, sort_order)
-                 VALUES (:planner_day_id, 'custom', :title, :sort_order)"
-            );
-
-            foreach ($timelineDays as $dayIndex => $day) {
-                $dayNumber = max(1, (int) ($day['day'] ?? ($dayIndex + 1)));
-                $items = is_array($day['items'] ?? null) ? $day['items'] : [];
-                $insertDay->execute([
-                    'plan_id' => $planId,
-                    'day_number' => $dayNumber,
-                    'day_title' => 'Day ' . $dayNumber,
-                    'notes' => null,
+            if ($planId) {
+                $ownerStmt = $this->pdo->prepare(
+                    'SELECT id FROM trips WHERE id = :id AND user_id = :user_id LIMIT 1'
+                );
+                $ownerStmt->execute([
+                    'id' => $planId,
+                    'user_id' => $userId,
                 ]);
 
-                $plannerDayId = (int) $this->pdo->lastInsertId();
-                foreach ($items as $idx => $titleItem) {
-                    $cleanTitle = trim((string) $titleItem);
-                    if ($cleanTitle === '') continue;
-                    $insertItem->execute([
-                        'planner_day_id' => $plannerDayId,
-                        'title' => $cleanTitle,
-                        'sort_order' => $idx + 1,
-                    ]);
+                if (!$ownerStmt->fetch()) {
+                    throw new \RuntimeException('Trip not found');
                 }
+
+                $stmt = $this->pdo->prepare(
+                    'UPDATE trips
+                     SET title = :title,
+                         description = :description,
+                         cover_image = :cover_image,
+                         visibility = :visibility,
+                         trip_data = :trip_data
+                     WHERE id = :id AND user_id = :user_id'
+                );
+                $stmt->execute([
+                    'id' => $planId,
+                    'user_id' => $userId,
+                    'title' => $title,
+                    'description' => $description,
+                    'cover_image' => $coverImage ?: null,
+                    'visibility' => $visibility,
+                    'trip_data' => $tripData,
+                ]);
+            } else {
+                $stmt = $this->pdo->prepare(
+                    'INSERT INTO trips (user_id, title, description, cover_image, visibility, trip_data)
+                     VALUES (:user_id, :title, :description, :cover_image, :visibility, :trip_data)'
+                );
+                $stmt->execute([
+                    'user_id' => $userId,
+                    'title' => $title,
+                    'description' => $description,
+                    'cover_image' => $coverImage ?: null,
+                    'visibility' => $visibility,
+                    'trip_data' => $tripData,
+                ]);
+
+                $planId = (int) $this->pdo->lastInsertId();
             }
+
+            $this->syncCommunityPost($planId, $userId, $title, $description, $coverImage, $visibility);
 
             $this->pdo->commit();
             return $planId;
@@ -112,91 +118,121 @@ class Planner
 
     public function getLatestPlanByUser(int $userId): ?array
     {
-        $planStmt = $this->pdo->prepare(
-            'SELECT * FROM planner_plans WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1'
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM trips WHERE user_id = :user_id ORDER BY updated_at DESC, created_at DESC LIMIT 1'
         );
-        $planStmt->execute(['user_id' => $userId]);
-        $plan = $planStmt->fetch();
+        $stmt->execute(['user_id' => $userId]);
+        $trip = $stmt->fetch();
 
-        if (!$plan) {
-            return null;
+        return $trip ? $this->hydrateTrip($trip) : null;
+    }
+
+    public function getPlansByUser(int $userId): array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM trips WHERE user_id = :user_id ORDER BY updated_at DESC, created_at DESC'
+        );
+        $stmt->execute(['user_id' => $userId]);
+
+        return array_map(fn ($trip) => $this->hydrateTrip($trip), $stmt->fetchAll());
+    }
+
+    private function encodeTripData(
+        array $tripMeta,
+        array $timelineDays,
+        array $budgetEstimate,
+        array $packingList,
+        array $weatherForecast,
+        array $auroraForecast,
+        string $summary
+    ): string {
+        return json_encode([
+            'meta' => $tripMeta,
+            'timeline' => $timelineDays,
+            'budget' => $budgetEstimate,
+            'weather' => $weatherForecast,
+            'aurora' => $auroraForecast,
+            'checklist' => $packingList,
+            'summary' => $summary,
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    private function syncCommunityPost(
+        int $tripId,
+        int $userId,
+        string $title,
+        string $description,
+        string $coverImage,
+        string $visibility
+    ): void {
+        $existingStmt = $this->pdo->prepare(
+            'SELECT id FROM community_posts WHERE trip_id = :trip_id AND user_id = :user_id LIMIT 1'
+        );
+        $existingStmt->execute([
+            'trip_id' => $tripId,
+            'user_id' => $userId,
+        ]);
+        $existing = $existingStmt->fetch();
+
+        if ($existing) {
+            $updateStmt = $this->pdo->prepare(
+                'UPDATE community_posts
+                 SET title = :title,
+                     description = :description,
+                     cover_image = :cover_image,
+                     status = :status
+                 WHERE id = :id AND user_id = :user_id'
+            );
+            $updateStmt->execute([
+                'id' => (int) $existing['id'],
+                'user_id' => $userId,
+                'title' => $title,
+                'description' => $description,
+                'cover_image' => $coverImage ?: null,
+                'status' => $visibility,
+            ]);
+            return;
         }
 
-        $daysStmt = $this->pdo->prepare(
-            'SELECT * FROM planner_days WHERE planner_plan_id = :plan_id ORDER BY day_number ASC'
-        );
-        $daysStmt->execute(['plan_id' => $plan['id']]);
-        $days = $daysStmt->fetchAll();
-
-        $itemsStmt = $this->pdo->prepare(
-            'SELECT planner_day_id, title, sort_order FROM planner_items
-             WHERE planner_day_id IN (SELECT id FROM planner_days WHERE planner_plan_id = :plan_id)
-             ORDER BY planner_day_id ASC, sort_order ASC'
-        );
-        $itemsStmt->execute(['plan_id' => $plan['id']]);
-        $itemsRows = $itemsStmt->fetchAll();
-
-        $itemsByDay = [];
-        foreach ($itemsRows as $row) {
-            $dayId = (int) $row['planner_day_id'];
-            if (!isset($itemsByDay[$dayId])) $itemsByDay[$dayId] = [];
-            $itemsByDay[$dayId][] = $row['title'];
+        if ($visibility !== 'public') {
+            return;
         }
 
-        $timelineDays = array_map(function ($day) use ($itemsByDay) {
-            $dayId = (int) $day['id'];
-            return [
-                'day' => (int) $day['day_number'],
-                'items' => $itemsByDay[$dayId] ?? [],
-            ];
-        }, $days);
+        $insertStmt = $this->pdo->prepare(
+            'INSERT INTO community_posts (trip_id, user_id, title, description, cover_image, status)
+             VALUES (:trip_id, :user_id, :title, :description, :cover_image, :status)'
+        );
+        $insertStmt->execute([
+            'trip_id' => $tripId,
+            'user_id' => $userId,
+            'title' => $title,
+            'description' => $description,
+            'cover_image' => $coverImage ?: null,
+            'status' => 'public',
+        ]);
+    }
 
-        $decodedNotes = json_decode((string) ($plan['notes'] ?? '{}'), true);
-        $tripMeta = $decodedNotes['tripMeta'] ?? [
-            'country' => ucfirst(str_replace('-', ' ', (string) ($plan['country_slug'] ?? 'Norway'))),
-            'countryRoute' => [ucfirst(str_replace('-', ' ', (string) ($plan['country_slug'] ?? 'Norway')))],
-            'startDate' => null,
-            'endDate' => null,
-            'pax' => 1,
-            'duration' => (int) ($plan['total_days'] ?? 1),
-            'style' => (string) ($plan['travel_style'] ?? 'Adventure'),
-            'budget' => 'Medium',
-            'accommodation' => 'Hotel',
-            'transport' => 'Train',
-            'season' => 'Winter',
-            'tripType' => 'Couple',
-            'activityLevel' => 'Moderate',
-            'interests' => [],
-        ];
+    private function hydrateTrip(array $trip): array
+    {
+        $tripData = json_decode((string) ($trip['trip_data'] ?? '{}'), true) ?: [];
+        $meta = is_array($tripData['meta'] ?? null) ? $tripData['meta'] : [];
 
         return [
-            'plan_id' => (int) $plan['id'],
-            'tripMeta' => $tripMeta,
-            'timelineDays' => $timelineDays,
-            'budgetEstimate' => $decodedNotes['budgetEstimate'] ?? null,
-            'packingList' => $decodedNotes['packingList'] ?? [],
-            'weatherForecast' => $decodedNotes['weatherForecast'] ?? [],
-            'auroraForecast' => $decodedNotes['auroraForecast'] ?? null,
-            'summary' => $decodedNotes['summary'] ?? '',
-            'savedAt' => $plan['created_at'] ?? null,
+            'plan_id' => (int) $trip['id'],
+            'trip_id' => (int) $trip['id'],
+            'title' => (string) ($trip['title'] ?? ''),
+            'tripMeta' => $meta,
+            'timelineDays' => is_array($tripData['timeline'] ?? null) ? $tripData['timeline'] : [],
+            'budgetEstimate' => is_array($tripData['budget'] ?? null) ? $tripData['budget'] : null,
+            'packingList' => is_array($tripData['checklist'] ?? null) ? $tripData['checklist'] : [],
+            'weatherForecast' => is_array($tripData['weather'] ?? null) ? $tripData['weather'] : [],
+            'auroraForecast' => $tripData['aurora'] ?? null,
+            'summary' => (string) ($tripData['summary'] ?? ''),
+            'description' => (string) ($trip['description'] ?? ''),
+            'visibility' => (string) ($trip['visibility'] ?? 'private'),
+            'coverImage' => (string) ($trip['cover_image'] ?? ''),
+            'savedAt' => $trip['created_at'] ?? null,
+            'updatedAt' => $trip['updated_at'] ?? null,
         ];
-    }
-
-    private function slugify(string $value): string
-    {
-        $value = strtolower(trim($value));
-        $value = preg_replace('/[^a-z0-9]+/', '-', $value);
-        return trim((string) $value, '-');
-    }
-
-    private function mapTravelStyle(string $style): string
-    {
-        $styleLower = strtolower(trim($style));
-        return match ($styleLower) {
-            'low', 'budget' => 'budget',
-            'high', 'luxury' => 'luxury',
-            'relax', 'comfort' => 'comfort',
-            default => 'balanced',
-        };
     }
 }
