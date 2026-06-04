@@ -125,7 +125,7 @@ const pageData = computed(() => {
     country: data.country || 'SWEDEN',
     title: data.title || 'Sweden',
     description: data.description || '',
-    heroImage: data.heroImage || '/images/sweden/sweden-hero.jpg',
+    heroImage: data.heroImage || '/assets/images/Sweden/sweden.jpg',
     bestTime: bestTimeText || 'June - August',
     bestTimeSeasons: bestTimeList,
     quickFacts,

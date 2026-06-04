@@ -70,11 +70,11 @@ const popup = ref({
 })
 
 const fallbackCountries = [
-  { id: 'is', slug: 'iceland', name: 'Iceland', image: '/assets/images/Iceland/iceland-hero.jpg' },
-  { id: 'no', slug: 'norway', name: 'Norway', image: '/assets/images/Norway/norway-hero.jpg' },
-  { id: 'se', slug: 'sweden', name: 'Sweden', image: '/assets/images/Sweden/sweden-hero.jpg' },
-  { id: 'fi', slug: 'finland', name: 'Finland', image: '/assets/images/Finland/finland-hero.jpg' },
-  { id: 'dk', slug: 'denmark', name: 'Denmark', image: '/assets/images/Denmark/denmark-hero.jpg' },
+  { id: 'is', slug: 'iceland', name: 'Iceland', image: '/assets/images/Iceland/iceland.jpg' },
+  { id: 'no', slug: 'norway', name: 'Norway', image: '/assets/images/Norway/norway.jpg' },
+  { id: 'se', slug: 'sweden', name: 'Sweden', image: '/assets/images/Sweden/sweden.jpg' },
+  { id: 'fi', slug: 'finland', name: 'Finland', image: '/assets/images/Finland/finland.jpg' },
+  { id: 'dk', slug: 'denmark', name: 'Denmark', image: '/assets/images/Denmark/denmark.jpg' },
 ]
 
 const countries = ref([...fallbackCountries])

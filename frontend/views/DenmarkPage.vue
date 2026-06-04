@@ -125,7 +125,7 @@ const pageData = computed(() => {
     country: data.country || 'DENMARK',
     title: data.title || 'Denmark',
     description: data.description || '',
-    heroImage: data.heroImage || '/images/denmark/denmark-hero.jpg',
+    heroImage: data.heroImage || '/assets/images/Denmark/denmark.jpg',
     bestTime: bestTimeText || 'May - September',
     bestTimeSeasons: bestTimeList,
     quickFacts,

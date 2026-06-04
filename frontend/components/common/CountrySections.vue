@@ -51,11 +51,11 @@ import icelandRaw from '../../src/locales/en/countries/iceland.json'
 const { t } = useI18n()
 
 const fallbackCountries = [
-  { id: 'is', slug: 'iceland', name: 'Iceland', displayName: ['ICE', 'LAND'], description: '', image: '/assets/images/Iceland/iceland-hero.jpg', randomDestinations: [] },
-  { id: 'no', slug: 'norway', name: 'Norway', displayName: ['NOR', 'WAY'], description: '', image: '/assets/images/Norway/norway-hero.jpg', randomDestinations: [] },
-  { id: 'se', slug: 'sweden', name: 'Sweden', displayName: ['SWE', 'DEN'], description: '', image: '/assets/images/Sweden/sweden-hero.jpg', randomDestinations: [] },
-  { id: 'fi', slug: 'finland', name: 'Finland', displayName: ['FIN', 'LAND'], description: '', image: '/assets/images/Finland/finland-hero.jpg', randomDestinations: [] },
-  { id: 'dk', slug: 'denmark', name: 'Denmark', displayName: ['DEN', 'MARK'], description: '', image: '/assets/images/Denmark/denmark-hero.jpg', randomDestinations: [] },
+  { id: 'is', slug: 'iceland', name: 'Iceland', displayName: ['ICE', 'LAND'], description: '', image: '/assets/images/Iceland/iceland.jpg', randomDestinations: [] },
+  { id: 'no', slug: 'norway', name: 'Norway', displayName: ['NOR', 'WAY'], description: '', image: '/assets/images/Norway/norway.jpg', randomDestinations: [] },
+  { id: 'se', slug: 'sweden', name: 'Sweden', displayName: ['SWE', 'DEN'], description: '', image: '/assets/images/Sweden/sweden.jpg', randomDestinations: [] },
+  { id: 'fi', slug: 'finland', name: 'Finland', displayName: ['FIN', 'LAND'], description: '', image: '/assets/images/Finland/finland.jpg', randomDestinations: [] },
+  { id: 'dk', slug: 'denmark', name: 'Denmark', displayName: ['DEN', 'MARK'], description: '', image: '/assets/images/Denmark/denmark.jpg', randomDestinations: [] },
 ]
 
 const countries = ref([...fallbackCountries])

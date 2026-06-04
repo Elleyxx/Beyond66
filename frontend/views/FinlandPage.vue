@@ -125,7 +125,7 @@ const pageData = computed(() => {
     country: data.country || 'FINLAND',
     title: data.title || 'Finland',
     description: data.description || '',
-    heroImage: data.heroImage || '/images/finland/finland-hero.jpg',
+    heroImage: data.heroImage || '/assets/images/Finland/finland.jpg',
     bestTime: bestTimeText || 'June - August',
     bestTimeSeasons: bestTimeList,
     quickFacts,

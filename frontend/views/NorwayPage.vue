@@ -134,7 +134,7 @@ const pageData = computed(() => {
     country: data.country || 'NORWAY',
     title: data.title || 'Norway',
     description: data.description || '',
-    heroImage: data.heroImage || '/assets/images/Norway/norway-hero.jpg',
+    heroImage: data.heroImage || '/assets/images/Norway/norway.jpg',
     bestTime: bestTimeText || 'June - August',
     bestTimeSeasons: bestTimeList,
     quickFacts,
