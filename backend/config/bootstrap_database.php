@@ -38,14 +38,10 @@ function ensureDatabaseReady(): void
         COLLATE {$charset}_unicode_ci
     ";
 
-    if (!$serverConn->query($createDbSql)) {
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'message' => 'Database creation failed'
-        ]);
-        exit;
-    }
+    // Shared hosts usually provision the database and block CREATE DATABASE.
+    // If creation fails, continue and let the real database connection below
+    // decide whether the configured database exists and is accessible.
+    $serverConn->query($createDbSql);
 
     $serverConn->close();
 

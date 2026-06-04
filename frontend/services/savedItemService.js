@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { AUTH_TOKEN_KEY } from '../utils/auth'
 
-const API_BASE = 'http://127.0.0.1:8000'
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
 
 function authHeaders() {
   const token = localStorage.getItem(AUTH_TOKEN_KEY)

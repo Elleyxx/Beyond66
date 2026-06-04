@@ -18,7 +18,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import HomeHero from '@/components/home/homeHero.vue'
 import HomeTours from '@/components/home/homeTopDest.vue'
-import HomeAbout from '@/components/home/HomeAbout.vue'
+import HomeAbout from '@/components/home/homeAbout.vue'
 import HomeInfo from '@/components/home/homeInfo.vue'
 
 const countries = [
