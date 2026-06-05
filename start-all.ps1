@@ -36,8 +36,16 @@ $aiApi = Start-Process `
   -PassThru
 
 Write-Host 'Starting Vue frontend'
+$npm = if (Get-Command npm.cmd -ErrorAction SilentlyContinue) {
+  'npm.cmd'
+} elseif (Get-Command npm -ErrorAction SilentlyContinue) {
+  'npm'
+} else {
+  throw 'npm was not found. Install Node.js or check that npm is available in PATH.'
+}
+
 $frontendApp = Start-Process `
-  -FilePath 'npm' `
+  -FilePath $npm `
   -ArgumentList @('run', 'dev') `
   -WorkingDirectory $frontend `
   -RedirectStandardOutput (Join-Path $logs 'frontend.log') `
