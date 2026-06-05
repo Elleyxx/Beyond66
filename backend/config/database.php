@@ -28,10 +28,10 @@ function backendEnvValue(string $key, string $default = ''): string
 }
 
 return [
-    'host' => backendEnvValue('DB_HOST', '127.0.0.1'),
-    'port' => (int) backendEnvValue('DB_PORT', '3306'),
-    'dbname' => backendEnvValue('DB_NAME', 'beyond66'),
-    'username' => backendEnvValue('DB_USER', 'root'),
-    'password' => backendEnvValue('DB_PASS', ''),
+    'host' => backendEnvValue('DB_HOST', backendEnvValue('MYSQLHOST', '127.0.0.1')),
+    'port' => (int) backendEnvValue('DB_PORT', backendEnvValue('MYSQLPORT', '3306')),
+    'dbname' => backendEnvValue('DB_NAME', backendEnvValue('MYSQLDATABASE', 'beyond66')),
+    'username' => backendEnvValue('DB_USER', backendEnvValue('MYSQLUSER', 'root')),
+    'password' => backendEnvValue('DB_PASS', backendEnvValue('MYSQLPASSWORD', '')),
     'charset' => backendEnvValue('DB_CHARSET', 'utf8mb4'),
 ];
