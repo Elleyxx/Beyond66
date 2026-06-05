@@ -2,20 +2,21 @@
   <main class="community-page">
     <CommunityHero v-model:filters="filters" />
 
-    <TrendingPosts :posts="trendingPosts" />
-
     <section class="community-layout">
-      <CommunityPostGrid
-        :posts="filteredPosts"
-        :loading="isLoading"
-        @save="openSaveModal"
-        @use-plan="usePlan"
-      />
+      <div class="community-main">
+        <TrendingPosts :posts="trendingPosts" />
+
+        <CommunityPostGrid
+          :posts="filteredPosts"
+          :loading="isLoading"
+          @save="openSaveModal"
+          @use-plan="usePlan"
+        />
+      </div>
 
       <CommunitySidebar
         :destinations="destinations"
         :tags="tags"
-        :creators="creators"
       />
     </section>
 
@@ -76,11 +77,6 @@ const destinations = [
 
 const tags = ['NorthernLights', 'RoadTrip', 'Fjords', 'Photography', 'BudgetTravel']
 
-const creators = [
-  { name: 'Ellie', posts: 8 },
-  { name: 'Sarah', posts: 6 },
-]
-
 onMounted(loadPosts)
 
 async function loadPosts() {
@@ -119,16 +115,23 @@ function usePlan(post) {
 }
 
 .community-layout {
-  max-width: 1180px;
+  width: 90%;
   margin: 0 auto 34px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
-  gap: 28px;
+  grid-template-columns: minmax(0, 7fr) minmax(240px, 3fr);
+  gap: 32px;
   align-items: start;
+}
+
+.community-main {
+  display: grid;
+  gap: 30px;
+  min-width: 0;
 }
 
 @media (max-width: 1000px) {
   .community-layout {
+    width: 90%;
     grid-template-columns: 1fr;
   }
 }

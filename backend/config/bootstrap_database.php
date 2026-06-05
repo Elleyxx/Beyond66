@@ -448,5 +448,216 @@ function ensureDatabaseReady(): void
     $seedStmt->execute();
     $seedStmt->close();
 
+    $communityUsers = [
+        ['ellie@beyond66.com', 'ellie', 'Ellie Frost'],
+        ['sarah@beyond66.com', 'sarah', 'Sarah North'],
+        ['mika@beyond66.com', 'mika', 'Mika Lane'],
+    ];
+
+    $communityUserStmt = $dbConn->prepare(
+        'INSERT INTO users (email, username, password_hash, display_name)
+         SELECT ?, ?, ?, ?
+         WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = ? OR username = ?)'
+    );
+    $communityPasswordHash = password_hash('password123', PASSWORD_DEFAULT);
+    foreach ($communityUsers as [$email, $username, $displayName]) {
+        $communityUserStmt->bind_param(
+            'ssssss',
+            $email,
+            $username,
+            $communityPasswordHash,
+            $displayName,
+            $email,
+            $username
+        );
+        $communityUserStmt->execute();
+    }
+    $communityUserStmt->close();
+
+    $lookupUserStmt = $dbConn->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
+    $getUserId = function (string $username) use ($lookupUserStmt): int {
+        $lookupUserStmt->bind_param('s', $username);
+        $lookupUserStmt->execute();
+        $result = $lookupUserStmt->get_result();
+        $row = $result ? $result->fetch_assoc() : null;
+
+        return (int) ($row['id'] ?? 1);
+    };
+
+    $communitySeeds = [
+        [
+            'username' => 'ellie',
+            'title' => 'Aurora Nights in Tromso',
+            'description' => 'A slow winter route for chasing northern lights, warming up in cafes, and drifting through snowy fjords.',
+            'cover' => '/assets/images/Norway/TromsøNorway.jpg',
+            'meta' => [
+                'country' => 'Norway',
+                'duration' => 5,
+                'season' => 'Winter',
+                'style' => 'Nature',
+                'tripType' => 'Friends',
+            ],
+            'timeline' => [
+                ['day' => 1, 'items' => ['Arrive in Tromso', 'Explore the harbour', 'Dinner in the city centre']],
+                ['day' => 2, 'items' => ['Fjord cruise', 'Cable car viewpoint', 'Northern lights chase']],
+                ['day' => 3, 'items' => ['Dog sledding tour', 'Sauna evening']],
+            ],
+            'likes' => ['demo', 'sarah', 'mika'],
+            'comments' => [
+                ['demo', 'This route feels perfect for a first aurora trip.'],
+                ['sarah', 'Adding the cable car viewpoint to my list.'],
+            ],
+        ],
+        [
+            'username' => 'sarah',
+            'title' => 'Iceland Ring Road Highlights',
+            'description' => 'Waterfalls, black sand beaches, glacier lagoons, and compact stops for a scenic Iceland road trip.',
+            'cover' => '/assets/images/Iceland/JokulsarlonGlacierLagoon.jpg',
+            'meta' => [
+                'country' => 'Iceland',
+                'duration' => 7,
+                'season' => 'Autumn',
+                'style' => 'Road Trip',
+                'tripType' => 'Couple',
+            ],
+            'timeline' => [
+                ['day' => 1, 'items' => ['Reykjavik arrival', 'Golden Circle stops']],
+                ['day' => 2, 'items' => ['Seljalandsfoss', 'Skogafoss', 'Reynisfjara']],
+                ['day' => 3, 'items' => ['Jokulsarlon Glacier Lagoon', 'Diamond Beach']],
+            ],
+            'likes' => ['demo', 'ellie'],
+            'comments' => [
+                ['mika', 'The glacier lagoon photo stop is unreal.'],
+            ],
+        ],
+        [
+            'username' => 'mika',
+            'title' => 'Finland Cabin and Sauna Escape',
+            'description' => 'A quiet Lapland plan with forest cabins, sauna nights, snowy trails, and a gentle Rovaniemi day.',
+            'cover' => '/assets/images/Finland/Rovaniemi.jpg',
+            'meta' => [
+                'country' => 'Finland',
+                'duration' => 4,
+                'season' => 'Winter',
+                'style' => 'Relaxed',
+                'tripType' => 'Family',
+            ],
+            'timeline' => [
+                ['day' => 1, 'items' => ['Arrive in Rovaniemi', 'Cabin check-in', 'Private sauna']],
+                ['day' => 2, 'items' => ['Snowshoe trail', 'Local market lunch']],
+                ['day' => 3, 'items' => ['Santa Claus Village', 'Evening aurora watch']],
+            ],
+            'likes' => ['demo', 'ellie', 'sarah'],
+            'comments' => [
+                ['ellie', 'This looks cozy and easy to follow.'],
+            ],
+        ],
+    ];
+
+    $findTripStmt = $dbConn->prepare('SELECT id FROM trips WHERE user_id = ? AND title = ? LIMIT 1');
+    $insertTripStmt = $dbConn->prepare(
+        'INSERT INTO trips (user_id, title, description, cover_image, visibility, trip_data)
+         VALUES (?, ?, ?, ?, "public", ?)'
+    );
+    $updateTripStmt = $dbConn->prepare(
+        'UPDATE trips
+         SET description = ?, cover_image = ?, visibility = "public", trip_data = ?
+         WHERE id = ?'
+    );
+    $upsertPostStmt = $dbConn->prepare(
+        'INSERT INTO community_posts (trip_id, user_id, title, description, cover_image, status)
+         VALUES (?, ?, ?, ?, ?, "public")
+         ON DUPLICATE KEY UPDATE
+             title = VALUES(title),
+             description = VALUES(description),
+             cover_image = VALUES(cover_image),
+             status = "public"'
+    );
+    $findPostStmt = $dbConn->prepare('SELECT id FROM community_posts WHERE trip_id = ? LIMIT 1');
+    $insertLikeStmt = $dbConn->prepare(
+        'INSERT IGNORE INTO post_likes (post_id, user_id) VALUES (?, ?)'
+    );
+    $insertCommentStmt = $dbConn->prepare(
+        'INSERT INTO post_comments (post_id, user_id, comment)
+         SELECT ?, ?, ?
+         WHERE NOT EXISTS (
+             SELECT 1 FROM post_comments
+             WHERE post_id = ? AND user_id = ? AND comment = ?
+         )'
+    );
+
+    foreach ($communitySeeds as $seed) {
+        $userId = $getUserId($seed['username']);
+        $title = $seed['title'];
+        $description = $seed['description'];
+        $cover = $seed['cover'];
+        $tripData = json_encode([
+            'meta' => $seed['meta'],
+            'timeline' => $seed['timeline'],
+            'budget' => [],
+            'weather' => [],
+            'aurora' => [],
+            'checklist' => [],
+            'summary' => $description,
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        $findTripStmt->bind_param('is', $userId, $title);
+        $findTripStmt->execute();
+        $tripResult = $findTripStmt->get_result();
+        $trip = $tripResult ? $tripResult->fetch_assoc() : null;
+
+        if ($trip) {
+            $tripId = (int) $trip['id'];
+            $updateTripStmt->bind_param('sssi', $description, $cover, $tripData, $tripId);
+            $updateTripStmt->execute();
+        } else {
+            $insertTripStmt->bind_param('issss', $userId, $title, $description, $cover, $tripData);
+            $insertTripStmt->execute();
+            $tripId = (int) $dbConn->insert_id;
+        }
+
+        $upsertPostStmt->bind_param('iisss', $tripId, $userId, $title, $description, $cover);
+        $upsertPostStmt->execute();
+
+        $findPostStmt->bind_param('i', $tripId);
+        $findPostStmt->execute();
+        $postResult = $findPostStmt->get_result();
+        $post = $postResult ? $postResult->fetch_assoc() : null;
+        $postId = (int) ($post['id'] ?? 0);
+
+        if ($postId <= 0) {
+            continue;
+        }
+
+        foreach ($seed['likes'] as $likedBy) {
+            $likedByUserId = $getUserId($likedBy);
+            $insertLikeStmt->bind_param('ii', $postId, $likedByUserId);
+            $insertLikeStmt->execute();
+        }
+
+        foreach ($seed['comments'] as [$commentBy, $comment]) {
+            $commentByUserId = $getUserId($commentBy);
+            $insertCommentStmt->bind_param(
+                'iisiss',
+                $postId,
+                $commentByUserId,
+                $comment,
+                $postId,
+                $commentByUserId,
+                $comment
+            );
+            $insertCommentStmt->execute();
+        }
+    }
+
+    $lookupUserStmt->close();
+    $findTripStmt->close();
+    $insertTripStmt->close();
+    $updateTripStmt->close();
+    $upsertPostStmt->close();
+    $findPostStmt->close();
+    $insertLikeStmt->close();
+    $insertCommentStmt->close();
+
     $dbConn->close();
 }

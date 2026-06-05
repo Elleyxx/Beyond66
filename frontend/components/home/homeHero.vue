@@ -32,7 +32,9 @@
         <div :key="activeCountry.slug" class="hero-copy">
           <h1>{{ activeCountry.name }}</h1>
           <p>Experience Nordic landscapes, culture and winter adventures.</p>
-          <router-link class="view-btn" :to="`/country/${activeCountry.slug}`">View More</router-link>
+          <button class="view-btn" type="button" @click="openActiveCountry">
+            View More
+          </button>
         </div>
       </Transition>
     </div>
@@ -41,6 +43,7 @@
 
 <script setup>
 import { onBeforeUnmount, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   countries: Array,
@@ -49,6 +52,7 @@ const props = defineProps({
 
 defineEmits(['change-country'])
 
+const router = useRouter()
 const displayedHeroSrc = ref(props.activeCountry?.hero || '')
 const displayedHeroAlt = ref(props.activeCountry?.name || 'Nordic destination')
 const incomingHeroSrc = ref('')
@@ -94,6 +98,11 @@ onBeforeUnmount(() => {
     clearTimeout(swapTimer)
   }
 })
+
+function openActiveCountry() {
+  if (!props.activeCountry?.slug) return
+  router.push(`/country/${props.activeCountry.slug}`)
+}
 </script>
 
 <style scoped>
@@ -152,7 +161,7 @@ onBeforeUnmount(() => {
 .country-nav button {
   background: transparent;
   border: none;
-  color: rgba(var(--v-theme-muted), 0.62);
+  color: rgba(var(--v-theme-muted), 0.80);
   text-transform: uppercase;
   font-weight: 800;
   cursor: pointer;
@@ -206,9 +215,9 @@ onBeforeUnmount(() => {
   width: fit-content;
   margin-top: 18px;
   padding: 10px 24px;
-  border: 1px solid rgb(var(--v-theme-on-surface));
+  border: 1.8px solid rgb(var(--v-theme-primary));
   background: transparent;
-  color: rgb(var(--v-theme-on-surface));
+  color: rgb(var(--v-theme-primary));
   border-radius: 999px;
   cursor: pointer;
   text-decoration: none;

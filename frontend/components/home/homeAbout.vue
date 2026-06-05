@@ -70,6 +70,7 @@
   line-height: 1.8;
   font-size: 1.1rem;
   text-align: justify;
+  font-family: 'Inter', sans-serif;
 }
 
 .about-image-wrap {

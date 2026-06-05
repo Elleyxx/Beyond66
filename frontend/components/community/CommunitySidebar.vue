@@ -1,6 +1,6 @@
 <template>
   <aside class="community-sidebar">
-    <section class="sidebar-card">
+    <section v-if="destinations.length" class="sidebar-card">
       <h3>Popular Destinations</h3>
 
       <ul>
@@ -12,7 +12,7 @@
       </ul>
     </section>
 
-    <section class="sidebar-card">
+    <section v-if="tags.length" class="sidebar-card">
       <h3>Popular Tags</h3>
 
       <div class="tag-list">
@@ -22,7 +22,7 @@
       </div>
     </section>
 
-    <section class="sidebar-card">
+    <section v-if="creators.length" class="sidebar-card">
       <h3>Top Creators</h3>
 
       <div v-for="creator in creators" :key="creator.name" class="creator-row">
@@ -48,16 +48,20 @@ defineProps({
 <style scoped>
 .community-sidebar {
   display: grid;
-  gap: 18px;
+  gap: 28px;
   position: sticky;
   top: 90px;
 }
 
 .sidebar-card {
-  padding: 18px;
-  border-radius: 18px;
+  min-height: 220px;
+  padding: 28px 24px;
+  border-radius: 28px;
   background: rgba(var(--v-theme-surface), 0.95);
   border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .sidebar-card h3 {

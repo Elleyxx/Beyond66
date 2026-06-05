@@ -4,7 +4,8 @@
       <h2>Trending This Week</h2>
       <button type="button">View All</button>
     </div>
-    <div class="section-divider" aria-hidden="true"></div>
+    <div class="section-divider"></div>
+
 
     <div class="trending-row">
       <article v-for="post in posts" :key="post.id" class="trending-card">
@@ -31,8 +32,8 @@ function coverImage(post) {
 
 <style scoped>
 .community-section {
-  max-width: 90%;
-  margin: 0 auto 34px;
+  width: 100%;
+  margin: 0;
 }
 
 .section-head {
@@ -43,9 +44,17 @@ function coverImage(post) {
 }
 
 .section-head h2 {
+  width: 90%;
   margin: 0;
   font-size: 1.35rem;
-  font-weight: 900;
+  font-weight: 850;
+}
+
+.section-divider{
+  width: 120px;
+  height: 2.5px;
+  margin: -6px 0 18px;
+  background: rgba(var(--v-theme-primary));
 }
 
 .section-head button {
@@ -56,16 +65,9 @@ function coverImage(post) {
   cursor: pointer;
 }
 
-.section-divider h2{
-  width: 70%;
-  height: 1px;
-  margin: -6px 0 18px;
-  background: rgba(var(--v-theme-on-surface), 0.18);
-}
-
 .trending-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 

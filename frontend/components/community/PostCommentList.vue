@@ -18,10 +18,10 @@ defineProps({
 
 <style scoped>
 .panel {
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
-  border-radius: 8px;
-  padding: 18px;
-  background: rgba(var(--v-theme-surface), 0.94);
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
 }
 
 h2,
@@ -29,13 +29,19 @@ p {
   margin-top: 0;
 }
 
-.comment {
-  padding: 12px 0;
-  border-top: 1px solid rgba(var(--v-theme-on-surface), 0.1);
+h2 {
+  font-size: 1.15rem;
+  font-weight: 900;
 }
 
-.comment:first-of-type {
-  border-top: 0;
+.comment {
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(var(--v-theme-background), 0.36);
+}
+
+.comment + .comment {
+  margin-top: 10px;
 }
 
 .empty {

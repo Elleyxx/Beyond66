@@ -4,6 +4,7 @@ $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 $allowedOrigins = [
     'http://localhost:5173',
+    'http://127.0.0.1:5173',
     'https://beyond66-j79m.vercel.app',
 ];
 
@@ -32,6 +33,7 @@ if (str_contains($_SERVER['REQUEST_URI'], '/api/health')) {
 }
 
 require_once __DIR__ . '/../config/bootstrap_database.php';
+ensureDatabaseReady();
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
@@ -65,8 +67,6 @@ if (str_starts_with($uri, '/api/saved-items')) {
     require_once __DIR__ . '/../routes/saved_items.php';
     exit;
 }
-
-ensureDatabaseReady();
 
 http_response_code(404);
 echo json_encode(['success' => false, 'message' => 'Route not found']);

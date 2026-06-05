@@ -43,8 +43,8 @@
 .eyebrow {
   margin: 0 0 14px;
   color: rgb(var(--v-theme-primary));
-  font-size: 0.78rem;
-  font-weight: 800;
+  font-size: 0.85rem;
+  font-weight: 850;
   letter-spacing: 0.18em;
 }
 
@@ -54,7 +54,7 @@
   color: rgb(var(--v-theme-text));
   font-size: clamp(2rem, 4rem, 4rem);
   line-height: 1.02;
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .about-copy p:last-child {
@@ -86,8 +86,9 @@
 
 .about-stats span {
   color: rgb(var(--v-theme-text));
-  font-weight: 700;
+  font-weight: 800;
   text-align: right;
+  font-size: 1.5rem;
 }
 
 @media (max-width: 820px) {

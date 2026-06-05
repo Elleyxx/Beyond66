@@ -4,6 +4,7 @@
       <h2>Latest Posts</h2>
       <span>{{ posts.length }} posts</span>
     </div>
+    <div class="section-divider"></div>
 
     <p v-if="loading" class="state">Loading posts...</p>
     <p v-else-if="!posts.length" class="state">No posts yet.</p>
@@ -33,8 +34,8 @@ defineEmits(['save', 'use-plan'])
 
 <style scoped>
 .feed-area {
-  max-width: 90%;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
 }
 .section-head {
   display: flex;
@@ -54,8 +55,15 @@ defineEmits(['save', 'use-plan'])
   font-weight: 800;
 }
 
+.section-divider{
+  width: 120px;
+  height: 2.5px;
+  margin: -6px 0 18px;
+  background: rgba(var(--v-theme-primary));
+}
+
 .post-grid {
-  columns: 3 230px;
+  columns: 2 230px;
   column-gap: 18px;
 }
 

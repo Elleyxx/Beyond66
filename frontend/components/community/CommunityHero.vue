@@ -81,8 +81,8 @@ function patch(update) {
 .eyebrow {
   margin: 0 0 8px;
   color: rgb(var(--v-theme-primary)) !important;
-  font-size: 0.78rem;
-  font-weight: 900;
+  font-size: 0.85rem;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -108,11 +108,11 @@ h1 {
   gap: 12px;
   padding: 13px 16px;
   border-radius: 999px;
-  background: rgb(var(--v-theme-communityHeader));
+  background: rgb(var(--v-theme-surface));
 }
 
 .hero-search i {
-  color: rgb(var(--v-theme-surface), 0.66);
+  color: rgb(var(--v-theme-on-surface), 0.66);
 }
 .hero-search input {
   width: 100%;
@@ -135,7 +135,7 @@ h1 {
   color: white;
   border-radius: 999px;
   padding: 9px 18px;
-  font-weight: 800;
+  font-weight: 600;
   cursor: pointer;
 }
 

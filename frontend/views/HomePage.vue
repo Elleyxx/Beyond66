@@ -9,6 +9,7 @@
     <HomeTours :countries="countries" />
 
     <HomeAbout />
+    <HomeTrendingPosts />
     <HomeInfo />
   </main>
 </template>
@@ -20,6 +21,7 @@ import HomeHero from '@/components/home/homeHero.vue'
 import HomeTours from '@/components/home/homeTopDest.vue'
 import HomeAbout from '@/components/home/homeAbout.vue'
 import HomeInfo from '@/components/home/homeInfo.vue'
+import HomeTrendingPosts from '@/components/home/HomeTrendingPosts.vue'
 
 const countries = [
   {

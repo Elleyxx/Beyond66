@@ -23,10 +23,10 @@ function submit() {
 .comment-box {
   display: grid;
   gap: 10px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
-  border-radius: 8px;
+  border: 0;
+  border-radius: 20px;
   padding: 18px;
-  background: rgba(var(--v-theme-surface), 0.94);
+  background: rgba(var(--v-theme-background), 0.36);
 }
 
 textarea {

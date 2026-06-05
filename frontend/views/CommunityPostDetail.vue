@@ -2,22 +2,24 @@
   <main class="post-detail-page">
     <PostDetailHeader :post="post" @save="isSaveModalOpen = true" />
 
-    <div class="detail-layout">
-      <section class="main-column">
+    <div class="detail-content">
+      <section class="trip-overview-panel">
         <PostTripSummary :trip="post?.trip" />
         <PostItineraryPreview :timeline="post?.trip?.timeline || []" />
-        <PostPortfolio :portfolios="post?.portfolios || []" />
+      </section>
+
+      <PostPortfolio v-if="hasPortfolios" :portfolios="post?.portfolios || []" />
+
+      <section class="comments-panel">
         <PostCommentList :comments="comments" />
         <PostCommentBox @submit="addComment" />
       </section>
 
-      <aside class="side-column">
-        <PostVisibilityControl
-          v-if="isOwner"
-          :status="post?.status || 'private'"
-          @update:status="updateVisibility"
-        />
-      </aside>
+      <PostVisibilityControl
+        v-if="isOwner"
+        :status="post?.status || 'private'"
+        @update:status="updateVisibility"
+      />
     </div>
 
     <PostSaveModal
@@ -53,6 +55,7 @@ const comments = ref([])
 const isSaveModalOpen = ref(false)
 
 const isOwner = computed(() => Boolean(post.value?.isOwner))
+const hasPortfolios = computed(() => Boolean(post.value?.portfolios?.length))
 
 onMounted(loadPost)
 
@@ -87,23 +90,42 @@ async function updateVisibility(status) {
   background: rgb(var(--v-theme-background));
 }
 
-.detail-layout {
-  max-width: 1180px;
-  margin: 24px auto 0;
+.detail-content {
+  width: 90%;
+  margin: 26px auto 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
-  gap: 24px;
-  align-items: start;
+  gap: 28px;
 }
 
-.main-column {
+.trip-overview-panel {
   display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(260px, 3fr);
   gap: 18px;
+  padding: 28px;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border-radius: 42px;
+  background: rgba(var(--v-theme-surface), 0.72);
+}
+
+.comments-panel {
+  display: grid;
+  gap: 16px;
+  padding: 28px;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border-radius: 34px;
+  background: rgba(var(--v-theme-surface), 0.72);
 }
 
 @media (max-width: 980px) {
-  .detail-layout {
+  .trip-overview-panel {
     grid-template-columns: 1fr;
+    border-radius: 28px;
+    padding: 18px;
+  }
+
+  .comments-panel {
+    border-radius: 24px;
+    padding: 18px;
   }
 }
 </style>
