@@ -4,6 +4,7 @@
       <h2>Trending This Week</h2>
       <button type="button">View All</button>
     </div>
+    <div class="section-divider" aria-hidden="true"></div>
 
     <div class="trending-row">
       <article v-for="post in posts" :key="post.id" class="trending-card">
@@ -53,6 +54,13 @@ function coverImage(post) {
   color: rgb(var(--v-theme-primary));
   font-weight: 800;
   cursor: pointer;
+}
+
+.section-divider h2{
+  width: 70%;
+  height: 1px;
+  margin: -6px 0 18px;
+  background: rgba(var(--v-theme-on-surface), 0.18);
 }
 
 .trending-row {
