@@ -12,38 +12,8 @@ function ensureDatabaseReady(): void
 
     $config = require __DIR__ . '/database.php';
 
-    $serverConn = new mysqli(
-        $config['host'],
-        $config['username'],
-        $config['password'],
-        '',
-        (int) $config['port']
-    );
-
-    if ($serverConn->connect_error) {
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'message' => 'Database server connection failed'
-        ]);
-        exit;
-    }
-
     $dbName = $config['dbname'];
     $charset = $config['charset'] ?? 'utf8mb4';
-
-    $createDbSql = "
-        CREATE DATABASE IF NOT EXISTS `$dbName`
-        CHARACTER SET $charset
-        COLLATE {$charset}_unicode_ci
-    ";
-
-    // Shared hosts usually provision the database and block CREATE DATABASE.
-    // If creation fails, continue and let the real database connection below
-    // decide whether the configured database exists and is accessible.
-    $serverConn->query($createDbSql);
-
-    $serverConn->close();
 
     $dbConn = new mysqli(
         $config['host'],
@@ -64,14 +34,17 @@ function ensureDatabaseReady(): void
 
     $dbConn->set_charset($charset);
 
-    $oldCommunityColumn = $dbConn->query("SHOW COLUMNS FROM community_posts LIKE 'trip_id'");
-    $hasNewCommunitySchema = $oldCommunityColumn && $oldCommunityColumn->num_rows > 0;
     $oldCommunityExists = $dbConn->query("SHOW TABLES LIKE 'community_posts'");
-    if ($oldCommunityExists && $oldCommunityExists->num_rows > 0 && !$hasNewCommunitySchema) {
-        $dbConn->query("DROP TABLE IF EXISTS forum_likes");
-        $dbConn->query("DROP TABLE IF EXISTS post_images");
-        $dbConn->query("DROP TABLE IF EXISTS community_comments");
-        $dbConn->query("DROP TABLE IF EXISTS community_posts");
+    if ($oldCommunityExists && $oldCommunityExists->num_rows > 0) {
+        $oldCommunityColumn = $dbConn->query("SHOW COLUMNS FROM community_posts LIKE 'trip_id'");
+        $hasNewCommunitySchema = $oldCommunityColumn && $oldCommunityColumn->num_rows > 0;
+
+        if (!$hasNewCommunitySchema) {
+            $dbConn->query("DROP TABLE IF EXISTS forum_likes");
+            $dbConn->query("DROP TABLE IF EXISTS post_images");
+            $dbConn->query("DROP TABLE IF EXISTS community_comments");
+            $dbConn->query("DROP TABLE IF EXISTS community_posts");
+        }
     }
 
     $tables = [
