@@ -15,7 +15,7 @@
           role="button"
           :tabindex="index <= maxUnlockedStep ? 0 : -1"
           :aria-disabled="index > maxUnlockedStep"
-          :aria-label="`Go to step ${index + 1}: ${step.title}`"
+          :aria-label="t('planner.steps.goTo', { step: index + 1, title: step.title })"
           @click="index <= maxUnlockedStep && $emit('go-step', index)"
           @keydown.enter="index <= maxUnlockedStep && $emit('go-step', index)"
           @keydown.space.prevent="index <= maxUnlockedStep && $emit('go-step', index)"
@@ -80,12 +80,12 @@
     </div>
 
     <div class="stepper-actions">
-      <button class="step-btn secondary" :disabled="currentStep === 0" @click="$emit('prev-step')">Back</button>
+      <button class="step-btn secondary" :disabled="currentStep === 0" @click="$emit('prev-step')">{{ t('planner.actions.back') }}</button>
       <button v-if="currentStep < steps.length - 1" class="step-btn primary" :disabled="isGeneratingAi" @click="$emit('next-step')">
-        {{ currentStep === 0 && isGeneratingAi ? 'Generating Trip Plan...' : 'Next' }}
+        {{ currentStep === 0 && isGeneratingAi ? t('planner.actions.generating') : t('planner.actions.next') }}
       </button>
       <button v-else class="step-btn primary" @click="$emit('open-save-modal')">
-        {{ isEditing ? 'Save Edit' : 'Save Trip' }}
+        {{ isEditing ? t('planner.actions.saveEdit') : t('planner.actions.saveTrip') }}
       </button>
     </div>
     <p v-if="aiError" class="ai-error">{{ aiError }}</p>
@@ -93,6 +93,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import PlannerControls from '@/components/planner/PlannerControls.vue'
 import PlannerTimeline from '@/components/planner/PlannerTimeline.vue'
 import PlannerBudget from '@/components/planner/PlannerBudget.vue'
@@ -132,6 +133,8 @@ defineEmits([
   'update:timelineDays',
   'update:budgetEstimate',
 ])
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

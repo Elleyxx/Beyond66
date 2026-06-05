@@ -6,6 +6,7 @@ import { useTheme } from 'vuetify'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import { clearAuthSession, isAuthenticated } from '../../utils/auth'
+import { searchSite } from '@/services/siteSearch'
 
 const theme = useTheme()
 const { t, locale } = useI18n()
@@ -16,6 +17,8 @@ const isScrolled = ref(false)
 const isInHeroScroll = ref(false)
 const mobileDrawer = ref(false)
 const isLoggedIn = ref(isAuthenticated())
+const searchQuery = ref('')
+const isSearchOpen = ref(false)
 const isDark = computed(() => theme.global.current.value.dark)
 
 const currentLogo = computed(() => {
@@ -24,8 +27,11 @@ const currentLogo = computed(() => {
 })
 
 const currentLanguageLabel = computed(() => {
-  return locale.value === 'zh' ? 'English' : '中文'
+  return locale.value === 'zh' ? t('menu.languageEnglish') : t('menu.languageChinese')
 })
+
+const searchSuggestions = computed(() => searchSite(searchQuery.value, t, { limit: 5 }))
+const hasSearchQuery = computed(() => searchQuery.value.trim().length > 0)
 
 // Language changer logic
 function toggleLanguage() {
@@ -50,6 +56,33 @@ function logout() {
 function goToLogin() {
   mobileDrawer.value = false
   router.push('/login')
+}
+
+function openSearch() {
+  isSearchOpen.value = true
+}
+
+function closeSearchSoon() {
+  window.setTimeout(() => {
+    isSearchOpen.value = false
+  }, 120)
+}
+
+function submitSearch() {
+  const query = searchQuery.value.trim()
+  isSearchOpen.value = false
+  mobileDrawer.value = false
+  router.push({
+    path: '/search',
+    query: query ? { q: query } : {},
+  })
+}
+
+function openSearchResult(result) {
+  searchQuery.value = ''
+  isSearchOpen.value = false
+  mobileDrawer.value = false
+  router.push(result.path)
 }
 
 function syncAuthState() {
@@ -79,7 +112,13 @@ onMounted(() => {
   handleScroll()
 })
 
-watch(() => route.fullPath, syncAuthState)
+watch(
+  () => route.fullPath,
+  () => {
+    syncAuthState()
+    isSearchOpen.value = false
+  },
+)
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll)
@@ -96,46 +135,46 @@ onBeforeUnmount(() => {
     class="mobile-drawer"
   >
     <v-list nav>
-      <v-list-item to="/home" @click="mobileDrawer = false" title="t('nav.home')" />
+      <v-list-item to="/home" @click="mobileDrawer = false" :title="t('nav.home')" />
       <v-list-item to="/explore" @click="mobileDrawer = false" :title="t('nav.explore')" />
       <v-list-item
         class="sidebar-subitem"
         to="/country/norway"
-        title="Norway"
+        :title="t('countryNames.norway')"
         @click="mobileDrawer = false"
       />
       <v-list-item
         class="sidebar-subitem"
         to="/country/sweden"
-        title="Sweden"
+        :title="t('countryNames.sweden')"
         @click="mobileDrawer = false"
       />
       <v-list-item
         class="sidebar-subitem"
         to="/country/finland"
-        title="Finland"
+        :title="t('countryNames.finland')"
         @click="mobileDrawer = false"
       />
       <v-list-item
         class="sidebar-subitem"
         to="/country/iceland"
-        title="Iceland"
+        :title="t('countryNames.iceland')"
         @click="mobileDrawer = false"
       />
       <v-list-item
         class="sidebar-subitem"
         to="/country/denmark"
-        title="Denmark"
+        :title="t('countryNames.denmark')"
         @click="mobileDrawer = false"
       />
 
       <v-list-item to="/trip-planner" @click="mobileDrawer = false" :title="t('nav.planner')" />
       <v-list-item to="/community" @click="mobileDrawer = false" :title="t('nav.community')" />
       <v-divider class="my-2" />
-      <v-list-item to="/dashboard" @click="mobileDrawer = false" title="Dashboard" />
+      <v-list-item to="/dashboard" @click="mobileDrawer = false" :title="t('nav.dashboard')" />
       <v-list-item @click="toggleLanguage" :title="currentLanguageLabel" />
-      <v-list-item v-if="isLoggedIn" @click="logout" title="Logout" />
-      <v-list-item v-else @click="goToLogin" title="Login" />
+      <v-list-item v-if="isLoggedIn" @click="logout" :title="t('nav.logout')" />
+      <v-list-item v-else @click="goToLogin" :title="t('nav.login')" />
     </v-list>
   </v-navigation-drawer>
 
@@ -161,11 +200,11 @@ onBeforeUnmount(() => {
           </template>
 
           <v-list>
-            <v-list-item to="/country/norway" title="Norway" />
-            <v-list-item to="/country/sweden" title="Sweden" />
-            <v-list-item to="/country/finland" title="Finland" />
-            <v-list-item to="/country/iceland" title="Iceland" />
-            <v-list-item to="/country/denmark" title="Denmark" />
+            <v-list-item to="/country/norway" :title="t('countryNames.norway')" />
+            <v-list-item to="/country/sweden" :title="t('countryNames.sweden')" />
+            <v-list-item to="/country/finland" :title="t('countryNames.finland')" />
+            <v-list-item to="/country/iceland" :title="t('countryNames.iceland')" />
+            <v-list-item to="/country/denmark" :title="t('countryNames.denmark')" />
           </v-list>
         </v-menu>
 
@@ -181,21 +220,50 @@ onBeforeUnmount(() => {
       <div class="header-center">
         <router-link to="/home" class="brand-link">
           <img :src="currentLogo" alt="Beyond 66 logo" class="brand-logo" />
-          <span class="brand-title">Beyond 66°</span>
+          <span class="brand-title">{{ t('brand.name') }}</span>
         </router-link>
       </div>
 
       <div class="header-side header-right">
-        <v-text-field
-          density="compact"
-          variant="solo-filled"
-          flat
-          hide-details
-          rounded
-          prepend-inner-icon="mdi-magnify"
-          :placeholder="t('nav.search')"
-          class="search-box"
-        />
+        <div class="search-shell">
+          <v-text-field
+            v-model="searchQuery"
+            density="compact"
+            variant="solo-filled"
+            flat
+            hide-details
+            rounded
+            prepend-inner-icon="mdi-magnify"
+            :placeholder="t('nav.search')"
+            class="search-box"
+            @focus="openSearch"
+            @blur="closeSearchSoon"
+            @keydown.enter.prevent="submitSearch"
+            @keydown.esc="isSearchOpen = false"
+          />
+
+          <div v-if="isSearchOpen && searchSuggestions.length" class="search-popover">
+            <button
+              v-for="result in searchSuggestions"
+              :key="`${result.path}-${result.title}`"
+              type="button"
+              class="search-result"
+              @mousedown.prevent="openSearchResult(result)"
+            >
+              <span>{{ result.category }}</span>
+              <strong>{{ result.title }}</strong>
+              <small>{{ result.description }}</small>
+            </button>
+            <button
+              v-if="hasSearchQuery"
+              type="button"
+              class="search-submit-row"
+              @mousedown.prevent="submitSearch"
+            >
+              {{ t('search.viewAllResults') }}
+            </button>
+          </div>
+        </div>
 
         <v-btn icon variant="text" @click="toggleTheme" class="theme-toggle-btn">
           <i :class="isDark ? 'bi bi-sun' : 'bi bi-moon-stars'"></i>
@@ -215,7 +283,7 @@ onBeforeUnmount(() => {
                 @click="!isLoggedIn && goToLogin()"
               >
                 <i class="bi bi-person"></i>
-                <span class="profile-action-label">{{ isLoggedIn ? 'Dashboard' : 'Login' }}</span>
+                <span class="profile-action-label">{{ isLoggedIn ? t('nav.dashboard') : t('nav.login') }}</span>
               </v-btn>
 
               <v-btn class="profile-action-btn profile-action-expand-btn" @click="toggleLanguage">
@@ -225,7 +293,7 @@ onBeforeUnmount(() => {
 
               <v-btn v-if="isLoggedIn" class="profile-action-btn profile-action-expand-btn" @click="logout">
                 <i class="bi bi-box-arrow-right"></i>
-                <span class="profile-action-label">Log Out</span>
+                <span class="profile-action-label">{{ t('nav.logout') }}</span>
               </v-btn>
             </div>
         </v-menu>
@@ -240,7 +308,7 @@ onBeforeUnmount(() => {
 
         <router-link to="/home" class="brand-link mobile-brand-link">
           <img :src="currentLogo" alt="Beyond 66 logo" class="brand-logo" />
-          <span class="brand-title">Beyond 66°</span>
+          <span class="brand-title">{{ t('brand.name') }}</span>
         </router-link>
 
         <div class="mobile-right-icons">
@@ -249,8 +317,9 @@ onBeforeUnmount(() => {
           </v-btn>
         </div>
       </div>
-      <div>
+      <div class="search-shell mobile-search-shell">
         <v-text-field
+          v-model="searchQuery"
           density="compact"
           variant="solo-filled"
           flat
@@ -259,7 +328,33 @@ onBeforeUnmount(() => {
           prepend-inner-icon="mdi-magnify"
           :placeholder="t('nav.search')"
           class="search-box mobile-search-box"
+          @focus="openSearch"
+          @blur="closeSearchSoon"
+          @keydown.enter.prevent="submitSearch"
+          @keydown.esc="isSearchOpen = false"
         />
+
+        <div v-if="isSearchOpen && searchSuggestions.length" class="search-popover">
+          <button
+            v-for="result in searchSuggestions"
+            :key="`${result.path}-${result.title}-mobile`"
+            type="button"
+            class="search-result"
+            @mousedown.prevent="openSearchResult(result)"
+          >
+            <span>{{ result.category }}</span>
+            <strong>{{ result.title }}</strong>
+            <small>{{ result.description }}</small>
+          </button>
+          <button
+            v-if="hasSearchQuery"
+            type="button"
+            class="search-submit-row"
+            @mousedown.prevent="submitSearch"
+          >
+            {{ t('search.viewAllResults') }}
+          </button>
+        </div>
       </div>
     </div>
   </v-app-bar>
@@ -389,10 +484,15 @@ onBeforeUnmount(() => {
   text-shadow: none;
 }
 
-.search-box {
+.search-shell {
+  position: relative;
   flex: 0 0 180px;
   max-width: 180px;
   margin-bottom: 8px;
+}
+
+.search-box {
+  width: 100%;
 }
 
 .search-box :deep(.v-field) {
@@ -405,6 +505,66 @@ onBeforeUnmount(() => {
 
 .search-box :deep(.v-field__overlay) {
   opacity: 0;
+}
+
+.search-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 100;
+  width: min(320px, 80vw);
+  overflow: hidden;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border-radius: 8px;
+  background: rgb(var(--v-theme-surface));
+  box-shadow: 0 18px 42px rgba(var(--v-theme-background), 0.22);
+}
+
+.search-result,
+.search-submit-row {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: rgb(var(--v-theme-text));
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.search-result {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+}
+
+.search-result:hover,
+.search-submit-row:hover {
+  background: rgba(var(--v-theme-primary), 0.08);
+}
+
+.search-result span {
+  color: rgb(var(--v-theme-primary));
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.search-result strong {
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.search-result small {
+  color: rgba(var(--v-theme-text), 0.62);
+  line-height: 1.35;
+}
+
+.search-submit-row {
+  padding: 12px 14px;
+  color: rgb(var(--v-theme-primary));
+  font-size: 0.86rem;
+  font-weight: 900;
 }
 
 .nav-link {
@@ -697,6 +857,18 @@ onBeforeUnmount(() => {
   .mobile-search-box {
     width: 100%;
     max-width: none;
+  }
+
+  .mobile-search-shell {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 0;
+  }
+
+  .mobile-search-shell .search-popover {
+    left: 0;
+    right: 0;
+    width: 100%;
   }
 
   .brand-title {

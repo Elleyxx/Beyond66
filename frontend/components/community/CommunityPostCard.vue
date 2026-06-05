@@ -2,32 +2,32 @@
   <article class="post-card">
     <RouterLink class="post-image" :to="`/community/${post.id}`">
       <img v-if="coverImage" :src="coverImage" :alt="post.title" />
-      <div v-else class="image-placeholder">{{ post.country || post.trip?.meta?.country || 'Nordic' }}</div>
-      <span class="post-type">{{ post.typeLabel || 'Trip Plan' }}</span>
+      <div v-else class="image-placeholder">{{ post.country || post.trip?.meta?.country || t('countryNames.nordic') }}</div>
+      <span class="post-type">{{ post.typeLabel || t('community.card.tripPlan') }}</span>
     </RouterLink>
 
     <div class="post-body">
       <div class="author-row">
         <div class="avatar">{{ authorInitial }}</div>
-        <span>{{ post.authorName || post.author_name || 'Traveller' }}</span>
+        <span>{{ post.authorName || post.author_name || t('community.card.traveller') }}</span>
       </div>
 
       <RouterLink class="title-link" :to="`/community/${post.id}`">
-        <h3>{{ post.title || 'Untitled trip' }}</h3>
+        <h3>{{ post.title || t('community.card.untitled') }}</h3>
       </RouterLink>
-      <p>{{ post.description || 'A Nordic route shared by the community.' }}</p>
+      <p>{{ post.description || t('community.card.fallbackDescription') }}</p>
 
       <div class="post-meta">
         <span>{{ durationLabel }}</span>
-        <span>{{ post.country || post.trip?.meta?.country || 'Nordic' }}</span>
-        <span>{{ post.season || post.trip?.meta?.season || 'Any season' }}</span>
+        <span>{{ post.country || post.trip?.meta?.country || t('countryNames.nordic') }}</span>
+        <span>{{ post.season || post.trip?.meta?.season || t('community.card.anySeason') }}</span>
       </div>
 
       <div class="post-actions">
         <button type="button"><i class="bi bi-heart"></i> {{ post.likes || 0 }}</button>
         <button type="button"><i class="bi bi-chat"></i> {{ post.comments || 0 }}</button>
-        <button type="button" @click="$emit('save')"><i class="bi bi-bookmark"></i> Save</button>
-        <button type="button" @click="$emit('use-plan')">Use Plan</button>
+        <button type="button" @click="$emit('save')"><i class="bi bi-bookmark"></i> {{ t('community.card.save') }}</button>
+        <button type="button" @click="$emit('use-plan')">{{ t('community.card.usePlan') }}</button>
       </div>
     </div>
   </article>
@@ -35,18 +35,20 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   post: { type: Object, required: true },
 })
 
 defineEmits(['save', 'use-plan'])
+const { t } = useI18n()
 
 const coverImage = computed(() => props.post.coverImage || props.post.cover_image || '')
 const authorInitial = computed(() => String(props.post.authorName || props.post.author_name || 'T').slice(0, 1).toUpperCase())
 const durationLabel = computed(() => {
   const duration = props.post.duration || props.post.trip?.meta?.duration
-  return duration ? `${duration} days` : 'Flexible'
+  return duration ? t('community.card.days', { count: duration }) : t('community.card.flexible')
 })
 </script>
 

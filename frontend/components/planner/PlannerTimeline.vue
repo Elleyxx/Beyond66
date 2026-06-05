@@ -1,17 +1,16 @@
 ﻿<template>
   <section class="planner-card timeline-card">
     <div class="timeline-head">
-      <h2>Trip Timeline</h2>
+      <h2>{{ t('planner.timeline.title') }}</h2>
     </div>
 
     <p class="timeline-intro">
-      This itinerary has been generated based on your travel preferences.
-      You can freely add, remove, or rearrange activities to personalise your journey.
+      {{ t('planner.timeline.intro') }}
     </p>
 
     <div class="activity-toolbar-head">
-      <h3>Activity Pool</h3>
-      <span>Drag into each day</span>
+      <h3>{{ t('planner.timeline.activityPool') }}</h3>
+      <span>{{ t('planner.timeline.dragHint') }}</span>
     </div>
 
     <div class="activity-pool">
@@ -34,7 +33,7 @@
         @drop="onDrop(dayIndex)"
       >
         <div class="day-label">
-          <h3>Day {{ day.day }}</h3>
+          <h3>{{ t('planner.timeline.day', { day: day.day }) }}</h3>
           <p v-if="day.date" class="day-date">{{ formatDate(day.date) }}</p>
           <select
             class="day-country-select"
@@ -57,7 +56,7 @@
 
         <div class="day-content">
           <div class="activity-panel">
-            <h4>Activities</h4>
+            <h4>{{ t('planner.timeline.activities') }}</h4>
 
             <ul>
               <li v-for="(item, itemIndex) in day.items" :key="`${item}-${itemIndex}`">
@@ -66,7 +65,7 @@
               </li>
 
               <li v-if="!day.items.length" class="empty">
-                Drop activity here
+                {{ t('planner.timeline.dropActivity') }}
               </li>
             </ul>
           </div>
@@ -79,6 +78,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   timeline: { type: Array, required: true },
@@ -87,6 +87,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:timeline'])
+const { t } = useI18n()
 
 const dragged = ref('')
 
@@ -150,10 +151,10 @@ const activityPool = computed(() => {
   return [...new Set(selectedActivities.length ? selectedActivities : fallbackActivities)]
 })
 
-const fallbackCountries = ['Country']
+const fallbackCountries = computed(() => [t('planner.timeline.fallbackCountry')])
 
 function countryOptionsList() {
-  return props.countryRoute.length ? props.countryRoute : fallbackCountries
+  return props.countryRoute.length ? props.countryRoute : fallbackCountries.value
 }
 
 function dayCountry(day, dayIndex) {

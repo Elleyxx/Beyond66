@@ -2,17 +2,17 @@
   <section class="community-trending">
     <div class="section-head">
       <div class="title-block">
-        <h2>JOURNEYS</h2>
+        <h2>{{ t('home.trending.title') }}</h2>
       </div>
 
       <RouterLink class="explore-link" to="/community">
-        Explore community
+        {{ t('home.trending.explore') }}
         <i class="bi bi-arrow-right"></i>
       </RouterLink>
     </div>
 
-    <p v-if="isLoading" class="state">Loading community posts...</p>
-    <p v-else-if="!topPosts.length" class="state">No community posts yet.</p>
+    <p v-if="isLoading" class="state">{{ t('home.trending.loading') }}</p>
+    <p v-else-if="!topPosts.length" class="state">{{ t('home.trending.empty') }}</p>
 
     <div v-else class="post-grid">
       <RouterLink
@@ -23,22 +23,22 @@
       >
         <div class="image-wrap">
           <img v-if="coverImage(post)" :src="coverImage(post)" :alt="post.title" />
-          <div v-else class="image-placeholder">{{ post.country || 'Nordic' }}</div>
+          <div v-else class="image-placeholder">{{ post.country || t('home.trending.fallbackCountry') }}</div>
           <span class="likes-pill"><i class="bi bi-heart-fill"></i> {{ post.likes || 0 }}</span>
         </div>
 
         <div class="card-body">
           <div class="author-row">
-            <span>{{ post.authorName || post.author_name || 'Traveller' }}</span>
-            <strong>{{ post.country || post.trip?.meta?.country || 'Nordic' }}</strong>
+            <span>{{ post.authorName || post.author_name || t('home.trending.fallbackAuthor') }}</span>
+            <strong>{{ post.country || post.trip?.meta?.country || t('home.trending.fallbackCountry') }}</strong>
           </div>
 
-          <h3>{{ post.title || 'Untitled trip' }}</h3>
-          <p>{{ post.description || 'A Nordic route shared by the community.' }}</p>
+          <h3>{{ post.title || t('home.trending.fallbackTitle') }}</h3>
+          <p>{{ post.description || t('home.trending.fallbackDescription') }}</p>
 
           <div class="meta-row">
             <span>{{ durationLabel(post) }}</span>
-            <span>{{ post.season || post.trip?.meta?.season || 'Any season' }}</span>
+            <span>{{ post.season || post.trip?.meta?.season || t('home.trending.anySeason') }}</span>
           </div>
         </div>
       </RouterLink>
@@ -48,11 +48,13 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { RouterLink } from 'vue-router'
 import { getCommunityPosts } from '@/services/communityService'
 
 const posts = ref([])
 const isLoading = ref(false)
+const { t } = useI18n()
 
 const topPosts = computed(() => {
   return [...posts.value]
@@ -79,7 +81,7 @@ function coverImage(post) {
 
 function durationLabel(post) {
   const duration = post.duration || post.trip?.meta?.duration
-  return duration ? `${duration} days` : 'Flexible'
+  return duration ? t('home.trending.days', { count: duration }) : t('home.trending.flexible')
 }
 </script>
 
@@ -98,7 +100,7 @@ function durationLabel(post) {
 }
 
 .title-block h2 {
-  margin: 0;
+  margin-bottom: 34px;
   color: rgba(var(--v-theme-on-surface), 0.35);
   font-size: clamp(4.5rem, 9vw, 8rem);
   line-height: 0.8;

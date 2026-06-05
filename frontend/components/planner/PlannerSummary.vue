@@ -2,10 +2,10 @@
   <section class="planner-card summary-card">
     <div class="summary-hero">
       <div>
-        <p class="eyebrow">Trip Summary</p>
+        <p class="eyebrow">{{ t('planner.summary.title') }}</p>
         <h2>{{ tripTitle }}</h2>
         <p class="hero-meta">
-          {{ dateRange }} · {{ meta.duration || 0 }} days · {{ meta.pax || 1 }} pax
+          {{ dateRange }} · {{ t('planner.summary.meta', { days: meta.duration || 0, pax: meta.pax || 1 }) }}
         </p>
       </div>
 
@@ -17,61 +17,61 @@
 
     <div class="summary-grid">
       <div class="summary-section preferences-card">
-        <h3>Travel Preferences</h3>
+        <h3>{{ t('planner.summary.preferences') }}</h3>
 
         <div class="info-list">
-          <span>Countries</span>
+          <span>{{ t('planner.summary.countries') }}</span>
           <strong>{{ countryRoute }}</strong>
 
-          <span>Travel Style</span>
+          <span>{{ t('planner.summary.travelStyle') }}</span>
           <strong>{{ meta.style || '—' }}</strong>
 
-          <span>Season</span>
+          <span>{{ t('planner.summary.season') }}</span>
           <strong>{{ meta.season || '—' }}</strong>
 
-          <span>Budget</span>
+          <span>{{ t('planner.summary.budget') }}</span>
           <strong>{{ meta.budget || '—' }}</strong>
 
-          <span>Accommodation</span>
+          <span>{{ t('planner.summary.accommodation') }}</span>
           <strong>{{ meta.accommodation || '—' }}</strong>
 
-          <span>Transport</span>
+          <span>{{ t('planner.summary.transport') }}</span>
           <strong>{{ meta.transport || '—' }}</strong>
 
-          <span>Trip Type</span>
+          <span>{{ t('planner.summary.tripType') }}</span>
           <strong>{{ meta.tripType || '—' }}</strong>
 
-          <span>Activity Level</span>
+          <span>{{ t('planner.summary.activityLevel') }}</span>
           <strong>{{ meta.activityLevel || '—' }}</strong>
         </div>
       </div>
 
       <div class="summary-section progress-card">
-        <h3>Progress Overview</h3>
+        <h3>{{ t('planner.summary.progress') }}</h3>
 
         <div class="stat-grid">
           <div>
             <strong>{{ totalActivities }}</strong>
-            <span>Activities</span>
+            <span>{{ t('planner.summary.activities') }}</span>
           </div>
 
           <div>
             <strong>{{ checkedCount }}/{{ checklistCount }}</strong>
-            <span>Packed Items</span>
+            <span>{{ t('planner.summary.packedItems') }}</span>
           </div>
 
           <div>
             <strong>{{ timeline.length }}</strong>
-            <span>Itinerary Days</span>
+            <span>{{ t('planner.summary.itineraryDays') }}</span>
           </div>
         </div>
       </div>
 
      <div v-if="budget" class="summary-section budget-card">
-        <h3>Budget Summary</h3>
+        <h3>{{ t('planner.summary.budgetSummary') }}</h3>
 
         <div class="budget-total-row">
-          <span>Total Estimated Budget</span>
+          <span>{{ t('planner.summary.totalBudget') }}</span>
           <strong class="budget-total">
             $ {{ Number(budget.total || 0).toLocaleString() }}
           </strong>
@@ -81,60 +81,60 @@
 
         <div class="budget-breakdown">
           <div class="budget-item">
-            <span>Stay</span>
+            <span>{{ t('planner.budget.stay') }}</span>
             <strong>$ {{ Number(budget.stay || 0).toLocaleString() }}</strong>
           </div>
 
           <div class="budget-item">
-            <span>Transport</span>
+            <span>{{ t('planner.budget.transport') }}</span>
             <strong>$ {{ Number(budget.transport || 0).toLocaleString() }}</strong>
           </div>
 
           <div class="budget-item">
-            <span>Food</span>
+            <span>{{ t('planner.budget.food') }}</span>
             <strong>$ {{ Number(budget.food || 0).toLocaleString() }}</strong>
           </div>
 
           <div class="budget-item">
-            <span>Activities</span>
+            <span>{{ t('planner.budget.activities') }}</span>
             <strong>$ {{ Number(budget.activities || 0).toLocaleString() }}</strong>
           </div>
         </div>
       </div>
 
       <div class="summary-section weather-card">
-        <h3>Weather & Aurora</h3>
+        <h3>{{ t('planner.summary.weatherAurora') }}</h3>
 
         <div class="info-list">
-          <span>Weather</span>
+          <span>{{ t('planner.summary.weather') }}</span>
           <strong>{{ weatherLabel }}</strong>
 
-          <span>Aurora Chance</span>
+          <span>{{ t('planner.summary.auroraChance') }}</span>
           <strong>{{ auroraLabel }}</strong>
 
-          <span>Best Window</span>
+          <span>{{ t('planner.summary.bestWindow') }}</span>
           <strong>{{ auroraWindow }}</strong>
         </div>
       </div>
 
       <div class="summary-section full">
-        <h3>Itinerary Timeline</h3>
+        <h3>{{ t('planner.summary.itinerary') }}</h3>
 
         <div class="timeline-preview">
           <article v-for="day in timeline" :key="day.day" class="timeline-day">
             <div class="day-badge">
-              Day {{ day.day }}
+              {{ t('planner.timeline.day', { day: day.day }) }}
             </div>
 
             <div>
-              <h4>{{ day.destination || day.country || 'Destination' }}</h4>
+              <h4>{{ day.destination || day.country || t('planner.summary.destination') }}</h4>
               <p>{{ day.country || '—' }}</p>
 
               <ul>
                 <li v-for="(item, index) in day.items" :key="`${day.day}-${item}-${index}`">
                   {{ item }}
                 </li>
-                <li v-if="!day.items?.length" class="empty">No activities added yet</li>
+                <li v-if="!day.items?.length" class="empty">{{ t('planner.summary.emptyActivities') }}</li>
               </ul>
             </div>
           </article>
@@ -146,6 +146,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   meta: { type: Object, required: true },
@@ -160,13 +161,14 @@ const props = defineProps({
 })
 
 defineEmits(['back', 'open-save-modal'])
+const { t } = useI18n()
 
 const tripTitle = computed(() => {
   const countries = Array.isArray(props.meta.countryRoute) && props.meta.countryRoute.length
     ? props.meta.countryRoute.join(' → ')
-    : props.meta.country || 'Nordic Trip'
+    : props.meta.country || t('countryNames.nordic')
 
-  return `${countries} Journey`
+  return t('planner.summary.journey', { countries })
 })
 
 const countryRoute = computed(() => {
@@ -178,7 +180,7 @@ const countryRoute = computed(() => {
 })
 
 const dateRange = computed(() => {
-  if (!props.meta.startDate || !props.meta.endDate) return 'Dates not set'
+  if (!props.meta.startDate || !props.meta.endDate) return t('planner.summary.datesNotSet')
   return `${formatDate(props.meta.startDate)} - ${formatDate(props.meta.endDate)}`
 })
 

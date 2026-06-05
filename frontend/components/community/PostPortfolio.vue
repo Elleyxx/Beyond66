@@ -1,9 +1,9 @@
 <template>
   <section class="panel">
-    <h2>Portfolio</h2>
+    <h2>{{ t('community.detail.portfolio.title') }}</h2>
 
     <article v-for="portfolio in portfolios" :key="portfolio.id" class="portfolio">
-      <h3>{{ portfolio.title || 'Travel notes' }}</h3>
+      <h3>{{ portfolio.title || t('community.detail.portfolio.fallbackTitle') }}</h3>
       <p>{{ portfolio.content }}</p>
 
       <div v-if="portfolio.images?.length" class="image-grid">
@@ -14,9 +14,13 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 defineProps({
   portfolios: { type: Array, default: () => [] },
 })
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

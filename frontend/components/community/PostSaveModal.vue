@@ -2,11 +2,11 @@
   <teleport to="body">
     <div class="backdrop" @click.self="$emit('close')">
       <section class="modal">
-        <h2>Save Post</h2>
-        <p>Save "{{ post?.title || 'this trip' }}" to your saved posts?</p>
+        <h2>{{ t('community.detail.saveModal.title') }}</h2>
+        <p>{{ t('community.detail.saveModal.message', { title: post?.title || t('community.detail.saveModal.fallbackTitle') }) }}</p>
         <div class="actions">
-          <button type="button" class="secondary" @click="$emit('close')">Cancel</button>
-          <button type="button" class="primary" @click="$emit('confirm', post)">Save</button>
+          <button type="button" class="secondary" @click="$emit('close')">{{ t('community.detail.saveModal.cancel') }}</button>
+          <button type="button" class="primary" @click="$emit('confirm', post)">{{ t('community.detail.saveModal.save') }}</button>
         </div>
       </section>
     </div>
@@ -14,11 +14,14 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 defineProps({
   post: { type: Object, default: null },
 })
 
 defineEmits(['close', 'confirm'])
+const { t } = useI18n()
 </script>
 
 <style scoped>

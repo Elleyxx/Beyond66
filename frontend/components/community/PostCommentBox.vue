@@ -1,15 +1,17 @@
 <template>
   <form class="comment-box" @submit.prevent="submit">
-    <textarea v-model="comment" rows="3" placeholder="Write a comment"></textarea>
-    <button type="submit" :disabled="!comment.trim()">Post Comment</button>
+    <textarea v-model="comment" rows="3" :placeholder="t('community.detail.comments.placeholder')"></textarea>
+    <button type="submit" :disabled="!comment.trim()">{{ t('community.detail.comments.submit') }}</button>
   </form>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const emit = defineEmits(['submit'])
 const comment = ref('')
+const { t } = useI18n()
 
 function submit() {
   const value = comment.value.trim()

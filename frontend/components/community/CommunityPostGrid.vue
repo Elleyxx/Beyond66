@@ -1,13 +1,13 @@
 <template>
   <section class="feed-area">
     <div class="section-head">
-      <h2>Latest Posts</h2>
-      <span>{{ posts.length }} posts</span>
+      <h2>{{ t('community.latest.title') }}</h2>
+      <span>{{ t('community.latest.count', { count: posts.length }) }}</span>
     </div>
     <div class="section-divider"></div>
 
-    <p v-if="loading" class="state">Loading posts...</p>
-    <p v-else-if="!posts.length" class="state">No posts yet.</p>
+    <p v-if="loading" class="state">{{ t('community.latest.loading') }}</p>
+    <p v-else-if="!posts.length" class="state">{{ t('community.latest.empty') }}</p>
 
     <div v-else class="post-grid">
       <CommunityPostCard
@@ -22,6 +22,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import CommunityPostCard from './CommunityPostCard.vue'
 
 defineProps({
@@ -30,6 +31,8 @@ defineProps({
 })
 
 defineEmits(['save', 'use-plan'])
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

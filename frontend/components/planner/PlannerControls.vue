@@ -3,8 +3,8 @@
     <div class="controls-grid">
       <div class="left-box column-box field-section">
         <label>
-          <h3>Countries Route</h3>
-          <p class="field-note">The first country will be the start of the tour.</p>
+          <h3>{{ t('planner.controls.countriesRoute') }}</h3>
+          <p class="field-note">{{ t('planner.controls.countriesRouteNote') }}</p>
 
           <div
             class="country-slot"
@@ -18,8 +18,8 @@
             <i class="bi bi-grip-vertical drag-icon"></i>
 
             <select :value="slot" @change="updateCountrySlot(index, $event.target.value)">
-              <option v-for="item in countries" :key="item" :value="item">
-                {{ item }}
+              <option v-for="item in countries" :key="item.value" :value="item.value">
+                {{ item.label }}
               </option>
             </select>
 
@@ -40,15 +40,15 @@
         <div class="date-picker-box">
           <label>
             <div class="date-header">
-              <h3>Travel Date</h3>
+              <h3>{{ t('planner.controls.travelDate') }}</h3>
               <p class="date-meta-pill">
                 <span>{{ derivedSeason }}</span>
                 <span> | </span>
-                <span>{{ tripDuration }} days</span>
+                <span>{{ t('planner.controls.days', { count: tripDuration }) }}</span>
               </p>
             </div>
 
-            <p class="field-note">Select your departure and return date.</p>
+            <p class="field-note">{{ t('planner.controls.travelDateNote') }}</p>
 
             <VueDatePicker
               :model-value="modelValue.dateRange"
@@ -57,7 +57,7 @@
               model-type="yyyy-MM-dd"
               :enable-time-picker="false"
               :clearable="false"
-              placeholder="Select travel dates"
+              :placeholder="t('planner.controls.selectTravelDates')"
               @update:model-value="updateDateRange"
             >
               <template #trigger>
@@ -73,14 +73,14 @@
         <div class="budget-selector">
           <label>
             <div class="budget-header">
-              <h3>Budget</h3>
+              <h3>{{ t('planner.controls.budget') }}</h3>
               <span class="budget-pill">
                 {{ getBudgetLabel(modelValue.budgetLevel || 3) }}
               </span>
             </div>
 
             <p class="field-note">
-              Select your overall spending level for the trip.
+              {{ t('planner.controls.budgetNote') }}
             </p>
 
             <input
@@ -100,16 +100,16 @@
         </div>
 
         <label>
-          <h3>Accommodation</h3>
-          <p class="field-note">Choose your preferred stay style.</p>
+          <h3>{{ t('planner.controls.accommodation') }}</h3>
+          <p class="field-note">{{ t('planner.controls.accommodationNote') }}</p>
           <select :value="modelValue.accommodation || accommodations[0]" @change="emitPatch({ accommodation: $event.target.value })">
             <option v-for="item in accommodations" :key="item" :value="item">{{ item }}</option>
           </select>
         </label>
 
         <label>
-          <h3>Transport</h3>
-          <p class="field-note">Select the main way you want to travel.</p>
+          <h3>{{ t('planner.controls.transport') }}</h3>
+          <p class="field-note">{{ t('planner.controls.transportNote') }}</p>
           <select :value="modelValue.transport || transports[0]" @change="emitPatch({ transport: $event.target.value })">
             <option v-for="item in transports" :key="item" :value="item">{{ item }}</option>
           </select>
@@ -118,31 +118,31 @@
 
       <div class="right-box column-box field-section">
         <label>
-          <h3>Pax</h3>
-          <p class="field-note">Number of people joining this trip.</p>
+          <h3>{{ t('planner.controls.pax') }}</h3>
+          <p class="field-note">{{ t('planner.controls.paxNote') }}</p>
           <select :value="modelValue.pax || 1" @change="emitPatch({ pax: Number($event.target.value) })">
             <option v-for="n in 20" :key="n" :value="n">{{ n }}</option>
           </select>
         </label>
         <label>
-          <h3>Travel Style</h3>
-          <p class="field-note">Choose the type of experience you prefer.</p>
+          <h3>{{ t('planner.controls.travelStyle') }}</h3>
+          <p class="field-note">{{ t('planner.controls.travelStyleNote') }}</p>
           <select :value="modelValue.style" @change="emitPatch({ style: $event.target.value })">
             <option v-for="item in styles" :key="item" :value="item">{{ item }}</option>
           </select>
         </label>
 
         <label>
-          <h3>Trip Type</h3>
-          <p class="field-note">Who are you travelling with?</p>
+          <h3>{{ t('planner.controls.tripType') }}</h3>
+          <p class="field-note">{{ t('planner.controls.tripTypeNote') }}</p>
           <select :value="modelValue.tripType || tripTypes[0]" @change="emitPatch({ tripType: $event.target.value })">
             <option v-for="item in tripTypes" :key="item" :value="item">{{ item }}</option>
           </select>
         </label>
 
         <label>
-          <h3>Activity Level</h3>
-          <p class="field-note">Set the pace of your itinerary.</p>
+          <h3>{{ t('planner.controls.activityLevel') }}</h3>
+          <p class="field-note">{{ t('planner.controls.activityLevelNote') }}</p>
           <select :value="modelValue.activityLevel || activityLevels[1]" @change="emitPatch({ activityLevel: $event.target.value })">
             <option v-for="item in activityLevels" :key="item" :value="item">{{ item }}</option>
           </select>
@@ -151,8 +151,8 @@
       </div>
 
       <div class="interests-box field-section">
-        <h3>Interests</h3>
-        <p class="field-note">Pick the experiences you want Beyond66 to prioritize.</p>
+        <h3>{{ t('planner.controls.interests') }}</h3>
+        <p class="field-note">{{ t('planner.controls.interestsNote') }}</p>
 
         <div class="interests-grid">
           <label v-for="item in interests" :key="item.value" class="check-option">
@@ -172,6 +172,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { VueDatePicker } from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
@@ -180,8 +181,15 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+const { t } = useI18n()
 
-const countries = ['Norway', 'Sweden', 'Finland', 'Iceland', 'Denmark']
+const countries = computed(() => [
+  { value: 'Norway', label: t('countryNames.norway') },
+  { value: 'Sweden', label: t('countryNames.sweden') },
+  { value: 'Finland', label: t('countryNames.finland') },
+  { value: 'Iceland', label: t('countryNames.iceland') },
+  { value: 'Denmark', label: t('countryNames.denmark') },
+])
 const styles = ['Adventure', 'Relax', 'Culture', 'Nature', 'Luxury', 'Balanced']
 
 const budgetRange = computed(() => {
@@ -200,14 +208,14 @@ const budgetRange = computed(() => {
 
 function getBudgetLabel(level) {
   const labels = {
-    1: 'Budget',
-    2: 'Economy',
-    3: 'Mid-Range',
-    4: 'Premium',
-    5: 'Luxury',
+    1: t('planner.options.budget'),
+    2: t('planner.options.economy'),
+    3: t('planner.options.midRange'),
+    4: t('planner.options.premium'),
+    5: t('planner.options.luxury'),
   }
 
-  return labels[level] || 'Mid-Range'
+  return labels[level] || t('planner.options.midRange')
 }
 
 function updateBudgetLevel(level) {
@@ -245,7 +253,7 @@ const tripDuration = computed(() => {
 
 const dateRangeLabel = computed(() => {
   if (!props.modelValue.startDate || !props.modelValue.endDate) {
-    return 'Select travel dates'
+    return t('planner.controls.selectTravelDates')
   }
 
   return `${formatDate(props.modelValue.startDate)} → ${formatDate(props.modelValue.endDate)}`
@@ -262,7 +270,7 @@ watch(
       countrySlots.value = [...next.countryRoute].slice(0, 5)
       return
     }
-    countrySlots.value = [next.country || countries[0]]
+    countrySlots.value = [next.country || countries.value[0].value]
   },
   { immediate: true, deep: true },
 )
@@ -336,7 +344,7 @@ function syncCountries(nextSlots) {
 
 function addCountrySlot() {
   if (countrySlots.value.length >= 5) return
-  syncCountries([...countrySlots.value, countries[0]])
+  syncCountries([...countrySlots.value, countries.value[0].value])
 }
 
 function updateCountrySlot(index, value) {
@@ -352,7 +360,7 @@ function removeCountrySlot(index) {
 
   // Always keep at least one country
   if (next.length === 0) {
-    next.push(countries[0])
+    next.push(countries.value[0].value)
   }
 
   syncCountries(next)

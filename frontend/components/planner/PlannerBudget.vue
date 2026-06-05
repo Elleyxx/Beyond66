@@ -3,13 +3,13 @@
     <div class="budget-left">
       <div class="budget-ticket">
         <div class="ticket-main">
-          <p class="eyebrow">Your Trip Budget</p>
+          <p class="eyebrow">{{ t('planner.budget.eyebrow') }}</p>
 
           <h2>$ {{ totalAmount.toLocaleString() }}</h2>
 
           <p class="budget-meta">
-            {{ estimate.pax || 1 }} pax · {{ estimate.duration || 0 }} days ·
-            {{ estimate.country || 'Nordic' }}
+            {{ estimate.pax || 1 }} pax · {{ t('planner.list.days', { count: estimate.duration || 0 }) }} ·
+            {{ estimate.country || t('countryNames.nordic') }}
           </p>
 
           <div class="ticket-info budget-status-main">
@@ -21,12 +21,12 @@
 
         <div class="ticket-side">
           <div>
-            <span>Recommended</span>
+            <span>{{ t('planner.budget.recommended') }}</span>
             <strong>$ {{ suggestedAmount.toLocaleString() }}</strong>
           </div>
 
           <div>
-            <span>Difference</span>
+            <span>{{ t('planner.budget.difference') }}</span>
             <strong>{{ budgetDifferenceText }}</strong>
           </div>
 
@@ -57,7 +57,7 @@
       <div class="donut-area">
         <div class="donut-chart" :style="{ background: donutBackground }">
           <div class="donut-center">
-            <span>Total</span>
+            <span>{{ t('planner.budget.total') }}</span>
             <strong>$ {{ totalAmount.toLocaleString() }}</strong>
           </div>
         </div>
@@ -75,7 +75,7 @@
       </div>
 
       <div class="tips-card">
-        <h3>Budget Tips</h3>
+        <h3>{{ t('planner.budget.tips') }}</h3>
 
         <ul v-if="estimate.tips?.length">
           <li v-for="(tip, index) in estimate.tips" :key="index">
@@ -84,7 +84,7 @@
         </ul>
 
         <p v-else>
-          Adjust the sliders to customise your trip budget. The total will update automatically.
+          {{ t('planner.budget.tipsFallback') }}
         </p>
       </div>
     </div>
@@ -93,12 +93,14 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   estimate: { type: Object, required: true },
 })
 
 const emit = defineEmits(['update:estimate'])
+const { t } = useI18n()
 
 const totalAmount = computed(() => Number(props.estimate.total || 0))
 
@@ -107,10 +109,10 @@ const sliderMax = computed(() =>
 )
 
 const breakdown = computed(() => [
-  { key: 'stay', label: 'Stay', value: Number(props.estimate.stay || 0), color: '#2563eb' },
-  { key: 'food', label: 'Food', value: Number(props.estimate.food || 0), color: '#f97316' },
-  { key: 'transport', label: 'Transport', value: Number(props.estimate.transport || 0), color: '#14b8a6' },
-  { key: 'activities', label: 'Activities', value: Number(props.estimate.activities || 0), color: '#a855f7' },
+  { key: 'stay', label: t('planner.budget.stay'), value: Number(props.estimate.stay || 0), color: '#2563eb' },
+  { key: 'food', label: t('planner.budget.food'), value: Number(props.estimate.food || 0), color: '#f97316' },
+  { key: 'transport', label: t('planner.budget.transport'), value: Number(props.estimate.transport || 0), color: '#14b8a6' },
+  { key: 'activities', label: t('planner.budget.activities'), value: Number(props.estimate.activities || 0), color: '#a855f7' },
 ])
 
 const breakdownTotal = computed(() =>
@@ -171,7 +173,7 @@ const budgetDifference = computed(() => totalAmount.value - suggestedAmount.valu
 const budgetDifferenceText = computed(() => {
   const diff = budgetDifference.value
 
-  if (diff === 0) return 'On target'
+  if (diff === 0) return t('planner.budget.onTarget')
   if (diff > 0) return `+$ ${diff.toLocaleString()}`
 
   return `-$ ${Math.abs(diff).toLocaleString()}`
@@ -181,19 +183,19 @@ const budgetStatus = computed(() => {
   const diff = budgetDifference.value
   const recommended = suggestedAmount.value
 
-  if (!recommended) return 'No Recommendation'
+  if (!recommended) return t('planner.budget.noRecommendation')
 
   const percentage = Math.abs(diff) / recommended
 
   if (percentage <= 0.1) {
-    return 'Within Recommended Range'
+    return t('planner.budget.withinRange')
   }
 
   if (diff > 0) {
-    return 'Above Recommendation'
+    return t('planner.budget.aboveRecommendation')
   }
 
-  return 'Below Recommendation'
+  return t('planner.budget.belowRecommendation')
 })
 
 const statusClass = computed(() => {

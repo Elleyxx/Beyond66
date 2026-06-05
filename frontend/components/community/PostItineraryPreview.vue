@@ -1,12 +1,12 @@
 <template>
   <section class="panel">
-    <p class="eyebrow">Itinerary</p>
-    <h2>Trip Timeline</h2>
+    <p class="eyebrow">{{ t('community.detail.itinerary.eyebrow') }}</p>
+    <h2>{{ t('community.detail.itinerary.title') }}</h2>
 
     <div class="timeline">
       <article v-for="day in timeline" :key="day.day">
         <div class="day-label">
-          <strong>Day {{ day.day }}</strong>
+          <strong>{{ t('community.detail.itinerary.day', { day: day.day }) }}</strong>
           <span v-if="day.date">{{ day.date }}</span>
         </div>
 
@@ -15,10 +15,10 @@
         </div>
 
         <div class="day-content">
-          <h3>{{ day.destination || day.country || 'Activities' }}</h3>
+          <h3>{{ day.destination || day.country || t('community.detail.itinerary.activities') }}</h3>
           <ul>
             <li v-for="(item, index) in day.items || []" :key="`${day.day}-${index}`">{{ item }}</li>
-            <li v-if="!day.items?.length" class="empty">No activities listed</li>
+            <li v-if="!day.items?.length" class="empty">{{ t('community.detail.itinerary.empty') }}</li>
           </ul>
         </div>
       </article>
@@ -27,9 +27,13 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 defineProps({
   timeline: { type: Array, default: () => [] },
 })
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

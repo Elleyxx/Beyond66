@@ -23,17 +23,17 @@
           :class="{ active: activeCountry.slug === country.slug }"
           @click="$emit('change-country', country)"
         >
-          <span>{{ country.name }}</span>
+          <span>{{ heroCountryName(country) }}</span>
           <small>0{{ index + 1 }}/05</small>
         </button>
       </div>
 
       <Transition name="copy-fade" mode="out-in">
         <div :key="activeCountry.slug" class="hero-copy">
-          <h1>{{ activeCountry.name }}</h1>
-          <p>Experience Nordic landscapes, culture and winter adventures.</p>
+          <h1>{{ heroCountryName(activeCountry) }}</h1>
+          <p>{{ heroCountrySubtitle(activeCountry) }}</p>
           <button class="view-btn" type="button" @click="openActiveCountry">
-            View More
+            {{ t('home.hero.viewMore') }}
           </button>
         </div>
       </Transition>
@@ -43,6 +43,7 @@
 
 <script setup>
 import { onBeforeUnmount, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
@@ -53,8 +54,9 @@ const props = defineProps({
 defineEmits(['change-country'])
 
 const router = useRouter()
+const { t } = useI18n()
 const displayedHeroSrc = ref(props.activeCountry?.hero || '')
-const displayedHeroAlt = ref(props.activeCountry?.name || 'Nordic destination')
+const displayedHeroAlt = ref(props.activeCountry?.name || t('home.hero.destinationAlt'))
 const incomingHeroSrc = ref('')
 const incomingHeroAlt = ref('')
 const showIncomingHero = ref(false)
@@ -71,7 +73,7 @@ watch(
     preloadImage.src = nextCountry.hero
     preloadImage.onload = () => {
       incomingHeroSrc.value = nextCountry.hero
-      incomingHeroAlt.value = nextCountry.name || 'Nordic destination'
+      incomingHeroAlt.value = nextCountry.name || t('home.hero.destinationAlt')
 
       requestAnimationFrame(() => {
         showIncomingHero.value = true
@@ -83,7 +85,7 @@ watch(
 
       swapTimer = setTimeout(() => {
         displayedHeroSrc.value = nextCountry.hero
-        displayedHeroAlt.value = nextCountry.name || 'Nordic destination'
+        displayedHeroAlt.value = nextCountry.name || t('home.hero.destinationAlt')
         incomingHeroSrc.value = ''
         incomingHeroAlt.value = ''
         showIncomingHero.value = false
@@ -102,6 +104,20 @@ onBeforeUnmount(() => {
 function openActiveCountry() {
   if (!props.activeCountry?.slug) return
   router.push(`/country/${props.activeCountry.slug}`)
+}
+
+function heroCountryName(country) {
+  if (!country?.slug) return country?.name || ''
+  const key = `home.hero.countries.${country.slug}.name`
+  const translated = t(key)
+  return translated === key ? country.name : translated
+}
+
+function heroCountrySubtitle(country) {
+  if (!country?.slug) return t('home.hero.subtitle')
+  const key = `home.hero.countries.${country.slug}.subtitle`
+  const translated = t(key)
+  return translated === key ? t('home.hero.subtitle') : translated
 }
 </script>
 
@@ -199,7 +215,7 @@ function openActiveCountry() {
 .hero-content h1 {
   font-size: clamp(4rem, 10vw, 9rem);
   line-height: 0.9;
-  margin: 80px 0 12px;
+  margin: 80px 0 50px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 4px;

@@ -1,30 +1,35 @@
 <template>
   <section class="home-about">
     <div class="about-copy">
-      <p class="eyebrow"><i class="bi bi-snow2"></i> BEYOND 66°</p>
-      <h2>Plan a Nordic route around the places you actually want to feel.</h2>
+      <p class="eyebrow"><i class="bi bi-snow2"></i> {{ t('home.info.eyebrow') }}</p>
+      <h2>{{ t('home.info.title') }}</h2>
       <p>
-        Move between fjords, forests, cities, glacier lagoons, and Arctic light with one
-        calm place to explore countries, compare destinations, and start building your trip.
+        {{ t('home.info.description') }}
       </p>
     </div>
 
-    <div class="about-stats" aria-label="Nordic travel highlights">
+    <div class="about-stats" :aria-label="t('home.info.statsLabel')">
       <article>
         <strong>5</strong>
-        <span>Nordic countries</span>
+        <span>{{ t('home.info.countries') }}</span>
       </article>
       <article>
         <strong>60+</strong>
-        <span>Featured places</span>
+        <span>{{ t('home.info.places') }}</span>
       </article>
       <article>
         <strong>66°</strong>
-        <span>Arctic inspiration</span>
+        <span>{{ t('home.info.inspiration') }}</span>
       </article>
     </div>
   </section>
 </template>
+
+<script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+</script>
 
 <style scoped>
 .home-about {
@@ -53,7 +58,7 @@
   max-width: 720px;
   color: rgb(var(--v-theme-text));
   font-size: clamp(2rem, 4rem, 4rem);
-  line-height: 1.02;
+  line-height: 1.1;
   font-weight: 800;
 }
 

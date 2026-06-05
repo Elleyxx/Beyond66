@@ -4,25 +4,27 @@
       <div class="about-content">
         <div class="about-left">
           <div class="about-header">
-            <h2>ABOUT</h2>
+            <h2>{{ t('home.about.title') }}</h2>
           </div>
           <div class="about-copy">
-            <p>
-              Beyond 66° is a Nordic travel discovery platform designed to inspire and guide travelers through the breathtaking landscapes, rich cultures, and unique experiences of Northern Europe. Covering Iceland, Norway, Sweden, Finland, and Denmark, the platform provides destination guides, travel insights, and curated recommendations to help users explore the beauty and diversity of the Nordic region.
-            </p>
-            <p>
-              Beyond destination exploration, Beyond 66° offers personalized trip planning tools that help users create meaningful travel experiences tailored to their interests and preferences. Whether you are seeking the northern lights, outdoor adventures, cultural landmarks, or local Nordic traditions, this platform serves as a trusted companion throughout your journey.
-            </p>
+            <p>{{ t('home.about.paragraphOne') }}</p>
+            <p>{{ t('home.about.paragraphTwo') }}</p>
           </div>
         </div>
 
         <figure class="about-image-wrap">
-          <img src="/assets/images/map.png" alt="Nordic map and destination highlights" />
+          <img src="/assets/images/map.png" :alt="t('home.about.mapAlt')" />
         </figure>
       </div>
     </div>
   </section>
 </template>
+
+<script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+</script>
 
 <style scoped>
 .home-about {

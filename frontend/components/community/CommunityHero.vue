@@ -1,11 +1,11 @@
 <template>
   <section class="community-hero">
     <div class="hero-content">
-      <p class="eyebrow">Beyond 66° Community</p>
-      <h1>Travel Stories</h1>
+      <p class="eyebrow">{{ t('community.hero.eyebrow') }}</p>
+      <h1>{{ t('community.hero.title') }}</h1>
 
       <p>
-        Discover Nordic travel plans, real trip stories, photos and inspiration from other travellers.
+        {{ t('community.hero.description') }}
       </p>
 
       <div class="hero-search">
@@ -13,7 +13,7 @@
         <input
           :value="filters.search"
           type="search"
-          placeholder="Search trips, stories or destinations"
+          :placeholder="t('community.hero.searchPlaceholder')"
           @input="patch({ search: $event.target.value })"
         />
       </div>
@@ -34,19 +34,23 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 const props = defineProps({
   filters: { type: Object, required: true },
 })
 
 const emit = defineEmits(['update:filters'])
+const { t } = useI18n()
 
-const pills = [
-  { label: 'All', value: 'all' },
-  { label: 'Trip Plans', value: 'plan' },
-  { label: 'Travel Stories', value: 'story' },
-  { label: 'Photography', value: 'photo' },
-  { label: 'My Posts', value: 'mine' },
-]
+const pills = computed(() => [
+  { label: t('community.filters.all'), value: 'all' },
+  { label: t('community.filters.plan'), value: 'plan' },
+  { label: t('community.filters.story'), value: 'story' },
+  { label: t('community.filters.photo'), value: 'photo' },
+  { label: t('community.filters.mine'), value: 'mine' },
+])
 
 function patch(update) {
   emit('update:filters', {

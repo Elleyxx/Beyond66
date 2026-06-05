@@ -15,12 +15,12 @@
 
         <section :id="sectionIds.overview" class="section-card tab-section mb-6">
           <div class="section-title-row">
-            <h2>OVERVIEW</h2>
+            <h2>{{ t('countryPage.tabs.overview') }}</h2>
             <div class="section-title-line"></div>
           </div>
           <div class="overview-grid">
             <div class="overview-image-wrap">
-              <img :src="overviewImage" :alt="`${country} overview`" class="overview-image" />
+              <img :src="overviewImage" :alt="t('countryPage.overviewAlt', { country })" class="overview-image" />
               <div class="overview-image-overlay">
                 <p>{{ description }}</p>
               </div>
@@ -43,7 +43,7 @@
               </div>
               <div v-if="bestTimeSeasonsList.length" class="besttime-wrap">
                 <div class="section-title-row section-title-row-sm">
-                  <h3>Best Time to Visit</h3>
+                  <h3>{{ t('countryPage.bestTime') }}</h3>
                 </div>
                 <div class="besttime-grid">
                   <article v-for="season in bestTimeSeasonsList" :key="season.season" class="besttime-card">
@@ -59,7 +59,7 @@
 
         <section :id="sectionIds.highlights" class="feature-section tab-section">
           <div class="section-title-row">
-            <h2>HIGHLIGHTS</h2>
+            <h2>{{ t('countryPage.tabs.highlights') }}</h2>
             <div class="section-title-line"></div>
           </div>
           <div class="highlight-cards">
@@ -80,7 +80,7 @@
 
         <section :id="sectionIds.destination" class="section-card tab-section mb-6">
           <div class="section-title-row">
-            <h2>DESTINATION</h2>
+            <h2>{{ t('countryPage.tabs.destination') }}</h2>
             <div class="section-title-line"></div>
           </div>
           <div class="destination-grid">
@@ -93,8 +93,8 @@
                 type="button"
                 class="save-destination-btn"
                 :class="{ saved: isDestinationSaved(destination.slug) }"
-                :aria-label="isDestinationSaved(destination.slug) ? 'Unsave destination' : 'Save destination'"
-                :title="isDestinationSaved(destination.slug) ? 'Unsave destination' : 'Save destination'"
+                :aria-label="isDestinationSaved(destination.slug) ? t('countryPage.unsaveDestination') : t('countryPage.saveDestination')"
+                :title="isDestinationSaved(destination.slug) ? t('countryPage.unsaveDestination') : t('countryPage.saveDestination')"
                 @click.stop="toggleDestinationSave(destination.slug)"
               >
                 <i :class="['bi', isDestinationSaved(destination.slug) ? 'bi-bookmark-fill' : 'bi-bookmark']"></i>
@@ -150,7 +150,7 @@
 
         <section :id="sectionIds.experiences" class="section-card tab-section mb-6">
           <div class="section-title-row">
-            <h2>TOP EXPERIENCE</h2>
+            <h2>{{ t('countryPage.tabs.experience') }}</h2>
             <div class="section-title-line"></div>
           </div>
           <div v-if="experiencesList.length" class="experience-layout">
@@ -178,7 +178,7 @@
 
         <section :id="sectionIds.gallery" class="section-card tab-section mb-6">
           <div class="section-title-row">
-            <h2>GALLERY</h2>
+            <h2>{{ t('countryPage.tabs.gallery') }}</h2>
             <div class="section-title-line"></div>
           </div>
           <div
@@ -202,7 +202,7 @@
 
         <section :id="sectionIds.travelTips" class="section-card tab-section">
           <div class="section-title-row">
-            <h2>TRAVEL TIPS</h2>
+            <h2>{{ t('countryPage.tabs.travelTips') }}</h2>
             <div class="section-title-line"></div>
           </div>
           <div class="tips-grid">
@@ -219,6 +219,7 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
 import SlidingSectionTabs from '@/components/common/SlidingSectionTabs.vue'
@@ -227,6 +228,7 @@ import { getSavedDestinations, toggleSavedDestination } from '@/services/savedIt
 
 const theme = useTheme()
 const router = useRouter()
+const { t } = useI18n()
 const isDark = computed(() => theme.global.current.value.dark)
 const props = defineProps({
   country: { type: String, required: true },
@@ -250,14 +252,14 @@ const heroStyle = computed(() => {
   return { backgroundImage: `url(${props.heroImage})` }
 })
 
-const tabs = [
-  { key: 'overview', label: 'OVERVIEW' },
-  { key: 'highlights', label: 'HIGHLIGHTS' },
-  { key: 'destination', label: 'DESTINATION' },
-  { key: 'experiences', label: 'EXPERIENCE' },
-  { key: 'gallery', label: 'GALLERY' },
-  { key: 'travelTips', label: 'TRAVEL TIPS' },
-]
+const tabs = computed(() => [
+  { key: 'overview', label: t('countryPage.tabs.overview') },
+  { key: 'highlights', label: t('countryPage.tabs.highlights') },
+  { key: 'destination', label: t('countryPage.tabs.destination') },
+  { key: 'experiences', label: t('countryPage.tabs.experience') },
+  { key: 'gallery', label: t('countryPage.tabs.gallery') },
+  { key: 'travelTips', label: t('countryPage.tabs.travelTips') },
+])
 
 const activeTab = ref('overview')
 const sectionIds = {
@@ -289,7 +291,7 @@ const quickFactsList = computed(() => {
     base.push(...Object.entries(props.quickFacts).map(([label, value]) => ({ label, value })))
   }
   if (props.bestTime && !props.bestTimeSeasons?.length) {
-    base.push({ label: 'Best Time To Visit', value: props.bestTime })
+    base.push({ label: t('countryPage.bestTimeFact'), value: props.bestTime })
   }
   return base
 })
@@ -302,7 +304,7 @@ const bestTimeSeasonsList = computed(() => {
 const highlightsList = computed(() => {
   if (!Array.isArray(props.highlights)) return []
   return props.highlights.map((highlight) => ({
-    title: highlight.title || 'Highlight',
+    title: highlight.title || t('countryPage.highlightFallback'),
     subtitle: highlight.subtitle || '',
     text: highlight.description || highlight.text || '',
     image: highlight.image || '',
@@ -316,9 +318,9 @@ const destinationsList = computed(() => {
       return { name: destination, description: '', images: [], slug: buildDestinationSlug(destination) }
     }
     return {
-      name: destination.name || 'Destination',
+      name: destination.name || t('countryPage.destinationFallback'),
       description: destination.description || '',
-      slug: destination.slug || buildDestinationSlug(destination.name || 'Destination'),
+      slug: destination.slug || buildDestinationSlug(destination.name || t('countryPage.destinationFallback')),
       images: Array.isArray(destination.images)
         ? destination.images
         : [destination.image].filter(Boolean),
@@ -337,7 +339,7 @@ const experiencesList = computed(() => {
       }
     }
     return {
-      title: experience.title || 'Experience',
+      title: experience.title || t('countryPage.experienceFallback'),
       description: experience.description || '',
       image: experience.image || galleryList.value[index % galleryList.value.length] || '',
     }
@@ -511,14 +513,14 @@ function onDestinationSlideTransitionEnd(cardIndex, total) {
 const travelTipsList = computed(() => {
   if (Array.isArray(props.travelTips) && props.travelTips.length) {
     return props.travelTips.map((tip, index) => {
-      if (typeof tip === 'string') return { title: `Tip ${index + 1}`, text: tip }
-      return { title: tip.title || `Tip ${index + 1}`, text: tip.text || '' }
+      if (typeof tip === 'string') return { title: t('countryPage.tipFallback', { number: index + 1 }), text: tip }
+      return { title: tip.title || t('countryPage.tipFallback', { number: index + 1 }), text: tip.text || '' }
     })
   }
   return [
-    { title: 'Tip 1', text: 'Carry layered clothing for weather shifts.' },
-    { title: 'Tip 2', text: 'Book popular activities early in peak season.' },
-    { title: 'Tip 3', text: 'Check local transport schedules in advance.' },
+    { title: t('countryPage.tipFallback', { number: 1 }), text: t('countryPage.defaultTipOne') },
+    { title: t('countryPage.tipFallback', { number: 2 }), text: t('countryPage.defaultTipTwo') },
+    { title: t('countryPage.tipFallback', { number: 3 }), text: t('countryPage.defaultTipThree') },
   ]
 })
 
@@ -577,10 +579,10 @@ function scrollToSection(tabKey) {
 
 function updateActiveTabOnScroll() {
   const viewportAnchor = 140
-  let current = tabs[0].key
+  let current = tabs.value[0].key
   let bestDistance = Number.POSITIVE_INFINITY
 
-  for (const tab of tabs) {
+  for (const tab of tabs.value) {
     const el = document.getElementById(sectionIds[tab.key])
     if (!el) continue
     const rect = el.getBoundingClientRect()
@@ -1233,6 +1235,5 @@ watch(experiencesList, (list) => {
   }
 }
 </style>
-
 
 

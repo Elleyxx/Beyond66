@@ -1,16 +1,535 @@
 {
+  "brand": {
+    "name": "Beyond 66°",
+    "tagline": "Arctic Circle of Exploration"
+  },
   "nav": {
     "home": "HOME",
     "explore": "EXPLORE",
     "planner": "PLANNER",
     "community": "COMMUNITY",
-    "search": "Search"
+    "search": "Search",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "logout": "Log Out"
   },
-
+  "search": {
+    "eyebrow": "Site Search",
+    "title": "Search Beyond 66",
+    "placeholder": "Search destinations, trips, aurora...",
+    "submit": "Search",
+    "popular": "Popular searches",
+    "resultsFor": "Results for \"{query}\"",
+    "resultCount": "{count} results",
+    "open": "Open result",
+    "empty": "No results found. Try a country, destination, or travel theme.",
+    "viewAllResults": "View all results",
+    "categories": {
+      "page": "Page",
+      "country": "Country",
+      "destination": "Destination",
+      "experience": "Experience",
+      "tool": "Tool"
+    },
+    "descriptions": {
+      "home": "Start from the homepage and discover Nordic journeys.",
+      "explore": "Browse Nordic countries, maps, and destination sections.",
+      "planner": "Build an itinerary with budget, weather, aurora, and checklist tools.",
+      "community": "Explore shared Nordic stories and trip plans.",
+      "fjords": "Find fjord landscapes, scenic routes, and Norway highlights.",
+      "aurora": "Search northern lights experiences across the Nordic region.",
+      "winter": "Plan snow, Arctic weather, and winter travel essentials."
+    },
+    "destinations": {
+      "fjords": "Fjords",
+      "aurora": "Northern Lights",
+      "winter": "Winter Travel"
+    }
+  },
   "menu": {
     "profile": "Profile",
     "darkMode": "Dark Mode",
     "lightMode": "Light Mode",
-    "logout": "Logout"
+    "logout": "Logout",
+    "languageEnglish": "English",
+    "languageChinese": "中文"
+  },
+  "countryNames": {
+    "norway": "Norway",
+    "sweden": "Sweden",
+    "finland": "Finland",
+    "iceland": "Iceland",
+    "denmark": "Denmark",
+    "nordic": "Nordic"
+  },
+  "countryPage": {
+    "tabs": {
+      "overview": "OVERVIEW",
+      "highlights": "HIGHLIGHTS",
+      "destination": "DESTINATION",
+      "experience": "EXPERIENCE",
+      "gallery": "GALLERY",
+      "travelTips": "TRAVEL TIPS"
+    },
+    "bestTime": "Best Time to Visit",
+    "bestTimeFact": "Best Time To Visit",
+    "saveDestination": "Save destination",
+    "unsaveDestination": "Unsave destination",
+    "overviewAlt": "{country} overview",
+    "highlightFallback": "Highlight",
+    "destinationFallback": "Destination",
+    "experienceFallback": "Experience",
+    "tipFallback": "Tip {number}",
+    "defaultTipOne": "Carry layered clothing for weather shifts.",
+    "defaultTipTwo": "Book popular activities early in peak season.",
+    "defaultTipThree": "Check local transport schedules in advance.",
+    "currentTime": "Current Time & Date",
+    "currentTemperature": "Current Temperature"
+  },
+  "home": {
+    "hero": {
+      "subtitle": "Experience Nordic landscapes, culture and winter adventures.",
+      "viewMore": "View More",
+      "destinationAlt": "Nordic destination",
+      "countries": {
+        "iceland": {
+          "name": "Iceland",
+          "subtitle": "Where glaciers, volcanoes and adventure meet"
+        },
+        "norway": {
+          "name": "Norway",
+          "subtitle": "Home to the world's most spectacular fjords"
+        },
+        "sweden": {
+          "name": "Sweden",
+          "subtitle": "A perfect blend of nature, culture and design"
+        },
+        "finland": {
+          "name": "Finland",
+          "subtitle": "The gateway to northern lights and Arctic wonders"
+        },
+        "denmark": {
+          "name": "Denmark",
+          "subtitle": "A land of fairy tales, castles and coastal charm"
+        }
+      }
+    },
+    "about": {
+      "title": "ABOUT",
+      "mapAlt": "Nordic map and destination highlights",
+      "paragraphOne": "Beyond 66° is a Nordic travel discovery platform designed to inspire and guide travelers through the breathtaking landscapes, rich cultures, and unique experiences of Northern Europe. Covering Iceland, Norway, Sweden, Finland, and Denmark, the platform provides destination guides, travel insights, and curated recommendations to help users explore the beauty and diversity of the Nordic region.",
+      "paragraphTwo": "Beyond destination exploration, Beyond 66° offers personalized trip planning tools that help users create meaningful travel experiences tailored to their interests and preferences. Whether you are seeking the northern lights, outdoor adventures, cultural landmarks, or local Nordic traditions, this platform serves as a trusted companion throughout your journey."
+    },
+    "info": {
+      "eyebrow": "BEYOND 66°",
+      "title": "Plan a Nordic route around the places you actually want to feel.",
+      "description": "Move between fjords, forests, cities, glacier lagoons, and Arctic light with one calm place to explore countries, compare destinations, and start building your trip.",
+      "statsLabel": "Nordic travel highlights",
+      "countries": "Nordic countries",
+      "places": "Featured places",
+      "inspiration": "Arctic inspiration"
+    },
+    "tours": {
+      "title": "DEST.",
+      "filmAlt": "Film frame",
+      "more": "MORE →"
+    },
+    "trending": {
+      "title": "JOURNEY",
+      "explore": "Explore community",
+      "loading": "Loading community posts...",
+      "empty": "No community posts yet.",
+      "fallbackAuthor": "Traveller",
+      "fallbackCountry": "Nordic",
+      "fallbackTitle": "Untitled trip",
+      "fallbackDescription": "A Nordic route shared by the community.",
+      "flexible": "Flexible",
+      "days": "{count} days",
+      "anySeason": "Any season"
+    }
+  },
+  "landing": {
+    "login": "Login",
+    "explore": "Explore",
+    "eyebrow": "WELCOME TO THE NORDIC WORLD",
+    "subtitleLineOne": "Five countries. Endless adventures.",
+    "subtitleLineTwo": "Your journey begins here.",
+    "enterJourney": "ENTER JOURNEY",
+    "scroll": "SCROLL TO EXPLORE",
+    "countries": {
+      "norway": {
+        "name": "NORWAY",
+        "desc": "Fjords, mountains & the midnight sun"
+      },
+      "sweden": {
+        "name": "SWEDEN",
+        "desc": "Vast wilderness & serene lakes"
+      },
+      "finland": {
+        "name": "FINLAND",
+        "desc": "Arctic forests & magical winters"
+      },
+      "iceland": {
+        "name": "ICELAND",
+        "desc": "Fire, ice & natural wonders"
+      },
+      "denmark": {
+        "name": "DENMARK",
+        "desc": "Coastal charm & timeless cities"
+      }
+    },
+    "destinations": {
+      "norway": {
+        "country": "NORWAY",
+        "place": "Geirangerfjord",
+        "description": "Sail between towering cliffs and waterfalls in Norway's iconic UNESCO fjord."
+      },
+      "sweden": {
+        "country": "SWEDEN",
+        "place": "Abisko National Park",
+        "description": "A premier Arctic destination for northern lights, hiking trails, and crisp alpine air."
+      },
+      "finland": {
+        "country": "FINLAND",
+        "place": "Rovaniemi, Lapland",
+        "description": "Experience snowy forests, reindeer culture, and magical winter nights above the Arctic Circle."
+      },
+      "iceland": {
+        "country": "ICELAND",
+        "place": "Jokulsarlon Glacier Lagoon",
+        "description": "Watch blue icebergs drift through glacier waters framed by dramatic black-sand shores."
+      },
+      "denmark": {
+        "country": "DENMARK",
+        "place": "Nyhavn, Copenhagen",
+        "description": "Stroll colorful harbor facades, canals, and cozy Nordic city life in Denmark's capital."
+      }
+    }
+  },
+  "community": {
+    "hero": {
+      "eyebrow": "Beyond 66° Community",
+      "title": "Travel Stories",
+      "description": "Discover Nordic travel plans, real trip stories, photos and inspiration from other travellers.",
+      "searchPlaceholder": "Search trips, stories or destinations"
+    },
+    "filters": {
+      "all": "All",
+      "plan": "Trip Plans",
+      "story": "Travel Stories",
+      "photo": "Photography",
+      "mine": "My Posts"
+    },
+    "trending": {
+      "title": "Trending This Week",
+      "viewAll": "View All"
+    },
+    "latest": {
+      "title": "Latest Posts",
+      "count": "{count} posts",
+      "loading": "Loading posts...",
+      "empty": "No posts yet."
+    },
+    "card": {
+      "tripPlan": "Trip Plan",
+      "traveller": "Traveller",
+      "untitled": "Untitled trip",
+      "fallbackDescription": "A Nordic route shared by the community.",
+      "flexible": "Flexible",
+      "days": "{count} days",
+      "anySeason": "Any season",
+      "save": "Save",
+      "usePlan": "Use Plan"
+    },
+    "sidebar": {
+      "destinations": "Popular Destinations",
+      "tags": "Popular Tags",
+      "creators": "Top Creators",
+      "posts": "{count} posts"
+    },
+    "detail": {
+      "back": "Back",
+      "savePost": "Save Post",
+      "statusFallback": "public",
+      "titleFallback": "Community trip",
+      "descriptionFallback": "A shared Nordic journey.",
+      "summary": {
+        "eyebrow": "Trip Summary",
+        "journey": "{place} Journey",
+        "country": "Country",
+        "dates": "Dates",
+        "duration": "Duration",
+        "budget": "Budget",
+        "style": "Style",
+        "season": "Season",
+        "days": "{count} days",
+        "notSet": "Not set",
+        "datesNotSet": "Dates not set",
+        "anySeason": "Any season"
+      },
+      "itinerary": {
+        "eyebrow": "Itinerary",
+        "title": "Trip Timeline",
+        "day": "Day {day}",
+        "activities": "Activities",
+        "empty": "No activities listed"
+      },
+      "portfolio": {
+        "title": "Portfolio",
+        "fallbackTitle": "Travel notes"
+      },
+      "comments": {
+        "title": "Comments",
+        "empty": "No comments yet.",
+        "authorFallback": "Traveler",
+        "placeholder": "Write a comment",
+        "submit": "Post Comment"
+      },
+      "saveModal": {
+        "title": "Save Post",
+        "message": "Save \"{title}\" to your saved posts?",
+        "fallbackTitle": "this trip",
+        "cancel": "Cancel",
+        "save": "Save"
+      }
+    }
+  },
+  "auth": {
+    "back": "Back",
+    "backToLanding": "Back to landing page",
+    "login": {
+      "title": "Login",
+      "subtitle": "Welcome to Beyond 66°",
+      "username": "Username",
+      "password": "Password",
+      "submit": "Login",
+      "remember": "Remember me",
+      "noAccount": "Don't have an account?",
+      "register": "Register",
+      "missing": "Please enter username and password.",
+      "failed": "Login failed.",
+      "backend": "Cannot connect to backend. Please start API server."
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "Create an account to start your journey",
+      "name": "Name",
+      "email": "Email",
+      "contact": "Contact",
+      "username": "Username",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Register",
+      "hasAccount": "Already have an account?",
+      "login": "Login",
+      "missing": "Name, email and password are required.",
+      "usernameRequired": "Username is required.",
+      "invalidEmail": "Please enter a valid email address.",
+      "invalidUsername": "Username must be 3-30 chars (letters, numbers, underscore).",
+      "invalidContact": "Contact number format is invalid.",
+      "shortPassword": "Password must be at least 6 characters.",
+      "passwordMismatch": "Passwords do not match.",
+      "failed": "Register failed.",
+      "success": "Registration successful. Redirecting to login...",
+      "backend": "Cannot connect to backend. Please start API server."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "loginRequired": "This page is available after login."
+  },
+  "planner": {
+    "title": "Nordic Trip Planner",
+    "borderAlt": "Planner border",
+    "steps": {
+      "basics": "Basics",
+      "timeline": "Timeline",
+      "budget": "Budget",
+      "weather": "Weather",
+      "checklist": "Checklist",
+      "save": "Save",
+      "goTo": "Go to step {step}: {title}"
+    },
+    "messages": {
+      "aiFailed": "Failed to generate AI planner.",
+      "editSaved": "Trip edit saved.",
+      "published": "Trip published to community.",
+      "privateSaved": "Trip saved privately.",
+      "localSaved": "Saved locally (backend unavailable)."
+    },
+    "actions": {
+      "back": "Back",
+      "next": "Next",
+      "generating": "Generating Trip Plan...",
+      "saveEdit": "Save Edit",
+      "saveTrip": "Save Trip",
+      "addTrip": "Add Trip",
+      "editTrip": "Edit Trip",
+      "cancel": "Cancel",
+      "publishTrip": "Publish Trip",
+      "saveDraft": "Save Draft"
+    },
+    "list": {
+      "title": "MY TRIPS",
+      "add": "+ ADD TRIP",
+      "empty": "Plan your first trip now!",
+      "days": "{count} days"
+    },
+    "controls": {
+      "countriesRoute": "Countries Route",
+      "countriesRouteNote": "The first country will be the start of the tour.",
+      "travelDate": "Travel Date",
+      "travelDateNote": "Select your departure and return date.",
+      "selectTravelDates": "Select travel dates",
+      "days": "{count} days",
+      "budget": "Budget",
+      "budgetNote": "Select your overall spending level for the trip.",
+      "accommodation": "Accommodation",
+      "accommodationNote": "Choose your preferred stay style.",
+      "transport": "Transport",
+      "transportNote": "Select the main way you want to travel.",
+      "pax": "Pax",
+      "paxNote": "Number of people joining this trip.",
+      "travelStyle": "Travel Style",
+      "travelStyleNote": "Choose the type of experience you prefer.",
+      "tripType": "Trip Type",
+      "tripTypeNote": "Who are you travelling with?",
+      "activityLevel": "Activity Level",
+      "activityLevelNote": "Set the pace of your itinerary.",
+      "interests": "Interests",
+      "interestsNote": "Pick the experiences you want Beyond66 to prioritize."
+    },
+    "options": {
+      "budget": "Budget",
+      "economy": "Economy",
+      "midRange": "Mid-Range",
+      "premium": "Premium",
+      "luxury": "Luxury"
+    },
+    "budget": {
+      "eyebrow": "Your Trip Budget",
+      "recommended": "Recommended",
+      "difference": "Difference",
+      "total": "Total",
+      "tips": "Budget Tips",
+      "tipsFallback": "Adjust the sliders to customise your trip budget. The total will update automatically.",
+      "stay": "Stay",
+      "food": "Food",
+      "transport": "Transport",
+      "activities": "Activities",
+      "onTarget": "On target",
+      "noRecommendation": "No Recommendation",
+      "withinRange": "Within Recommended Range",
+      "aboveRecommendation": "Above Recommendation",
+      "belowRecommendation": "Below Recommendation"
+    },
+    "timeline": {
+      "title": "Trip Timeline",
+      "intro": "This itinerary has been generated based on your travel preferences. You can freely add, remove, or rearrange activities to personalise your journey.",
+      "activityPool": "Activity Pool",
+      "dragHint": "Drag into each day",
+      "day": "Day {day}",
+      "activities": "Activities",
+      "dropActivity": "Drop activity here",
+      "fallbackCountry": "Country"
+    },
+    "weather": {
+      "weather": "Weather",
+      "forecast": "Weather Forecast",
+      "day": "Day {day}",
+      "aurora": "Aurora",
+      "bestAuroraNight": "Best Aurora Night",
+      "highestChance": "Highest chance to view aurora",
+      "kpIndex": "KP Index",
+      "bestTime": "Best Time",
+      "bestAvailableNight": "Best available night",
+      "estimate": "Estimate",
+      "forecastLabel": "Forecast"
+    },
+    "checklist": {
+      "decorate": "Decorate",
+      "titleLabel": "Checklist Title",
+      "defaultTitle": "Packing Checklist",
+      "paperSize": "Paper Size",
+      "fontStyle": "Font Style",
+      "clean": "Clean",
+      "handwritten": "Handwritten",
+      "serif": "Serif",
+      "hideChecked": "Hide checked items on export",
+      "background": "Background",
+      "cream": "Cream Notebook",
+      "blue": "Blue Travel Notes",
+      "green": "Nature Green",
+      "pink": "Soft Pink",
+      "accentColor": "Accent Color",
+      "hint": "Click the star to highlight important items.",
+      "eyebrow": "Beyond 66° Travel Notes",
+      "exportPdf": "Export PDF",
+      "highlight": "Highlight {item}"
+    },
+    "saveModal": {
+      "eyebrow": "Share Your Trip Plan",
+      "tripTitle": "Trip Title",
+      "titlePlaceholder": "Norway Winter Escape",
+      "description": "Description",
+      "descriptionPlaceholder": "Write something about your journey...",
+      "coverImage": "Cover Image (Optional)",
+      "coverAlt": "Trip Cover",
+      "chooseCover": "Choose a cover image",
+      "visibility": "Visibility",
+      "private": "Private",
+      "public": "Public",
+      "defaultTitle": "Nordic Trip Plan"
+    },
+    "summary": {
+      "title": "Trip Summary",
+      "journey": "{countries} Journey",
+      "meta": "{days} days · {pax} pax",
+      "preferences": "Travel Preferences",
+      "countries": "Countries",
+      "travelStyle": "Travel Style",
+      "season": "Season",
+      "budget": "Budget",
+      "accommodation": "Accommodation",
+      "transport": "Transport",
+      "tripType": "Trip Type",
+      "activityLevel": "Activity Level",
+      "progress": "Progress Overview",
+      "activities": "Activities",
+      "packedItems": "Packed Items",
+      "itineraryDays": "Itinerary Days",
+      "budgetSummary": "Budget Summary",
+      "totalBudget": "Total Estimated Budget",
+      "weatherAurora": "Weather & Aurora",
+      "weather": "Weather",
+      "auroraChance": "Aurora Chance",
+      "bestWindow": "Best Window",
+      "itinerary": "Itinerary Timeline",
+      "destination": "Destination",
+      "emptyActivities": "No activities added yet",
+      "datesNotSet": "Dates not set"
+    },
+    "detail": {
+      "selectTrip": "Select a trip",
+      "selectTripHint": "Pick a planned trip from the left panel, or create a new one."
+    }
+  },
+  "footer": {
+    "explore": "EXPLORE",
+    "planner": "PLANNER",
+    "community": "COMMUNITY",
+    "journeyPlanner": "Journey Planner",
+    "myTrips": "My Trips",
+    "savedPlaces": "Saved Places",
+    "travelTips": "Travel Tips",
+    "communityFeed": "Community Feed",
+    "travelStories": "Travel Stories",
+    "photosGuides": "Photos & Guides",
+    "communityRules": "Community Rules",
+    "copyright": "© 2026 Beyond 66°. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions",
+    "cookie": "Cookie Policy",
+    "madeFor": "Made for Nordic explorers"
   }
 }

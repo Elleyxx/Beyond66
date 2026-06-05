@@ -1,38 +1,38 @@
 <template>
   <section class="panel">
-    <p class="eyebrow">Trip Summary</p>
-    <h2>{{ meta.country || routeLabel }} Journey</h2>
+    <p class="eyebrow">{{ t('community.detail.summary.eyebrow') }}</p>
+    <h2>{{ t('community.detail.summary.journey', { place: meta.country || routeLabel }) }}</h2>
     <p v-if="summary" class="summary-text">{{ summary }}</p>
 
     <div class="summary-grid">
       <div>
-        <span>Country</span>
+        <span>{{ t('community.detail.summary.country') }}</span>
         <strong>{{ meta.country || routeLabel }}</strong>
       </div>
 
       <div>
-        <span>Dates</span>
+        <span>{{ t('community.detail.summary.dates') }}</span>
         <strong>{{ dateRange }}</strong>
       </div>
 
       <div>
-        <span>Duration</span>
-        <strong>{{ meta.duration || 0 }} days</strong>
+        <span>{{ t('community.detail.summary.duration') }}</span>
+        <strong>{{ t('community.detail.summary.days', { count: meta.duration || 0 }) }}</strong>
       </div>
 
       <div>
-        <span>Budget</span>
-        <strong>{{ meta.budget || 'Not set' }}</strong>
+        <span>{{ t('community.detail.summary.budget') }}</span>
+        <strong>{{ meta.budget || t('community.detail.summary.notSet') }}</strong>
       </div>
 
       <div>
-        <span>Style</span>
-        <strong>{{ meta.style || 'Not set' }}</strong>
+        <span>{{ t('community.detail.summary.style') }}</span>
+        <strong>{{ meta.style || t('community.detail.summary.notSet') }}</strong>
       </div>
 
       <div>
-        <span>Season</span>
-        <strong>{{ meta.season || 'Any season' }}</strong>
+        <span>{{ t('community.detail.summary.season') }}</span>
+        <strong>{{ meta.season || t('community.detail.summary.anySeason') }}</strong>
       </div>
     </div>
   </section>
@@ -40,16 +40,18 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   trip: { type: Object, default: null },
 })
 
+const { t } = useI18n()
 const meta = computed(() => props.trip?.meta || props.trip?.tripMeta || {})
 const summary = computed(() => props.trip?.summary || '')
-const routeLabel = computed(() => Array.isArray(meta.value.countryRoute) ? meta.value.countryRoute.join(' -> ') : 'Nordic')
+const routeLabel = computed(() => Array.isArray(meta.value.countryRoute) ? meta.value.countryRoute.join(' -> ') : t('countryNames.nordic'))
 const dateRange = computed(() => {
-  if (!meta.value.startDate || !meta.value.endDate) return 'Dates not set'
+  if (!meta.value.startDate || !meta.value.endDate) return t('community.detail.summary.datesNotSet')
   return `${meta.value.startDate} - ${meta.value.endDate}`
 })
 </script>

@@ -3,19 +3,19 @@
     <img v-if="post?.cover_image || post?.coverImage" :src="post.cover_image || post.coverImage" :alt="post.title" />
     <button class="back-button" type="button" @click="goBack">
       <i class="bi bi-arrow-left"></i>
-      <span>Back</span>
+      <span>{{ t('community.detail.back') }}</span>
     </button>
 
     <div class="header-content">
       <div class="header-copy">
-        <p class="status-pill">{{ post?.status || 'public' }}</p>
-        <h1>{{ post?.title || 'Community trip' }}</h1>
-        <span class="description">{{ post?.description || 'A shared Nordic journey.' }}</span>
+        <p class="status-pill">{{ post?.status || t('community.detail.statusFallback') }}</p>
+        <h1>{{ post?.title || t('community.detail.titleFallback') }}</h1>
+        <span class="description">{{ post?.description || t('community.detail.descriptionFallback') }}</span>
       </div>
 
       <button class="save-button" type="button" @click="$emit('save')">
         <i class="bi bi-bookmark"></i>
-        Save Post
+        {{ t('community.detail.savePost') }}
       </button>
     </div>
   </header>
@@ -23,6 +23,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 defineProps({
   post: { type: Object, default: null },
@@ -31,6 +32,7 @@ defineProps({
 defineEmits(['save'])
 
 const router = useRouter()
+const { t } = useI18n()
 
 function goBack() {
   router.push('/community')

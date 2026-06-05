@@ -1,19 +1,19 @@
 <template>
   <aside class="community-sidebar">
     <section v-if="destinations.length" class="sidebar-card">
-      <h3>Popular Destinations</h3>
+      <h3>{{ t('community.sidebar.destinations') }}</h3>
 
       <ul>
         <li v-for="item in destinations" :key="item.name">
           <span class="country-code">{{ item.code }}</span>
           <strong>{{ item.name }}</strong>
-          <small>{{ item.posts }} posts</small>
+          <small>{{ t('community.sidebar.posts', { count: item.posts }) }}</small>
         </li>
       </ul>
     </section>
 
     <section v-if="tags.length" class="sidebar-card">
-      <h3>Popular Tags</h3>
+      <h3>{{ t('community.sidebar.tags') }}</h3>
 
       <div class="tag-list">
         <button v-for="tag in tags" :key="tag" type="button">
@@ -23,14 +23,14 @@
     </section>
 
     <section v-if="creators.length" class="sidebar-card">
-      <h3>Top Creators</h3>
+      <h3>{{ t('community.sidebar.creators') }}</h3>
 
       <div v-for="creator in creators" :key="creator.name" class="creator-row">
         <div class="avatar">{{ creator.name.slice(0, 1) }}</div>
 
         <div>
           <strong>{{ creator.name }}</strong>
-          <span>{{ creator.posts }} posts</span>
+          <span>{{ t('community.sidebar.posts', { count: creator.posts }) }}</span>
         </div>
       </div>
     </section>
@@ -38,11 +38,15 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 defineProps({
   destinations: { type: Array, default: () => [] },
   tags: { type: Array, default: () => [] },
   creators: { type: Array, default: () => [] },
 })
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

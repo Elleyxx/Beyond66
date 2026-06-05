@@ -31,6 +31,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import CommunityHero from '@/components/community/CommunityHero.vue'
 import CommunityPostGrid from '@/components/community/CommunityPostGrid.vue'
@@ -40,6 +41,7 @@ import TrendingPosts from '@/components/community/TrendingPosts.vue'
 import { getCommunityPosts, saveCommunityPost } from '@/services/communityService'
 
 const router = useRouter()
+const { t } = useI18n()
 const posts = ref([])
 const isLoading = ref(false)
 const savingPost = ref(null)
@@ -69,11 +71,11 @@ const filteredPosts = computed(() => {
 
 const trendingPosts = computed(() => posts.value.slice(0, 3))
 
-const destinations = [
-  { code: 'NO', name: 'Norway', posts: 32 },
-  { code: 'IS', name: 'Iceland', posts: 28 },
-  { code: 'FI', name: 'Finland', posts: 19 },
-]
+const destinations = computed(() => [
+  { code: 'NO', name: t('countryNames.norway'), posts: 32 },
+  { code: 'IS', name: t('countryNames.iceland'), posts: 28 },
+  { code: 'FI', name: t('countryNames.finland'), posts: 19 },
+])
 
 const tags = ['NorthernLights', 'RoadTrip', 'Fjords', 'Photography', 'BudgetTravel']
 

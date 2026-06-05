@@ -6,16 +6,16 @@
     <div class="register-overlay"></div>
 
     <div class="register-card">
-      <router-link to="/" class="back-link" aria-label="Back to landing page">
+      <router-link to="/" class="back-link" :aria-label="t('auth.backToLanding')">
         <i class="bi bi-arrow-left"></i>
-        <span>Back</span>
+        <span>{{ t('auth.back') }}</span>
       </router-link>
-      <h1>Register</h1>
-      <p class="subtitle">Create an account to start your journey</p>
+      <h1>{{ t('auth.register.title') }}</h1>
+      <p class="subtitle">{{ t('auth.register.subtitle') }}</p>
 
       <div class="form-grid">
         <div class="field-block">
-          <label for="name">Name</label>
+          <label for="name">{{ t('auth.register.name') }}</label>
           <v-text-field
             id="name"
             v-model="name"
@@ -27,7 +27,7 @@
         </div>
 
         <div class="field-block">
-          <label for="email">Email</label>
+          <label for="email">{{ t('auth.register.email') }}</label>
           <v-text-field
             id="email"
             v-model="email"
@@ -40,7 +40,7 @@
         </div>
 
         <div class="field-block">
-          <label for="contact">Contact</label>
+          <label for="contact">{{ t('auth.register.contact') }}</label>
           <v-text-field
             id="contact"
             v-model="contact"
@@ -53,7 +53,7 @@
         </div>
 
         <div class="field-block">
-          <label for="username">Username</label>
+          <label for="username">{{ t('auth.register.username') }}</label>
           <v-text-field
             id="username"
             v-model="username"
@@ -65,7 +65,7 @@
         </div>
 
         <div class="field-block">
-          <label for="password">Password</label>
+          <label for="password">{{ t('auth.register.password') }}</label>
           <v-text-field
             id="password"
             v-model="password"
@@ -80,7 +80,7 @@
         </div>
 
         <div class="field-block">
-          <label for="confirmPassword">Confirm Password</label>
+          <label for="confirmPassword">{{ t('auth.register.confirmPassword') }}</label>
           <v-text-field
             id="confirmPassword"
             v-model="confirmPassword"
@@ -95,13 +95,13 @@
         </div>
       </div>
 
-      <v-btn class="register-btn" block :loading="isLoading" :disabled="isLoading" @click="handleRegister">Register</v-btn>
+      <v-btn class="register-btn" block :loading="isLoading" :disabled="isLoading" @click="handleRegister">{{ t('auth.register.submit') }}</v-btn>
       <p v-if="errorMessage" class="error-text">{{ errorMessage }}</p>
       <p v-if="successMessage" class="success-text">{{ successMessage }}</p>
 
       <p class="login-text">
-        Already have an account?
-        <router-link to="/login">Login</router-link>
+        {{ t('auth.register.hasAccount') }}
+        <router-link to="/login">{{ t('auth.register.login') }}</router-link>
       </p>
     </div>
   </section>
@@ -109,6 +109,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { API_BASE } from '../services/apiBase'
 
@@ -124,48 +125,49 @@ const errorMessage = ref('')
 const successMessage = ref('')
 const isLoading = ref(false)
 const router = useRouter()
+const { t } = useI18n()
 
 async function handleRegister() {
   errorMessage.value = ''
   successMessage.value = ''
 
   if (!name.value.trim() || !email.value.trim() || !password.value) {
-    errorMessage.value = 'Name, email and password are required.'
+    errorMessage.value = t('auth.register.missing')
     return
   }
 
   if (!username.value.trim()) {
-    errorMessage.value = 'Username is required.'
+    errorMessage.value = t('auth.register.usernameRequired')
     return
   }
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailPattern.test(email.value.trim())) {
-    errorMessage.value = 'Please enter a valid email address.'
+    errorMessage.value = t('auth.register.invalidEmail')
     return
   }
 
   const usernamePattern = /^[A-Za-z0-9_]{3,30}$/
   if (!usernamePattern.test(username.value.trim())) {
-    errorMessage.value = 'Username must be 3-30 chars (letters, numbers, underscore).'
+    errorMessage.value = t('auth.register.invalidUsername')
     return
   }
 
   if (contact.value.trim()) {
     const contactPattern = /^[0-9+\-\s]{8,20}$/
     if (!contactPattern.test(contact.value.trim())) {
-      errorMessage.value = 'Contact number format is invalid.'
+      errorMessage.value = t('auth.register.invalidContact')
       return
     }
   }
 
   if (password.value.length < 6) {
-    errorMessage.value = 'Password must be at least 6 characters.'
+    errorMessage.value = t('auth.register.shortPassword')
     return
   }
 
   if (password.value !== confirmPassword.value) {
-    errorMessage.value = 'Passwords do not match.'
+    errorMessage.value = t('auth.register.passwordMismatch')
     return
   }
 
@@ -185,16 +187,16 @@ async function handleRegister() {
 
     const result = await response.json()
     if (!response.ok || !result.success) {
-      errorMessage.value = result.message || 'Register failed.'
+      errorMessage.value = result.message || t('auth.register.failed')
       return
     }
 
-    successMessage.value = 'Registration successful. Redirecting to login...'
+    successMessage.value = t('auth.register.success')
     setTimeout(() => {
       router.push('/login')
     }, 800)
   } catch {
-    errorMessage.value = 'Cannot connect to backend. Please start API server.'
+    errorMessage.value = t('auth.register.backend')
   } finally {
     isLoading.value = false
   }

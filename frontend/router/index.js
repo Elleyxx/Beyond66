@@ -13,6 +13,7 @@ import ForumView from '../views/CommunityPage.vue'
 import CommunityPostDetailView from '../views/CommunityPostDetail.vue'
 import ProfileView from '../views/Profile.vue'
 import ItineraryView from '../views/PlannerPage.vue'
+import SearchView from '../views/SearchPage.vue'
 import { isAuthenticated } from '../utils/auth'
 
 const router = createRouter({
@@ -39,6 +40,7 @@ const router = createRouter({
     { path: '/country/finland', name: 'country-finland', component: FinlandView },
     { path: '/country/iceland', name: 'country-iceland', component: IcelandView },
     { path: '/country/denmark', name: 'country-denmark', component: DenmarkView },
+    { path: '/search', name: 'search', component: SearchView },
     { path: '/community', name: 'community', component: ForumView, meta: { requiresAuth: true } },
     { path: '/community/:id', name: 'community-post-detail', component: CommunityPostDetailView, meta: { requiresAuth: true } },
     { path: '/profile', name: 'profile', component: ProfileView, meta: { requiresAuth: true } },

@@ -1,19 +1,23 @@
 <template>
   <section class="panel">
-    <h2>Comments</h2>
-    <p v-if="!comments.length" class="empty">No comments yet.</p>
+    <h2>{{ t('community.detail.comments.title') }}</h2>
+    <p v-if="!comments.length" class="empty">{{ t('community.detail.comments.empty') }}</p>
 
     <article v-for="comment in comments" :key="comment.id || comment.created_at" class="comment">
-      <strong>{{ comment.author || comment.username || 'Traveler' }}</strong>
+      <strong>{{ comment.author || comment.username || t('community.detail.comments.authorFallback') }}</strong>
       <p>{{ comment.comment || comment.body }}</p>
     </article>
   </section>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 defineProps({
   comments: { type: Array, default: () => [] },
 })
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

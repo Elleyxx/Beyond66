@@ -4,13 +4,13 @@
       <div class="tripdetail-head">
         <h2>{{ trip.title }}</h2>
         <div class="tripdetail-actions">
-          <button class="step-btn secondary" @click="$emit('edit')">Edit Trip</button>
-          <button class="step-btn primary" @click="$emit('add')">Add Trip</button>
+          <button class="step-btn secondary" @click="$emit('edit')">{{ t('planner.actions.editTrip') }}</button>
+          <button class="step-btn primary" @click="$emit('add')">{{ t('planner.actions.addTrip') }}</button>
         </div>
       </div>
 
       <p class="tripdetail-meta">
-        {{ trip.country }} · {{ tripDateRange }} · {{ trip.duration }} days · {{ trip.style }} · {{ trip.season }}
+        {{ trip.country }} · {{ tripDateRange }} · {{ t('planner.list.days', { count: trip.duration }) }} · {{ trip.style }} · {{ trip.season }}
       </p>
 
       <PlannerSummary
@@ -27,24 +27,26 @@
     </div>
 
     <div v-else class="tripdetail-empty">
-      <h3>Select a trip</h3>
-      <p>Pick a planned trip from the left panel, or create a new one.</p>
-      <button class="step-btn primary" @click="$emit('add')">Add Trip</button>
+      <h3>{{ t('planner.detail.selectTrip') }}</h3>
+      <p>{{ t('planner.detail.selectTripHint') }}</p>
+      <button class="step-btn primary" @click="$emit('add')">{{ t('planner.actions.addTrip') }}</button>
     </div>
   </section>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import PlannerSummary from '@/components/planner/PlannerSummary.vue'
 
 const props = defineProps({
   trip: { type: Object, default: null },
 })
 defineEmits(['edit', 'add'])
+const { t } = useI18n()
 
 const tripDateRange = computed(() => {
-  if (!props.trip?.startDate || !props.trip?.endDate) return 'Dates not set'
+  if (!props.trip?.startDate || !props.trip?.endDate) return t('planner.summary.datesNotSet')
   return `${formatDate(props.trip.startDate)} - ${formatDate(props.trip.endDate)}`
 })
 

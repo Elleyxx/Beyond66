@@ -1,8 +1,8 @@
 <template>
   <main class="planner-page" :class="{ 'is-dark': isDark }">
     <header class="planner-header">
-      <h1 :style="{ color: plannerTitleColor }">Nordic Trip Planner</h1>
-      <img class="planner-border-image" src="/assets/images/plan_border.png" alt="Planner border" />
+      <h1 :style="{ color: plannerTitleColor }">{{ t('planner.title') }}</h1>
+      <img class="planner-border-image" src="/assets/images/plan_border.png" :alt="t('planner.borderAlt')" />
     </header>
 
     <div class="planner-layout" :class="{ 'is-split': isSplitLayout }">
@@ -67,6 +67,7 @@
 
 <script setup>
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useTheme } from 'vuetify'
 import PlannerTripListPanel from '@/components/planner/PlannerTripListPanel.vue'
 import PlannerCreatePanel from '@/components/planner/PlannerCreatePanel.vue'
@@ -76,19 +77,20 @@ import { generateAiPlanner, loadPlannerDrafts, savePlannerDraft } from '@/servic
 import { getAuroraPrediction, getTripWeather } from '@/services/weatherService'
 
 const theme = useTheme()
+const { t } = useI18n()
 const isDark = computed(() => theme.global.current.value.dark)
 const plannerTitleColor = computed(() =>
   isDark.value ? 'rgb(var(--v-theme-primary))' : 'rgb(var(--v-theme-headerText))',
 )
 
-const steps = [
-  { title: 'Basics', iconClass: 'bi-passport' },
-  { title: 'Timeline', iconClass: 'bi-signpost-split' },
-  { title: 'Budget', iconClass: 'bi-cash-stack' },
-  { title: 'Weather', iconClass: 'bi-cloud-sun' },
-  { title: 'Checklist', iconClass: 'bi-list-check' },
-  { title: 'Save', iconClass: 'bi-journal-check' },
-]
+const steps = computed(() => [
+  { title: t('planner.steps.basics'), iconClass: 'bi-passport' },
+  { title: t('planner.steps.timeline'), iconClass: 'bi-signpost-split' },
+  { title: t('planner.steps.budget'), iconClass: 'bi-cash-stack' },
+  { title: t('planner.steps.weather'), iconClass: 'bi-cloud-sun' },
+  { title: t('planner.steps.checklist'), iconClass: 'bi-list-check' },
+  { title: t('planner.steps.save'), iconClass: 'bi-journal-check' },
+])
 
 const currentStep = ref(0)
 const maxUnlockedStep = ref(0)
@@ -243,8 +245,8 @@ const countryCoordinates = {
 }
 
 const progressPercent = computed(() => {
-  if (steps.length <= 1) return 100
-  return (currentStep.value / (steps.length - 1)) * 100
+  if (steps.value.length <= 1) return 100
+  return (currentStep.value / (steps.value.length - 1)) * 100
 })
 
 const selectedTrip = computed(() => trips.value.find((trip) => trip.id === selectedTripId.value) || null)
@@ -451,7 +453,7 @@ async function generatePlannerFromAi() {
     currentStep.value = 1
     return true
   } catch (error) {
-    aiError.value = error?.message || 'Failed to generate AI planner.'
+    aiError.value = error?.message || t('planner.messages.aiFailed')
     return false
   } finally {
     isGeneratingAi.value = false
@@ -469,7 +471,7 @@ function printChecklist() {
 }
 
 async function nextStep() {
-  if (currentStep.value >= steps.length - 1) return
+  if (currentStep.value >= steps.value.length - 1) return
 
   if (currentStep.value === 0 && !isEditing.value) {
     await generatePlannerFromAi()
@@ -487,7 +489,7 @@ function prevStep() {
 }
 
 function goToStep(index) {
-  if (index < 0 || index > steps.length - 1) return
+  if (index < 0 || index > steps.value.length - 1) return
   if (index > maxUnlockedStep.value) return
   currentStep.value = index
 }
@@ -544,7 +546,7 @@ function editSelectedTrip() {
   editingTripId.value = selectedTrip.value.id
   mode.value = 'create'
   currentStep.value = 0
-  maxUnlockedStep.value = steps.length - 1
+  maxUnlockedStep.value = steps.value.length - 1
   scrollPlannerToTop()
 }
 
@@ -629,14 +631,14 @@ async function saveTrip(saveOptions = {}) {
     maxUnlockedStep.value = 0
     isSaveModalOpen.value = false
     saveMessage.value = wasEditing
-      ? 'Trip edit saved.'
+      ? t('planner.messages.editSaved')
       : visibility === 'public'
-        ? 'Trip published to community.'
-        : 'Trip saved privately.'
+        ? t('planner.messages.published')
+        : t('planner.messages.privateSaved')
   } catch {
     localStorage.setItem('trip_planner_draft', JSON.stringify(payload))
     isSaveModalOpen.value = false
-    saveMessage.value = 'Saved locally (backend unavailable).'
+    saveMessage.value = t('planner.messages.localSaved')
   }
 
   window.setTimeout(() => {

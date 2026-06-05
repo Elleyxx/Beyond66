@@ -6,14 +6,14 @@
     <div class="login-overlay"></div>
 
     <div class="login-card">
-      <router-link to="/" class="back-link" aria-label="Back to landing page">
+      <router-link to="/" class="back-link" :aria-label="t('auth.backToLanding')">
         <i class="bi bi-arrow-left"></i>
-        <span>Back</span>
+        <span>{{ t('auth.back') }}</span>
       </router-link>
-      <h1>Login</h1>
-      <p class="subtitle">Welcome to Beyond 66°</p>
+      <h1>{{ t('auth.login.title') }}</h1>
+      <p class="subtitle">{{ t('auth.login.subtitle') }}</p>
 
-      <label for="username">Username</label>
+      <label for="username">{{ t('auth.login.username') }}</label>
       <v-text-field
         id="username"
         v-model="username"
@@ -23,7 +23,7 @@
         class="field"
       />
 
-      <label for="password">Password</label>
+      <label for="password">{{ t('auth.login.password') }}</label>
       <v-text-field
         id="password"
         v-model="password"
@@ -36,17 +36,17 @@
         @click:append-inner="showPassword = !showPassword"
       />
 
-      <v-btn class="login-btn" block :loading="isLoading" :disabled="isLoading" @click="handleLogin">Login</v-btn>
+      <v-btn class="login-btn" block :loading="isLoading" :disabled="isLoading" @click="handleLogin">{{ t('auth.login.submit') }}</v-btn>
       <p v-if="errorMessage" class="error-text">{{ errorMessage }}</p>
 
       <label class="remember-wrap">
         <input v-model="rememberMe" type="checkbox" />
-        <span>Remember me</span>
+        <span>{{ t('auth.login.remember') }}</span>
       </label>
 
       <p class="register-text">
-        Dont have an account?
-        <router-link to="/register">Register</router-link>
+        {{ t('auth.login.noAccount') }}
+        <router-link to="/register">{{ t('auth.login.register') }}</router-link>
       </p>
     </div>
   </section>
@@ -54,6 +54,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { API_BASE } from '../services/apiBase'
 import { setAuthSession } from '../utils/auth'
@@ -66,12 +67,13 @@ const errorMessage = ref('')
 const isLoading = ref(false)
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
 async function handleLogin() {
   errorMessage.value = ''
 
   if (!username.value.trim() || !password.value) {
-    errorMessage.value = 'Please enter username and password.'
+    errorMessage.value = t('auth.login.missing')
     return
   }
 
@@ -88,7 +90,7 @@ async function handleLogin() {
 
     const result = await response.json()
     if (!response.ok || !result.success) {
-      errorMessage.value = result.message || 'Login failed.'
+      errorMessage.value = result.message || t('auth.login.failed')
       return
     }
 
@@ -101,7 +103,7 @@ async function handleLogin() {
     const redirectPath = typeof route.query.redirect === 'string' ? route.query.redirect : '/home'
     router.push(redirectPath)
   } catch {
-    errorMessage.value = 'Cannot connect to backend. Please start API server.'
+    errorMessage.value = t('auth.login.backend')
   } finally {
     isLoading.value = false
   }

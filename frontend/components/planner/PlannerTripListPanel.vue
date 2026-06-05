@@ -4,10 +4,10 @@
 
     <div class="triplist-content">
       <div class="triplist-head">
-        <h2>MY TRIPS</h2>
+        <h2>{{ t('planner.list.title') }}</h2>
         <button class="add-trip-btn" @click="$emit('add')">
           <img class="add-trip-stamp" src="/assets/images/stamp.svg" alt="" aria-hidden="true" />
-          <span>+ ADD TRIP</span>
+          <span>{{ t('planner.list.add') }}</span>
         </button>
       </div>
 
@@ -19,10 +19,10 @@
           @click="$emit('select', trip.id)"
         >
           <strong>{{ trip.title }}</strong>
-          <span>{{ trip.country }} · {{ trip.duration }} days</span>
+          <span>{{ trip.country }} · {{ t('planner.list.days', { count: trip.duration }) }}</span>
         </li>
         <li v-if="!trips.length" class="empty-trip">
-          Plan your first trip now!
+          {{ t('planner.list.empty') }}
         </li>
       </ul>
     </div>
@@ -30,11 +30,14 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 defineProps({
   trips: { type: Array, default: () => [] },
   selectedTripId: { type: [Number, String, null], default: null },
 })
 defineEmits(['select', 'add'])
+const { t } = useI18n()
 </script>
 
 <style scoped>

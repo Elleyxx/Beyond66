@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <CountryLayout
     :country="pageData.country"
     :title="pageData.title"
@@ -23,7 +23,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import CountryLayout from '@/components/common/CountryLayout.vue'
 import { getCurrentWeather } from '../services/weatherService'
-const { tm, getLocaleMessage } = useI18n()
+const { t, tm, getLocaleMessage } = useI18n()
 const currentTemp = ref(null)
 const currentTime = ref('--')
 const currentWeatherIcon = ref('')
@@ -90,9 +90,9 @@ const pageData = computed(() => {
     ...Object.entries(baseQuickFacts)
       .filter(([key]) => key !== 'timeZone')
       .map(([label, value]) => ({ label, value })),
-    { label: 'Current Time & Date', value: currentTime.value || '--' },
+    { label: t('countryPage.currentTime'), value: currentTime.value || '--' },
     {
-      label: 'Current Temperature',
+      label: t('countryPage.currentTemperature'),
       value: currentTemp.value != null ? `${currentTemp.value}°C` : '--',
       icon: currentWeatherIcon.value || '',
     },
@@ -161,3 +161,4 @@ onBeforeUnmount(() => {
   if (weatherTimer) window.clearInterval(weatherTimer)
 })
 </script>
+

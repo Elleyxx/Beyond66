@@ -4,8 +4,8 @@
       <section class="save-modal">
         <div class="modal-head">
           <div>
-            <p class="eyebrow">Share Your Trip Plan</p>
-            <h2>{{ isEditing ? 'Save Edit' : 'Save Trip' }}</h2>
+            <p class="eyebrow">{{ t('planner.saveModal.eyebrow') }}</p>
+            <h2>{{ isEditing ? t('planner.actions.saveEdit') : t('planner.actions.saveTrip') }}</h2>
           </div>
 
           <button class="icon-btn" type="button" @click="$emit('close')">
@@ -14,21 +14,21 @@
         </div>
 
         <label>
-          Trip Title
-          <input v-model="title" type="text" placeholder="Norway Winter Escape" />
+          {{ t('planner.saveModal.tripTitle') }}
+          <input v-model="title" type="text" :placeholder="t('planner.saveModal.titlePlaceholder')" />
         </label>
 
         <label>
-          Description
+          {{ t('planner.saveModal.description') }}
           <textarea
             v-model="description"
             rows="4"
-            placeholder="Write something about your journey..."
+            :placeholder="t('planner.saveModal.descriptionPlaceholder')"
           ></textarea>
         </label>
 
         <label>
-          Cover Image (Optional)
+          {{ t('planner.saveModal.coverImage') }}
 
           <div class="image-upload">
             <input
@@ -39,37 +39,37 @@
             />
 
             <div v-if="coverPreview" class="preview">
-              <img :src="coverPreview" alt="Trip Cover" />
+              <img :src="coverPreview" :alt="t('planner.saveModal.coverAlt')" />
             </div>
 
             <div v-else class="upload-placeholder">
               <i class="bi bi-image"></i>
-              <span>Choose a cover image</span>
+              <span>{{ t('planner.saveModal.chooseCover') }}</span>
             </div>
           </div>
         </label>
 
         <div v-if="!isEditing" class="visibility-options">
-          <span>Visibility</span>
+          <span>{{ t('planner.saveModal.visibility') }}</span>
 
           <label>
             <input v-model="visibility" type="radio" value="private" />
-            Private
+            {{ t('planner.saveModal.private') }}
           </label>
 
           <label>
             <input v-model="visibility" type="radio" value="public" />
-            Public
+            {{ t('planner.saveModal.public') }}
           </label>
         </div>
 
         <div class="modal-actions">
           <button class="secondary" type="button" @click="$emit('close')">
-            Cancel
+            {{ t('planner.actions.cancel') }}
           </button>
 
           <button class="primary" type="button" @click="emitSave">
-            {{ isEditing ? 'Save Edit' : visibility === 'public' ? 'Publish Trip' : 'Save Draft' }}
+            {{ isEditing ? t('planner.actions.saveEdit') : visibility === 'public' ? t('planner.actions.publishTrip') : t('planner.actions.saveDraft') }}
           </button>
         </div>
       </section>
@@ -79,27 +79,29 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const coverImage = ref(null)
 const coverPreview = ref('')
 
 const props = defineProps({
-  defaultTitle: { type: String, default: 'Nordic Trip Plan' },
+  defaultTitle: { type: String, default: '' },
   defaultDescription: { type: String, default: '' },
   defaultVisibility: { type: String, default: 'private' },
   isEditing: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['close', 'save-trip'])
+const { t } = useI18n()
 
-const title = ref(props.defaultTitle)
+const title = ref(props.defaultTitle || t('planner.saveModal.defaultTitle'))
 const description = ref(props.defaultDescription)
 const visibility = ref(props.defaultVisibility)
 
 watch(
   () => props.defaultTitle,
   (nextTitle) => {
-    title.value = nextTitle
+    title.value = nextTitle || t('planner.saveModal.defaultTitle')
   },
 )
 
@@ -119,7 +121,7 @@ watch(
 
 function emitSave() {
   emit('save-trip', {
-    title: title.value.trim() || props.defaultTitle,
+    title: title.value.trim() || props.defaultTitle || t('planner.saveModal.defaultTitle'),
     description: description.value.trim(),
     visibility: props.isEditing ? props.defaultVisibility : visibility.value,
     coverImage: coverImage.value,

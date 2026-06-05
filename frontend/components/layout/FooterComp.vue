@@ -1,87 +1,91 @@
 <template>
   <footer class="nordic-footer" :class="{ 'nordic-footer-home': isHome }">
     <v-container fluid class="footer-content px-6 px-md-10 px-lg-14">
-        <v-row class="footer-top" dense>
-          <v-col cols="12" sm="6" md="3">
-            <h4 class="footer-title">EXPLORE</h4>
-            <div class="footer-line"></div>
-            <ul class="footer-list">
-              <li><router-link to="/country/norway">Norway</router-link></li>
-              <li><router-link to="/country/sweden">Sweden</router-link></li>
-              <li><router-link to="/country/finland">Finland</router-link></li>
-              <li><router-link to="/country/iceland">Iceland</router-link></li>
-              <li><router-link to="/country/denmark">Denmark</router-link></li>
-            </ul>
-          </v-col>
+      <v-row class="footer-top" dense>
+        <v-col cols="12" sm="6" md="3">
+          <h4 class="footer-title">{{ t('footer.explore') }}</h4>
+          <div class="footer-line"></div>
+          <ul class="footer-list">
+            <li><router-link to="/country/norway">{{ t('countryNames.norway') }}</router-link></li>
+            <li><router-link to="/country/sweden">{{ t('countryNames.sweden') }}</router-link></li>
+            <li><router-link to="/country/finland">{{ t('countryNames.finland') }}</router-link></li>
+            <li><router-link to="/country/iceland">{{ t('countryNames.iceland') }}</router-link></li>
+            <li><router-link to="/country/denmark">{{ t('countryNames.denmark') }}</router-link></li>
+          </ul>
+        </v-col>
 
-          <v-col cols="12" sm="6" md="3">
-            <h4 class="footer-title">PLANNER</h4>
-            <div class="footer-line"></div>
-            <ul class="footer-list">
-              <li><router-link to="/trip-planner">Journey Planner</router-link></li>
-              <li><router-link to="/dashboard">My Trips</router-link></li>
-              <li><router-link to="/dashboard">Saved Places</router-link></li>
-              <li><router-link to="/trip-planner">Travel Tips</router-link></li>
-            </ul>
-          </v-col>
+        <v-col cols="12" sm="6" md="3">
+          <h4 class="footer-title">{{ t('footer.planner') }}</h4>
+          <div class="footer-line"></div>
+          <ul class="footer-list">
+            <li><router-link to="/trip-planner">{{ t('footer.journeyPlanner') }}</router-link></li>
+            <li><router-link to="/dashboard">{{ t('footer.myTrips') }}</router-link></li>
+            <li><router-link to="/dashboard">{{ t('footer.savedPlaces') }}</router-link></li>
+            <li><router-link to="/trip-planner">{{ t('footer.travelTips') }}</router-link></li>
+          </ul>
+        </v-col>
 
-          <v-col cols="12" sm="6" md="3">
-            <h4 class="footer-title">COMMUNITY</h4>
-            <div class="footer-line"></div>
-            <ul class="footer-list">
-              <li><router-link to="/community">Community Feed</router-link></li>
-              <li><router-link to="/community">Travel Stories</router-link></li>
-              <li><router-link to="/community">Photos & Guides</router-link></li>
-              <li><router-link to="/community">Community Rules</router-link></li>
-            </ul>
-          </v-col>
+        <v-col cols="12" sm="6" md="3">
+          <h4 class="footer-title">{{ t('footer.community') }}</h4>
+          <div class="footer-line"></div>
+          <ul class="footer-list">
+            <li><router-link to="/community">{{ t('footer.communityFeed') }}</router-link></li>
+            <li><router-link to="/community">{{ t('footer.travelStories') }}</router-link></li>
+            <li><router-link to="/community">{{ t('footer.photosGuides') }}</router-link></li>
+            <li><router-link to="/community">{{ t('footer.communityRules') }}</router-link></li>
+          </ul>
+        </v-col>
 
-          <v-col cols="12" sm="6" md="3" class="brand-section">
-            <h2 class="brand-logo">BEYOND 66°</h2>
-            <div class="footer-line brand-line"></div>
+        <v-col cols="12" sm="6" md="3" class="brand-section">
+          <h2 class="brand-logo">{{ t('brand.name') }}</h2>
+          <div class="footer-line brand-line"></div>
 
-            <p>Arctic Circle of Exploration</p>
-            <p>hello@beyond66.com</p>
-            <p>+60 12-345 6789</p>
+          <p>{{ t('brand.tagline') }}</p>
+          <p>hello@beyond66.com</p>
+          <p>+60 12-345 6789</p>
 
-            <div class="socials mt-3">
-              <v-btn icon variant="text" class="social-btn" aria-label="Facebook">
-                <v-icon>mdi-facebook</v-icon>
-              </v-btn>
-              <v-btn icon variant="text" class="social-btn" aria-label="Instagram">
-                <v-icon>mdi-instagram</v-icon>
-              </v-btn>
-              <v-btn icon variant="text" class="social-btn" aria-label="Twitter">
-                <v-icon>mdi-twitter</v-icon>
-              </v-btn>
-            </div>
-          </v-col>
-        </v-row>
-
-        <div class="footer-divider"></div>
-
-        <div class="footer-bottom">
-          <p>© 2026 Beyond 66°. All rights reserved.</p>
-
-          <div class="bottom-links">
-            <a href="#" @click.prevent>Privacy Policy</a>
-            <a href="#" @click.prevent>Terms & Conditions</a>
-            <a href="#" @click.prevent>Cookie Policy</a>
+          <div class="socials mt-3">
+            <v-btn icon variant="text" class="social-btn" aria-label="Facebook">
+              <v-icon>mdi-facebook</v-icon>
+            </v-btn>
+            <v-btn icon variant="text" class="social-btn" aria-label="Instagram">
+              <v-icon>mdi-instagram</v-icon>
+            </v-btn>
+            <v-btn icon variant="text" class="social-btn" aria-label="Twitter">
+              <v-icon>mdi-twitter</v-icon>
+            </v-btn>
           </div>
+        </v-col>
+      </v-row>
 
-          <p>Made for Nordic explorers</p>
+      <div class="footer-divider"></div>
+
+      <div class="footer-bottom">
+        <p>{{ t('footer.copyright') }}</p>
+
+        <div class="bottom-links">
+          <a href="#" @click.prevent>{{ t('footer.privacy') }}</a>
+          <a href="#" @click.prevent>{{ t('footer.terms') }}</a>
+          <a href="#" @click.prevent>{{ t('footer.cookie') }}</a>
         </div>
+
+        <p>{{ t('footer.madeFor') }}</p>
+      </div>
     </v-container>
   </footer>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 defineProps({
   isHome: {
     type: Boolean,
     default: false,
   },
 })
+
+const { t } = useI18n()
 </script>
 
 <style scoped>
@@ -118,7 +122,6 @@ defineProps({
     );
 }
 
-/* Home page: keep one continuous background from App shell through footer */
 .nordic-footer-home {
   background: transparent;
   margin-top: -1px;

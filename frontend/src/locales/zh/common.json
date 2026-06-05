@@ -1,16 +1,535 @@
 {
+  "brand": {
+    "name": "Beyond 66°",
+    "tagline": "北极圈探索"
+  },
   "nav": {
-    "home": "主页",
+    "home": "首页",
     "explore": "探索",
     "planner": "规划",
     "community": "社区",
-    "search": "搜索"
+    "search": "搜索",
+    "dashboard": "仪表板",
+    "login": "登录",
+    "logout": "登出"
   },
-
+  "search": {
+    "eyebrow": "站内搜索",
+    "title": "搜索 Beyond 66",
+    "placeholder": "搜索目的地、行程、极光...",
+    "submit": "搜索",
+    "popular": "热门搜索",
+    "resultsFor": "“{query}”的搜索结果",
+    "resultCount": "{count} 个结果",
+    "open": "打开结果",
+    "empty": "没有找到结果。可以试试国家、目的地或旅行主题。",
+    "viewAllResults": "查看全部结果",
+    "categories": {
+      "page": "页面",
+      "country": "国家",
+      "destination": "目的地",
+      "experience": "体验",
+      "tool": "工具"
+    },
+    "descriptions": {
+      "home": "从首页开始探索北欧旅程。",
+      "explore": "浏览北欧国家、地图和目的地区块。",
+      "planner": "使用预算、天气、极光和清单工具建立行程。",
+      "community": "探索社区分享的北欧故事和行程计划。",
+      "fjords": "寻找峡湾景观、风景路线和挪威亮点。",
+      "aurora": "搜索北欧地区的极光体验。",
+      "winter": "规划雪地、北极天气和冬季旅行准备。"
+    },
+    "destinations": {
+      "fjords": "峡湾",
+      "aurora": "极光",
+      "winter": "冬季旅行"
+    }
+  },
   "menu": {
     "profile": "个人资料",
     "darkMode": "深色模式",
     "lightMode": "浅色模式",
-    "logout": "登出"
+    "logout": "登出",
+    "languageEnglish": "English",
+    "languageChinese": "中文"
+  },
+  "countryNames": {
+    "norway": "挪威",
+    "sweden": "瑞典",
+    "finland": "芬兰",
+    "iceland": "冰岛",
+    "denmark": "丹麦",
+    "nordic": "北欧"
+  },
+  "countryPage": {
+    "tabs": {
+      "overview": "概览",
+      "highlights": "亮点",
+      "destination": "景点",
+      "experience": "体验",
+      "gallery": "图库",
+      "travelTips": "旅行贴士"
+    },
+    "bestTime": "最佳旅行时间",
+    "bestTimeFact": "最佳旅行时间",
+    "saveDestination": "收藏景点",
+    "unsaveDestination": "取消收藏景点",
+    "overviewAlt": "{country} 概览",
+    "highlightFallback": "亮点",
+    "destinationFallback": "景点",
+    "experienceFallback": "体验",
+    "tipFallback": "贴士 {number}",
+    "defaultTipOne": "携带分层衣物以应对天气变化。",
+    "defaultTipTwo": "旺季请提前预订热门活动。",
+    "defaultTipThree": "提前查看当地交通时间表。",
+    "currentTime": "当前时间与日期",
+    "currentTemperature": "当前温度"
+  },
+  "home": {
+    "hero": {
+      "subtitle": "体验北欧风景、文化与冬季冒险。",
+      "viewMore": "查看更多",
+      "destinationAlt": "北欧景点",
+      "countries": {
+        "iceland": {
+          "name": "冰岛",
+          "subtitle": "冰川、火山与冒险交汇之地"
+        },
+        "norway": {
+          "name": "挪威",
+          "subtitle": "拥有世界上最壮观峡湾的国度"
+        },
+        "sweden": {
+          "name": "瑞典",
+          "subtitle": "自然、文化与设计的完美融合"
+        },
+        "finland": {
+          "name": "芬兰",
+          "subtitle": "通往极光与北极奇观的门户"
+        },
+        "denmark": {
+          "name": "丹麦",
+          "subtitle": "童话、城堡与海岸魅力之地"
+        }
+      }
+    },
+    "about": {
+      "title": "关于",
+      "mapAlt": "北欧地图和目的地亮点",
+      "paragraphOne": "Beyond 66° 是一个北欧旅行探索平台，旨在通过北欧壮丽的自然景观、丰富文化和独特体验启发并引导旅行者。平台涵盖冰岛、挪威、瑞典、芬兰和丹麦，提供目的地指南、旅行见解和精选推荐，帮助用户探索北欧地区的美丽与多样性。",
+      "paragraphTwo": "除了目的地探索，Beyond 66° 还提供个性化行程规划工具，帮助用户根据兴趣和偏好创建有意义的旅行体验。无论你想追寻极光、户外冒险、文化地标还是当地北欧传统，这个平台都会成为你旅途中的可靠伙伴。"
+    },
+    "info": {
+      "eyebrow": "BEYOND 66°",
+      "title": "围绕你真正想感受的地方规划北欧路线。",
+      "description": "在峡湾、森林、城市、冰河湖与北极光之间移动，用一个安静清晰的平台探索国家、比较目的地，并开始建立你的旅程。",
+      "statsLabel": "北欧旅行亮点",
+      "countries": "北欧国家",
+      "places": "精选地点",
+      "inspiration": "北极灵感"
+    },
+    "tours": {
+      "title": "景点",
+      "filmAlt": "胶片边框",
+      "more": "更多 →"
+    },
+    "trending": {
+      "title": "旅程",
+      "explore": "探索社区",
+      "loading": "正在加载社区帖子...",
+      "empty": "还没有社区帖子。",
+      "fallbackAuthor": "旅行者",
+      "fallbackCountry": "北欧",
+      "fallbackTitle": "未命名行程",
+      "fallbackDescription": "社区分享的北欧路线。",
+      "flexible": "弹性安排",
+      "days": "{count} 天",
+      "anySeason": "任何季节"
+    }
+  },
+  "landing": {
+    "login": "登录",
+    "explore": "探索",
+    "eyebrow": "欢迎来到北欧世界",
+    "subtitleLineOne": "五个国家，无尽冒险。",
+    "subtitleLineTwo": "你的旅程从这里开始。",
+    "enterJourney": "开启旅程",
+    "scroll": "向下探索",
+    "countries": {
+      "norway": {
+        "name": "挪威",
+        "desc": "峡湾、群山与午夜太阳"
+      },
+      "sweden": {
+        "name": "瑞典",
+        "desc": "广阔荒野与宁静湖泊"
+      },
+      "finland": {
+        "name": "芬兰",
+        "desc": "北极森林与梦幻冬季"
+      },
+      "iceland": {
+        "name": "冰岛",
+        "desc": "火山、冰川与自然奇观"
+      },
+      "denmark": {
+        "name": "丹麦",
+        "desc": "海岸魅力与经典城市"
+      }
+    },
+    "destinations": {
+      "norway": {
+        "country": "挪威",
+        "place": "盖朗厄尔峡湾",
+        "description": "乘船穿行在挪威标志性的联合国教科文组织峡湾，两侧是高耸峭壁与瀑布。"
+      },
+      "sweden": {
+        "country": "瑞典",
+        "place": "阿比斯库国家公园",
+        "description": "这里是追寻极光、徒步小径与清冽高山空气的北极热门目的地。"
+      },
+      "finland": {
+        "country": "芬兰",
+        "place": "罗瓦涅米，拉普兰",
+        "description": "在北极圈上方体验雪林、驯鹿文化与梦幻冬夜。"
+      },
+      "iceland": {
+        "country": "冰岛",
+        "place": "杰古沙龙冰河湖",
+        "description": "欣赏蓝色冰山漂过冰河湖水，四周是壮观的黑沙海岸。"
+      },
+      "denmark": {
+        "country": "丹麦",
+        "place": "哥本哈根新港",
+        "description": "漫步彩色港口建筑、运河与舒适的北欧城市生活。"
+      }
+    }
+  },
+  "community": {
+    "hero": {
+      "eyebrow": "Beyond 66° 社区",
+      "title": "旅行故事",
+      "description": "发现来自其他旅行者的北欧行程、真实故事、照片与灵感。",
+      "searchPlaceholder": "搜索行程、故事或目的地"
+    },
+    "filters": {
+      "all": "全部",
+      "plan": "行程计划",
+      "story": "旅行故事",
+      "photo": "摄影",
+      "mine": "我的帖子"
+    },
+    "trending": {
+      "title": "本周热门",
+      "viewAll": "查看全部"
+    },
+    "latest": {
+      "title": "最新帖子",
+      "count": "{count} 个帖子",
+      "loading": "正在加载帖子...",
+      "empty": "还没有帖子。"
+    },
+    "card": {
+      "tripPlan": "行程计划",
+      "traveller": "旅行者",
+      "untitled": "未命名行程",
+      "fallbackDescription": "社区分享的北欧路线。",
+      "flexible": "弹性安排",
+      "days": "{count} 天",
+      "anySeason": "任何季节",
+      "save": "收藏",
+      "usePlan": "使用行程"
+    },
+    "sidebar": {
+      "destinations": "热门目的地",
+      "tags": "热门标签",
+      "creators": "热门创作者",
+      "posts": "{count} 个帖子"
+    },
+    "detail": {
+      "back": "返回",
+      "savePost": "收藏帖子",
+      "statusFallback": "公开",
+      "titleFallback": "社区行程",
+      "descriptionFallback": "一段社区分享的北欧旅程。",
+      "summary": {
+        "eyebrow": "行程摘要",
+        "journey": "{place} 旅程",
+        "country": "国家",
+        "dates": "日期",
+        "duration": "时长",
+        "budget": "预算",
+        "style": "风格",
+        "season": "季节",
+        "days": "{count} 天",
+        "notSet": "未设置",
+        "datesNotSet": "日期未设置",
+        "anySeason": "任何季节"
+      },
+      "itinerary": {
+        "eyebrow": "行程",
+        "title": "旅行时间线",
+        "day": "第 {day} 天",
+        "activities": "活动",
+        "empty": "暂无活动"
+      },
+      "portfolio": {
+        "title": "作品集",
+        "fallbackTitle": "旅行笔记"
+      },
+      "comments": {
+        "title": "评论",
+        "empty": "还没有评论。",
+        "authorFallback": "旅行者",
+        "placeholder": "写下评论",
+        "submit": "发布评论"
+      },
+      "saveModal": {
+        "title": "收藏帖子",
+        "message": "要把“{title}”收藏到你的帖子中吗？",
+        "fallbackTitle": "这个行程",
+        "cancel": "取消",
+        "save": "收藏"
+      }
+    }
+  },
+  "auth": {
+    "back": "返回",
+    "backToLanding": "返回首页",
+    "login": {
+      "title": "登录",
+      "subtitle": "欢迎来到 Beyond 66°",
+      "username": "用户名",
+      "password": "密码",
+      "submit": "登录",
+      "remember": "记住我",
+      "noAccount": "还没有账号？",
+      "register": "注册",
+      "missing": "请输入用户名和密码。",
+      "failed": "登录失败。",
+      "backend": "无法连接后端。请启动 API 服务器。"
+    },
+    "register": {
+      "title": "注册",
+      "subtitle": "创建账号，开始你的旅程",
+      "name": "姓名",
+      "email": "电子邮箱",
+      "contact": "联系方式",
+      "username": "用户名",
+      "password": "密码",
+      "confirmPassword": "确认密码",
+      "submit": "注册",
+      "hasAccount": "已有账号？",
+      "login": "登录",
+      "missing": "姓名、邮箱和密码为必填项。",
+      "usernameRequired": "用户名为必填项。",
+      "invalidEmail": "请输入有效的电子邮箱地址。",
+      "invalidUsername": "用户名必须为 3-30 个字符（字母、数字或下划线）。",
+      "invalidContact": "联系方式格式无效。",
+      "shortPassword": "密码至少需要 6 个字符。",
+      "passwordMismatch": "两次输入的密码不一致。",
+      "failed": "注册失败。",
+      "success": "注册成功。正在跳转到登录页...",
+      "backend": "无法连接后端。请启动 API 服务器。"
+    }
+  },
+  "profile": {
+    "title": "个人资料",
+    "loginRequired": "登录后可查看此页面。"
+  },
+  "planner": {
+    "title": "北欧行程规划器",
+    "borderAlt": "规划器边框",
+    "steps": {
+      "basics": "基础",
+      "timeline": "时间线",
+      "budget": "预算",
+      "weather": "天气",
+      "checklist": "清单",
+      "save": "保存",
+      "goTo": "前往第 {step} 步：{title}"
+    },
+    "messages": {
+      "aiFailed": "AI 行程生成失败。",
+      "editSaved": "行程修改已保存。",
+      "published": "行程已发布到社区。",
+      "privateSaved": "行程已私密保存。",
+      "localSaved": "已保存到本地（后端不可用）。"
+    },
+    "actions": {
+      "back": "返回",
+      "next": "下一步",
+      "generating": "正在生成行程...",
+      "saveEdit": "保存修改",
+      "saveTrip": "保存行程",
+      "addTrip": "添加行程",
+      "editTrip": "编辑行程",
+      "cancel": "取消",
+      "publishTrip": "发布行程",
+      "saveDraft": "保存草稿"
+    },
+    "list": {
+      "title": "我的行程",
+      "add": "+ 添加行程",
+      "empty": "现在开始规划你的第一个行程！",
+      "days": "{count} 天"
+    },
+    "controls": {
+      "countriesRoute": "国家路线",
+      "countriesRouteNote": "第一个国家将作为旅程起点。",
+      "travelDate": "旅行日期",
+      "travelDateNote": "选择出发和返回日期。",
+      "selectTravelDates": "选择旅行日期",
+      "days": "{count} 天",
+      "budget": "预算",
+      "budgetNote": "选择本次旅行的整体消费水平。",
+      "accommodation": "住宿",
+      "accommodationNote": "选择你偏好的住宿类型。",
+      "transport": "交通",
+      "transportNote": "选择主要出行方式。",
+      "pax": "人数",
+      "paxNote": "参加这次旅行的人数。",
+      "travelStyle": "旅行风格",
+      "travelStyleNote": "选择你偏好的体验类型。",
+      "tripType": "旅行类型",
+      "tripTypeNote": "你和谁一起旅行？",
+      "activityLevel": "活动强度",
+      "activityLevelNote": "设置你的行程节奏。",
+      "interests": "兴趣",
+      "interestsNote": "选择你希望 Beyond66 优先安排的体验。"
+    },
+    "options": {
+      "budget": "节省",
+      "economy": "经济",
+      "midRange": "中等",
+      "premium": "高级",
+      "luxury": "奢华"
+    },
+    "budget": {
+      "eyebrow": "你的旅行预算",
+      "recommended": "推荐",
+      "difference": "差额",
+      "total": "总计",
+      "tips": "预算建议",
+      "tipsFallback": "调整滑块来自定义旅行预算，总额会自动更新。",
+      "stay": "住宿",
+      "food": "餐饮",
+      "transport": "交通",
+      "activities": "活动",
+      "onTarget": "符合目标",
+      "noRecommendation": "暂无推荐",
+      "withinRange": "在推荐范围内",
+      "aboveRecommendation": "高于推荐",
+      "belowRecommendation": "低于推荐"
+    },
+    "timeline": {
+      "title": "行程时间线",
+      "intro": "此行程根据你的旅行偏好生成。你可以自由添加、删除或重新排列活动，让旅程更符合个人需求。",
+      "activityPool": "活动池",
+      "dragHint": "拖到每天的行程中",
+      "day": "第 {day} 天",
+      "activities": "活动",
+      "dropActivity": "把活动拖到这里",
+      "fallbackCountry": "国家"
+    },
+    "weather": {
+      "weather": "天气",
+      "forecast": "天气预报",
+      "day": "第 {day} 天",
+      "aurora": "极光",
+      "bestAuroraNight": "最佳极光夜",
+      "highestChance": "观看极光概率最高",
+      "kpIndex": "KP 指数",
+      "bestTime": "最佳时间",
+      "bestAvailableNight": "最佳可用夜晚",
+      "estimate": "估算",
+      "forecastLabel": "预报"
+    },
+    "checklist": {
+      "decorate": "装饰",
+      "titleLabel": "清单标题",
+      "defaultTitle": "打包清单",
+      "paperSize": "纸张大小",
+      "fontStyle": "字体风格",
+      "clean": "简洁",
+      "handwritten": "手写",
+      "serif": "衬线",
+      "hideChecked": "导出时隐藏已勾选项目",
+      "background": "背景",
+      "cream": "奶油笔记本",
+      "blue": "蓝色旅行笔记",
+      "green": "自然绿色",
+      "pink": "柔粉色",
+      "accentColor": "强调色",
+      "hint": "点击星标突出重要项目。",
+      "eyebrow": "Beyond 66° 旅行笔记",
+      "exportPdf": "导出 PDF",
+      "highlight": "突出显示 {item}"
+    },
+    "saveModal": {
+      "eyebrow": "分享你的行程计划",
+      "tripTitle": "行程标题",
+      "titlePlaceholder": "挪威冬日之旅",
+      "description": "描述",
+      "descriptionPlaceholder": "写下关于这段旅程的内容...",
+      "coverImage": "封面图片（可选）",
+      "coverAlt": "行程封面",
+      "chooseCover": "选择封面图片",
+      "visibility": "可见性",
+      "private": "私密",
+      "public": "公开",
+      "defaultTitle": "北欧行程计划"
+    },
+    "summary": {
+      "title": "行程摘要",
+      "journey": "{countries} 旅程",
+      "meta": "{days} 天 · {pax} 人",
+      "preferences": "旅行偏好",
+      "countries": "国家",
+      "travelStyle": "旅行风格",
+      "season": "季节",
+      "budget": "预算",
+      "accommodation": "住宿",
+      "transport": "交通",
+      "tripType": "旅行类型",
+      "activityLevel": "活动强度",
+      "progress": "进度概览",
+      "activities": "活动",
+      "packedItems": "已打包项目",
+      "itineraryDays": "行程天数",
+      "budgetSummary": "预算摘要",
+      "totalBudget": "总预计预算",
+      "weatherAurora": "天气与极光",
+      "weather": "天气",
+      "auroraChance": "极光概率",
+      "bestWindow": "最佳时段",
+      "itinerary": "行程时间线",
+      "destination": "目的地",
+      "emptyActivities": "还没有添加活动",
+      "datesNotSet": "日期未设置"
+    },
+    "detail": {
+      "selectTrip": "选择行程",
+      "selectTripHint": "从左侧面板选择已规划的行程，或创建一个新行程。"
+    }
+  },
+  "footer": {
+    "explore": "探索",
+    "planner": "规划",
+    "community": "社区",
+    "journeyPlanner": "行程规划",
+    "myTrips": "我的行程",
+    "savedPlaces": "已收藏地点",
+    "travelTips": "旅行贴士",
+    "communityFeed": "社区动态",
+    "travelStories": "旅行故事",
+    "photosGuides": "照片与指南",
+    "communityRules": "社区规则",
+    "copyright": "© 2026 Beyond 66°。保留所有权利。",
+    "privacy": "隐私政策",
+    "terms": "条款与条件",
+    "cookie": "Cookie 政策",
+    "madeFor": "为北欧探索者打造"
   }
 }

@@ -1,15 +1,15 @@
 ﻿<template>
   <section class="planner-card checklist-builder">
     <aside class="style-panel">
-      <h3>Decorate</h3>
+      <h3>{{ t('planner.checklist.decorate') }}</h3>
 
       <label>
-        Checklist Title
+        {{ t('planner.checklist.titleLabel') }}
         <input v-model="checklistTitle" type="text" />
       </label>
 
       <label>
-        Paper Size
+        {{ t('planner.checklist.paperSize') }}
         <select v-model="paperSize">
           <option value="a4">A4</option>
           <option value="letter">Letter</option>
@@ -17,35 +17,35 @@
       </label>
 
       <label>
-        Font Style
+        {{ t('planner.checklist.fontStyle') }}
         <select v-model="fontStyle">
-          <option value="clean">Clean</option>
-          <option value="handwritten">Handwritten</option>
-          <option value="serif">Serif</option>
+          <option value="clean">{{ t('planner.checklist.clean') }}</option>
+          <option value="handwritten">{{ t('planner.checklist.handwritten') }}</option>
+          <option value="serif">{{ t('planner.checklist.serif') }}</option>
         </select>
       </label>
 
       <label class="switch-row">
         <input v-model="hideCheckedOnExport" type="checkbox" />
-        Hide checked items on export
+        {{ t('planner.checklist.hideChecked') }}
       </label>
 
       <label>
-        Background
+        {{ t('planner.checklist.background') }}
         <select v-model="theme">
-          <option value="cream">Cream Notebook</option>
-          <option value="blue">Blue Travel Notes</option>
-          <option value="green">Nature Green</option>
-          <option value="pink">Soft Pink</option>
+          <option value="cream">{{ t('planner.checklist.cream') }}</option>
+          <option value="blue">{{ t('planner.checklist.blue') }}</option>
+          <option value="green">{{ t('planner.checklist.green') }}</option>
+          <option value="pink">{{ t('planner.checklist.pink') }}</option>
         </select>
       </label>
 
       <label>
-        Accent Color
+        {{ t('planner.checklist.accentColor') }}
         <input v-model="accentColor" type="color" />
       </label>
 
-      <p class="hint">Click the star to highlight important items.</p>
+      <p class="hint">{{ t('planner.checklist.hint') }}</p>
     </aside>
 
     <div
@@ -56,12 +56,12 @@
     >
       <div class="paper-head">
         <div>
-          <p class="eyebrow">Beyond 66° Travel Notes</p>
+          <p class="eyebrow">{{ t('planner.checklist.eyebrow') }}</p>
           <h2>{{ checklistTitle }}</h2>
         </div>
 
         <button class="export-btn" @click="exportChecklist">
-          Export PDF
+          {{ t('planner.checklist.exportPdf') }}
         </button>
       </div>
 
@@ -84,7 +84,7 @@
           <button
             class="highlight-btn"
             type="button"
-            :aria-label="`Highlight ${item.name}`"
+            :aria-label="t('planner.checklist.highlight', { item: item.name })"
             @click="toggleHighlight(item.id)"
           >
             ★
@@ -97,6 +97,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 defineProps({
   items: {
@@ -109,7 +110,8 @@ defineProps({
 defineEmits(['toggle'])
 
 const checklistRef = ref(null)
-const checklistTitle = ref('Packing Checklist')
+const { t } = useI18n()
+const checklistTitle = ref(t('planner.checklist.defaultTitle'))
 const paperSize = ref('a4')
 const fontStyle = ref('clean')
 const hideCheckedOnExport = ref(false)

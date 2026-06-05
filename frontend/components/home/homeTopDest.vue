@@ -2,7 +2,7 @@
   <section class="tours-section">
     <div class="tours-header">
       <div class="title-block">
-        <h2>DEST.</h2>
+        <h2>{{ t('home.tours.title') }}</h2>
       </div>
 
       <div class="tour-tabs">
@@ -35,7 +35,7 @@
           <img
             class="film-border"
             src="/assets/images/frame.png"
-            alt="Film frame"
+            :alt="t('home.tours.filmAlt')"
           />
         </div>
       </div>
@@ -53,7 +53,7 @@
           <div class="card-overlay">
             <h3>{{ place.title }}</h3>
             <p>{{ place.desc }}</p>
-            <span class="more-link">MORE →</span>
+            <span class="more-link">{{ t('home.tours.more') }}</span>
           </div>
         </article>
       </div>
@@ -63,6 +63,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
@@ -70,6 +71,7 @@ const props = defineProps({
 })
 
 const router = useRouter()
+const { t } = useI18n()
 const selectedSlug = ref('norway')
 const cardsRef = ref(null)
 

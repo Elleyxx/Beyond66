@@ -1,8 +1,8 @@
 <template>
   <section class="community-section">
     <div class="section-head">
-      <h2>Trending This Week</h2>
-      <button type="button">View All</button>
+      <h2>{{ t('community.trending.title') }}</h2>
+      <button type="button">{{ t('community.trending.viewAll') }}</button>
     </div>
     <div class="section-divider"></div>
 
@@ -12,8 +12,8 @@
         <img v-if="coverImage(post)" :src="coverImage(post)" :alt="post.title" />
 
         <div>
-          <span>{{ post.country || post.trip?.meta?.country || 'Nordic' }}</span>
-          <h3>{{ post.title || 'Untitled trip' }}</h3>
+          <span>{{ post.country || post.trip?.meta?.country || t('countryNames.nordic') }}</span>
+          <h3>{{ post.title || t('community.card.untitled') }}</h3>
         </div>
       </article>
     </div>
@@ -21,9 +21,13 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 defineProps({
   posts: { type: Array, default: () => [] },
 })
+
+const { t } = useI18n()
 
 function coverImage(post) {
   return post.coverImage || post.cover_image || ''

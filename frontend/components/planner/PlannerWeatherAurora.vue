@@ -3,8 +3,8 @@
     <div class="forecast-card weather-card">
       <div class="card-head">
         <div>
-          <p class="eyebrow">Weather</p>
-          <h2>Weather Forecast</h2>
+          <p class="eyebrow">{{ t('planner.weather.weather') }}</p>
+          <h2>{{ t('planner.weather.forecast') }}</h2>
         </div>
         <i class="bi bi-cloud-sun"></i>
       </div>
@@ -12,7 +12,7 @@
       <div v-if="featuredWeather" class="weather-feature-card">
         <div class="weather-feature-meta">
           <div>
-            <p>Day 1</p>
+            <p>{{ t('planner.weather.day', { day: 1 }) }}</p>
             <span>{{ formatDate(featuredWeather.date) }}</span>
           </div>
           <span class="forecast-badge" :class="featuredWeather.type || 'forecast'">
@@ -33,7 +33,7 @@
           class="weather-mini-card"
         >
           <div>
-            <p>Day {{ idx + 2 }}</p>
+            <p>{{ t('planner.weather.day', { day: idx + 2 }) }}</p>
             <span>{{ formatDate(item.date) }}</span>
             <small :class="['forecast-badge', item.type || 'forecast']">
               {{ forecastTypeLabel(item.type) }}
@@ -53,8 +53,8 @@
     <div class="forecast-card aurora-card">
       <div class="card-head">
         <div>
-          <p class="eyebrow">Aurora</p>
-          <h2>Best Aurora Night</h2>
+          <p class="eyebrow">{{ t('planner.weather.aurora') }}</p>
+          <h2>{{ t('planner.weather.bestAuroraNight') }}</h2>
         </div>
         <i class="bi bi-stars"></i>
       </div>
@@ -62,15 +62,15 @@
       <div class="best-aurora">
         <p class="best-date">{{ formatDate(bestAurora.date) }}</p>
         <p class="chance">{{ bestAurora.chance }}%</p>
-        <p class="label">Highest chance to view aurora</p>
+        <p class="label">{{ t('planner.weather.highestChance') }}</p>
       </div>
 
       <div class="aurora-meta">
         <span
-          >KP Index: <strong>{{ bestAurora.kp }}</strong></span
+          >{{ t('planner.weather.kpIndex') }}: <strong>{{ bestAurora.kp }}</strong></span
         >
         <span
-          >Best Time: <strong>{{ bestAurora.window }}</strong></span
+          >{{ t('planner.weather.bestTime') }}: <strong>{{ bestAurora.window }}</strong></span
         >
       </div>
     </div>
@@ -79,11 +79,13 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   weather: { type: Array, required: true },
   aurora: { type: [Object, Array], required: true },
 })
+const { t } = useI18n()
 
 const featuredWeather = computed(() => props.weather[0] || null)
 const remainingWeather = computed(() => props.weather.slice(1))
@@ -96,7 +98,7 @@ const bestAurora = computed(() => {
   }
 
   return {
-    date: props.aurora.date || props.aurora.bestDate || 'Best available night',
+    date: props.aurora.date || props.aurora.bestDate || t('planner.weather.bestAvailableNight'),
     chance: props.aurora.chance || 0,
     kp: props.aurora.kp || 0,
     window: props.aurora.window || '10:00 PM - 2:00 AM',
@@ -105,7 +107,7 @@ const bestAurora = computed(() => {
 
 function fallbackAurora() {
   return {
-    date: 'Best available night',
+    date: t('planner.weather.bestAvailableNight'),
     chance: 0,
     kp: 0,
     window: '10:00 PM - 2:00 AM',
@@ -113,7 +115,7 @@ function fallbackAurora() {
 }
 
 function formatDate(dateValue) {
-  if (!dateValue || dateValue === 'Best available night') return dateValue || '—'
+  if (!dateValue || dateValue === t('planner.weather.bestAvailableNight')) return dateValue || '—'
 
   const date = new Date(`${dateValue}T00:00:00`)
   if (Number.isNaN(date.getTime())) return dateValue
@@ -133,7 +135,7 @@ function formatTemp(temp) {
 }
 
 function forecastTypeLabel(type) {
-  return type === 'seasonal' ? 'Estimate' : 'Forecast'
+  return type === 'seasonal' ? t('planner.weather.estimate') : t('planner.weather.forecastLabel')
 }
 
 function weatherIcon(condition) {

@@ -5,13 +5,13 @@
 
       <div class="top-nav">
         <div class="nav-actions">
-          <router-link to="/login">Login <i class="bi bi-person"></i></router-link>
-          <router-link to="/explore">Explore <i class="bi bi-snow2"></i></router-link>
+          <router-link to="/login">{{ t('landing.login') }} <i class="bi bi-person"></i></router-link>
+          <router-link to="/explore">{{ t('landing.explore') }} <i class="bi bi-snow2"></i></router-link>
         </div>
       </div>
 
       <div class="splash-content">
-        <p class="eyebrow">WELCOME TO THE NORDIC WORLD</p>
+        <p class="eyebrow">{{ t('landing.eyebrow') }}</p>
 
         <h1>Beyond 66&deg;</h1>
 
@@ -22,17 +22,17 @@
         </div>
 
         <p class="subtitle">
-          Five countries. Endless adventures.<br />
-          Your journey begins here.
+          {{ t('landing.subtitleLineOne') }}<br />
+          {{ t('landing.subtitleLineTwo') }}
         </p>
 
         <div class="country-grid">
           <div
             v-for="country in countries"
-            :key="country.name"
+            :key="country.slug"
             class="country-card"
             :style="{ backgroundImage: `url(${country.image})` }"
-            @click="scrollToDestination(country.name)"
+            @click="scrollToDestination(country.slug)"
           >
             <div class="card-glass">
               <v-icon size="38" class="country-icon">{{ country.icon }}</v-icon>
@@ -50,13 +50,13 @@
           rounded="pill"
           to="/home"
         >
-          ENTER JOURNEY
+          {{ t('landing.enterJourney') }}
           <v-icon end>mdi-arrow-right</v-icon>
         </v-btn>
 
       <div class="scroll-hint">
         <v-icon size="28">mdi-mouse</v-icon>
-        <span>SCROLL TO EXPLORE</span>
+        <span>{{ t('landing.scroll') }}</span>
         <v-icon size="20">mdi-arrow-down</v-icon>
       </div>
     </div>
@@ -64,8 +64,8 @@
 
     <section
       v-for="(destination, index) in destinations"
-      :key="destination.country"
-      :id="`destination-${destination.country.toLowerCase()}`"
+      :key="destination.slug"
+      :id="`destination-${destination.slug}`"
       class="destination-section snap-section"
       :style="{ backgroundImage: `url(${destination.image})` }"
     >
@@ -84,7 +84,7 @@
           rounded="pill"
           to="/home"
         >
-          EXPLORE
+          {{ t('landing.explore') }}
           <v-icon end>mdi-arrow-right</v-icon>
         </v-btn>
       </div>
@@ -95,9 +95,11 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import BackToTopButton from '@/components/common/BackToTopButton.vue'
 
+const { t } = useI18n()
 const landingPageRef = ref(null)
 const activeSectionIndex = ref(0)
 const showDelayedEnterJourney = ref(false)
@@ -241,78 +243,88 @@ onBeforeUnmount(() => {
   }
 })
 
-const scrollToDestination = (countryName) => {
-  const target = document.getElementById(`destination-${countryName.toLowerCase()}`)
+const scrollToDestination = (countrySlug) => {
+  const target = document.getElementById(`destination-${countrySlug}`)
   if (target) {
     target.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 }
 
-const countries = [
+const countries = computed(() => [
   {
-    name: 'NORWAY',
-    desc: 'Fjords, mountains & the midnight sun',
+    slug: 'norway',
+    name: t('landing.countries.norway.name'),
+    desc: t('landing.countries.norway.desc'),
     icon: 'mdi-image-filter-hdr',
     image: new URL('@/assets/images/Norway/norway.jpg', import.meta.url).href
   },
   {
-    name: 'SWEDEN',
-    desc: 'Vast wilderness & serene lakes',
+    slug: 'sweden',
+    name: t('landing.countries.sweden.name'),
+    desc: t('landing.countries.sweden.desc'),
     icon: 'mdi-pine-tree',
     image: new URL('@/assets/images/Sweden/sweden.jpg', import.meta.url).href
   },
   {
-    name: 'FINLAND',
-    desc: 'Arctic forests & magical winters',
+    slug: 'finland',
+    name: t('landing.countries.finland.name'),
+    desc: t('landing.countries.finland.desc'),
     icon: 'mdi-snowflake',
     image: new URL('@/assets/images/Finland/finland.jpg', import.meta.url).href
   },
   {
-    name: 'ICELAND',
-    desc: 'Fire, ice & natural wonders',
+    slug: 'iceland',
+    name: t('landing.countries.iceland.name'),
+    desc: t('landing.countries.iceland.desc'),
     icon: 'mdi-volcano',
     image: new URL('@/assets/images/Iceland/iceland.jpg', import.meta.url).href
   },
   {
-    name: 'DENMARK',
-    desc: 'Coastal charm & timeless cities',
+    slug: 'denmark',
+    name: t('landing.countries.denmark.name'),
+    desc: t('landing.countries.denmark.desc'),
     icon: 'mdi-lighthouse',
     image: new URL('@/assets/images/Denmark/denmark.jpg', import.meta.url).href
   }
-]
+])
 
-const destinations = [
+const destinations = computed(() => [
   {
-    country: 'NORWAY',
-    place: 'Geirangerfjord',
-    description: 'Sail between towering cliffs and waterfalls in Norway\'s iconic UNESCO fjord.',
+    slug: 'norway',
+    country: t('landing.destinations.norway.country'),
+    place: t('landing.destinations.norway.place'),
+    description: t('landing.destinations.norway.description'),
     image: new URL('@/assets/images/Norway/Geirangerfjord.jpg', import.meta.url).href
   },
   {
-    country: 'SWEDEN',
-    place: 'Abisko National Park',
-    description: 'A premier Arctic destination for northern lights, hiking trails, and crisp alpine air.',
+    slug: 'sweden',
+    country: t('landing.destinations.sweden.country'),
+    place: t('landing.destinations.sweden.place'),
+    description: t('landing.destinations.sweden.description'),
     image: new URL('@/assets/images/Sweden/AbiskoNationalPark.jpg', import.meta.url).href
   },
   {
-    country: 'FINLAND',
-    place: 'Rovaniemi, Lapland',
-    description: 'Experience snowy forests, reindeer culture, and magical winter nights above the Arctic Circle.',
+    slug: 'finland',
+    country: t('landing.destinations.finland.country'),
+    place: t('landing.destinations.finland.place'),
+    description: t('landing.destinations.finland.description'),
     image: new URL('@/assets/images/Finland/Rovaniemi.jpg', import.meta.url).href
   },
   {
-    country: 'ICELAND',
-    place: 'Jokulsarlon Glacier Lagoon',
-    description: 'Watch blue icebergs drift through glacier waters framed by dramatic black-sand shores.',
+    slug: 'iceland',
+    country: t('landing.destinations.iceland.country'),
+    place: t('landing.destinations.iceland.place'),
+    description: t('landing.destinations.iceland.description'),
     image: new URL('@/assets/images/Iceland/JokulsarlonGlacierLagoon.jpg', import.meta.url).href
   },
   {
-    country: 'DENMARK',
-    place: 'Nyhavn, Copenhagen',
-    description: 'Stroll colorful harbor facades, canals, and cozy Nordic city life in Denmark\'s capital.',
+    slug: 'denmark',
+    country: t('landing.destinations.denmark.country'),
+    place: t('landing.destinations.denmark.place'),
+    description: t('landing.destinations.denmark.description'),
     image: new URL('@/assets/images/Denmark/Nyhavn.jpg', import.meta.url).href
   }
-]
+])
 </script>
 
 <style scoped>
