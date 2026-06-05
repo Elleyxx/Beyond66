@@ -7,7 +7,9 @@ $allowedOrigins = [
     'https://beyond66-j79m.vercel.app',
 ];
 
-if (in_array($origin, $allowedOrigins, true)) {
+$isAllowedVercelOrigin = (bool) preg_match('/^https:\/\/[a-z0-9-]+\.vercel\.app$/i', $origin);
+
+if (in_array($origin, $allowedOrigins, true) || $isAllowedVercelOrigin) {
     header("Access-Control-Allow-Origin: $origin");
     header('Vary: Origin');
 }

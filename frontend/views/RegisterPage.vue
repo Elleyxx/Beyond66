@@ -110,6 +110,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { API_BASE } from '../services/apiBase'
 
 const name = ref('')
 const username = ref('')
@@ -123,7 +124,6 @@ const errorMessage = ref('')
 const successMessage = ref('')
 const isLoading = ref(false)
 const router = useRouter()
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
 
 async function handleRegister() {
   errorMessage.value = ''

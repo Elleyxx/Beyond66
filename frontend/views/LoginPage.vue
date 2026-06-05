@@ -55,6 +55,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { API_BASE } from '../services/apiBase'
 import { setAuthSession } from '../utils/auth'
 
 const username = ref('')
@@ -65,7 +66,6 @@ const errorMessage = ref('')
 const isLoading = ref(false)
 const router = useRouter()
 const route = useRoute()
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
 
 async function handleLogin() {
   errorMessage.value = ''

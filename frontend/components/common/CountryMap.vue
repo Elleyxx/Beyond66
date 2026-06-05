@@ -50,8 +50,8 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useTheme } from 'vuetify'
 import { SvgMap } from 'vue-svg-map'
 import world from '@svg-maps/world'
+import { API_BASE } from '../../services/apiBase'
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'
 const theme = useTheme()
 
 const heroSectionRef = ref(null)

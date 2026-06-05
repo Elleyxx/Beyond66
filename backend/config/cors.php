@@ -6,9 +6,11 @@ $allowedOrigins = [
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$isAllowedVercelOrigin = (bool) preg_match('/^https:\/\/[a-z0-9-]+\.vercel\.app$/i', $origin);
 
-if (in_array($origin, $allowedOrigins, true)) {
+if (in_array($origin, $allowedOrigins, true) || $isAllowedVercelOrigin) {
     header("Access-Control-Allow-Origin: $origin");
+    header('Vary: Origin');
 }
 
 header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
