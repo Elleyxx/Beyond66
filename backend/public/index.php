@@ -1,9 +1,35 @@
 <?php
 
-require_once __DIR__ . '/../config/cors.php';
-require_once __DIR__ . '/../config/bootstrap_database.php';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-header('Content-Type: application/json; charset=utf-8');
+$allowedOrigins = [
+    'http://localhost:5173',
+    'https://beyond66-j79m.vercel.app',
+];
+
+if (in_array($origin, $allowedOrigins, true)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header('Vary: Origin');
+}
+
+header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
+if (str_contains($_SERVER['REQUEST_URI'], '/api/health')) {
+    echo json_encode([
+        'success' => true,
+        'status' => 'ok'
+    ]);
+    exit;
+}
+
+require_once __DIR__ . '/../config/bootstrap_database.php';
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
@@ -35,11 +61,6 @@ if (str_starts_with($uri, '/api/dashboard')) {
 
 if (str_starts_with($uri, '/api/saved-items')) {
     require_once __DIR__ . '/../routes/saved_items.php';
-    exit;
-}
-
-if ($uri === '/api/health') {
-    echo json_encode(['success' => true, 'status' => 'ok']);
     exit;
 }
 
