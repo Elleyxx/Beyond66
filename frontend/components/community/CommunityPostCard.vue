@@ -30,7 +30,14 @@
       <div class="post-actions">
         <button type="button"><i class="bi bi-heart"></i> {{ post.likes || 0 }}</button>
         <button type="button"><i class="bi bi-chat"></i> {{ post.comments || 0 }}</button>
-        <button type="button" @click="$emit('save')"><i class="bi bi-bookmark"></i> {{ t('community.card.save') }}</button>
+        <button v-if="post.isOwner" type="button" @click="$emit('edit')">
+          <i class="bi bi-pencil-square"></i>
+          Edit Post
+        </button>
+        <button v-else type="button" @click="$emit('save')">
+          <i class="bi bi-bookmark"></i>
+          {{ t('community.card.save') }}
+        </button>
         <button type="button" @click="$emit('use-plan')">{{ t('community.card.usePlan') }}</button>
       </div>
     </div>
@@ -40,15 +47,16 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { resolveAssetUrl } from '@/services/apiBase'
 
 const props = defineProps({
   post: { type: Object, required: true },
 })
 
-defineEmits(['save', 'use-plan'])
+defineEmits(['save', 'edit', 'use-plan'])
 const { t } = useI18n()
 
-const coverImage = computed(() => props.post.coverImage || props.post.cover_image || '')
+const coverImage = computed(() => resolveAssetUrl(props.post.coverImage || props.post.cover_image || ''))
 const authorInitial = computed(() => String(props.post.authorName || props.post.author_name || 'T').slice(0, 1).toUpperCase())
 const tags = computed(() => {
   const rawTags = Array.isArray(props.post.tags)

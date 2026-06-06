@@ -68,7 +68,7 @@ function ensureDatabaseReady(): void
             user_id BIGINT UNSIGNED NOT NULL,
             title VARCHAR(255) NULL,
             description TEXT NULL,
-            cover_image VARCHAR(500) NULL,
+            cover_image MEDIUMTEXT NULL,
             visibility ENUM('private','public') DEFAULT 'private',
             trip_data JSON NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -89,7 +89,7 @@ function ensureDatabaseReady(): void
             user_id BIGINT UNSIGNED NOT NULL,
             title VARCHAR(255) NULL,
             description TEXT NULL,
-            cover_image VARCHAR(500) NULL,
+            cover_image MEDIUMTEXT NULL,
             status ENUM('public','private') DEFAULT 'public',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -401,6 +401,9 @@ function ensureDatabaseReady(): void
     if (!$avatarColumnExists) {
         $dbConn->query("ALTER TABLE users ADD COLUMN avatar_url VARCHAR(500) NULL AFTER display_name");
     }
+
+    $dbConn->query("ALTER TABLE trips MODIFY cover_image MEDIUMTEXT NULL");
+    $dbConn->query("ALTER TABLE community_posts MODIFY cover_image MEDIUMTEXT NULL");
 
     // Backward-safe migration: older setup scripts created saved_items without item_slug
     // and with a narrower item_type enum.

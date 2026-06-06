@@ -15,6 +15,7 @@
         :key="post.id"
         :post="post"
         @save="$emit('save', post)"
+        @edit="$emit('edit', post)"
         @use-plan="$emit('use-plan', post)"
       />
     </div>
@@ -30,7 +31,7 @@ defineProps({
   loading: { type: Boolean, default: false },
 })
 
-defineEmits(['save', 'use-plan'])
+defineEmits(['save', 'edit', 'use-plan'])
 
 const { t } = useI18n()
 </script>

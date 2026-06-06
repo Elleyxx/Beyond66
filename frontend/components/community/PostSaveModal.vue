@@ -1,7 +1,7 @@
 <template>
   <teleport to="body">
     <div class="backdrop" @click.self="$emit('close')">
-      <section class="modal">
+      <section class="community-save-modal">
         <h2>{{ t('community.detail.saveModal.title') }}</h2>
         <p>{{ t('community.detail.saveModal.message', { title: post?.title || t('community.detail.saveModal.fallbackTitle') }) }}</p>
         <div class="actions">
@@ -35,7 +35,7 @@ const { t } = useI18n()
   background: rgba(0, 0, 0, 0.48);
 }
 
-.modal {
+.community-save-modal {
   width: min(100%, 420px);
   border-radius: 8px;
   padding: 22px;

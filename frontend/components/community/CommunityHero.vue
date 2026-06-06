@@ -45,11 +45,26 @@ const emit = defineEmits(['update:filters'])
 const { t } = useI18n()
 
 const pills = computed(() => [
-  { label: t('community.filters.all'), value: 'all' },
-  { label: t('community.filters.plan'), value: 'plan' },
-  { label: t('community.filters.story'), value: 'story' },
-  { label: t('community.filters.photo'), value: 'photo' },
-  { label: t('community.filters.mine'), value: 'mine' },
+  {
+    label: t('community.filters.all'),
+    value: 'all',
+  },
+  {
+    label: t('community.filters.journey'),
+    value: 'journey',
+  },
+  {
+    label: t('community.filters.diary'),
+    value: 'diary',
+  },
+  {
+    label: t('community.filters.completeJourney'),
+    value: 'complete_journey',
+  },
+  {
+    label: t('community.filters.myPosts'),
+    value: 'my_posts',
+  },
 ])
 
 function patch(update) {

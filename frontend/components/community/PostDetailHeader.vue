@@ -1,6 +1,6 @@
 <template>
   <header class="detail-header">
-    <img v-if="post?.cover_image || post?.coverImage" :src="post.cover_image || post.coverImage" :alt="post.title" />
+    <img v-if="coverImage" :src="coverImage" :alt="post?.title" />
     <button class="back-button" type="button" @click="goBack">
       <i class="bi bi-arrow-left"></i>
       <span>{{ t('community.detail.back') }}</span>
@@ -13,26 +13,29 @@
         <span class="description">{{ post?.description || t('community.detail.descriptionFallback') }}</span>
       </div>
 
-      <button class="save-button" type="button" @click="$emit('save')">
-        <i class="bi bi-bookmark"></i>
-        {{ t('community.detail.savePost') }}
+      <button class="save-button" type="button" @click="$emit(post?.isOwner ? 'edit' : 'save')">
+        <i :class="post?.isOwner ? 'bi bi-pencil-square' : 'bi bi-bookmark'"></i>
+        {{ post?.isOwner ? 'Edit Post' : t('community.detail.savePost') }}
       </button>
     </div>
   </header>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { resolveAssetUrl } from '@/services/apiBase'
 
-defineProps({
+const props = defineProps({
   post: { type: Object, default: null },
 })
 
-defineEmits(['save'])
+defineEmits(['save', 'edit'])
 
 const router = useRouter()
 const { t } = useI18n()
+const coverImage = computed(() => resolveAssetUrl(props.post?.cover_image || props.post?.coverImage || ''))
 
 function goBack() {
   router.push('/community')

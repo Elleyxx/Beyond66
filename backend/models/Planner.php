@@ -47,6 +47,7 @@ class Planner
             $description = trim($description);
             $coverImage = trim($coverImage);
             $visibility = strtolower($visibility) === 'public' ? 'public' : 'private';
+            $existingDiary = $planId ? $this->getExistingDiary($planId, $userId) : null;
             $tripData = $this->encodeTripData(
                 $tripMeta,
                 $timelineDays,
@@ -55,7 +56,8 @@ class Planner
                 $weatherForecast,
                 $auroraForecast,
                 $summary,
-                $tags
+                $tags,
+                $existingDiary
             );
 
             if ($planId) {
@@ -139,6 +141,81 @@ class Planner
         return array_map(fn ($trip) => $this->hydrateTrip($trip), $stmt->fetchAll());
     }
 
+    public function saveJourneyDiary(int $userId, int $tripId, array $diary): ?array
+    {
+        $trip = $this->getOwnedTrip($tripId, $userId);
+        if (!$trip) {
+            return null;
+        }
+
+        $tripData = json_decode((string) ($trip['trip_data'] ?? '{}'), true) ?: [];
+        $tripData['diary'] = [
+            'title' => trim((string) ($diary['title'] ?? '')),
+            'story' => trim((string) ($diary['story'] ?? '')),
+            'country' => trim((string) ($diary['country'] ?? ($tripData['meta']['country'] ?? ''))),
+            'photos' => array_values(array_filter(array_map('strval', is_array($diary['photos'] ?? null) ? $diary['photos'] : []))),
+            'updatedAt' => date('c'),
+        ];
+
+        $description = trim((string) ($trip['description'] ?? ''));
+        if ($description === '' && $tripData['diary']['story'] !== '') {
+            $description = $tripData['diary']['story'];
+        }
+
+        $stmt = $this->pdo->prepare(
+            'UPDATE trips
+             SET description = :description,
+                 trip_data = :trip_data
+             WHERE id = :id AND user_id = :user_id'
+        );
+        $stmt->execute([
+            'id' => $tripId,
+            'user_id' => $userId,
+            'description' => $description,
+            'trip_data' => json_encode($tripData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        ]);
+
+        $this->syncCommunityPost(
+            $tripId,
+            $userId,
+            (string) ($trip['title'] ?? 'Untitled journey'),
+            $description,
+            (string) ($trip['cover_image'] ?? ''),
+            (string) ($trip['visibility'] ?? 'private')
+        );
+
+        return $this->getLatestHydratedTrip($tripId, $userId);
+    }
+
+    public function updateJourneyVisibility(int $userId, int $tripId, string $visibility): ?array
+    {
+        $trip = $this->getOwnedTrip($tripId, $userId);
+        if (!$trip) {
+            return null;
+        }
+
+        $visibility = strtolower($visibility) === 'public' ? 'public' : 'private';
+        $stmt = $this->pdo->prepare(
+            'UPDATE trips SET visibility = :visibility WHERE id = :id AND user_id = :user_id'
+        );
+        $stmt->execute([
+            'id' => $tripId,
+            'user_id' => $userId,
+            'visibility' => $visibility,
+        ]);
+
+        $this->syncCommunityPost(
+            $tripId,
+            $userId,
+            (string) ($trip['title'] ?? 'Untitled journey'),
+            (string) ($trip['description'] ?? ''),
+            (string) ($trip['cover_image'] ?? ''),
+            $visibility
+        );
+
+        return $this->getLatestHydratedTrip($tripId, $userId);
+    }
+
     private function encodeTripData(
         array $tripMeta,
         array $timelineDays,
@@ -147,9 +224,10 @@ class Planner
         array $weatherForecast,
         array $auroraForecast,
         string $summary,
-        array $tags
+        array $tags,
+        ?array $diary = null
     ): string {
-        return json_encode([
+        $data = [
             'meta' => $tripMeta,
             'timeline' => $timelineDays,
             'budget' => $budgetEstimate,
@@ -158,7 +236,13 @@ class Planner
             'checklist' => $packingList,
             'summary' => $summary,
             'tags' => $this->normalizeTags($tags),
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        ];
+
+        if ($diary) {
+            $data['diary'] = $diary;
+        }
+
+        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
     private function normalizeTags(array $tags): array
@@ -247,6 +331,7 @@ class Planner
     {
         $tripData = json_decode((string) ($trip['trip_data'] ?? '{}'), true) ?: [];
         $meta = is_array($tripData['meta'] ?? null) ? $tripData['meta'] : [];
+        $diary = is_array($tripData['diary'] ?? null) ? $tripData['diary'] : null;
 
         return [
             'plan_id' => (int) $trip['id'],
@@ -259,6 +344,9 @@ class Planner
             'weatherForecast' => is_array($tripData['weather'] ?? null) ? $tripData['weather'] : [],
             'auroraForecast' => $tripData['aurora'] ?? null,
             'summary' => (string) ($tripData['summary'] ?? ''),
+            'diary' => $diary,
+            'hasPlanner' => true,
+            'hasDiary' => $this->hasDiary($diary),
             'tags' => is_array($tripData['tags'] ?? null) ? $tripData['tags'] : [],
             'description' => (string) ($trip['description'] ?? ''),
             'visibility' => (string) ($trip['visibility'] ?? 'private'),
@@ -266,5 +354,45 @@ class Planner
             'savedAt' => $trip['created_at'] ?? null,
             'updatedAt' => $trip['updated_at'] ?? null,
         ];
+    }
+
+    private function getExistingDiary(int $tripId, int $userId): ?array
+    {
+        $trip = $this->getOwnedTrip($tripId, $userId);
+        if (!$trip) {
+            return null;
+        }
+
+        $tripData = json_decode((string) ($trip['trip_data'] ?? '{}'), true) ?: [];
+        return is_array($tripData['diary'] ?? null) ? $tripData['diary'] : null;
+    }
+
+    private function getOwnedTrip(int $tripId, int $userId): ?array
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM trips WHERE id = :id AND user_id = :user_id LIMIT 1');
+        $stmt->execute([
+            'id' => $tripId,
+            'user_id' => $userId,
+        ]);
+        $trip = $stmt->fetch();
+
+        return $trip ?: null;
+    }
+
+    private function getLatestHydratedTrip(int $tripId, int $userId): ?array
+    {
+        $trip = $this->getOwnedTrip($tripId, $userId);
+        return $trip ? $this->hydrateTrip($trip) : null;
+    }
+
+    private function hasDiary(?array $diary): bool
+    {
+        if (!$diary) {
+            return false;
+        }
+
+        return trim((string) ($diary['story'] ?? '')) !== ''
+            || trim((string) ($diary['title'] ?? '')) !== ''
+            || !empty($diary['photos']);
     }
 }

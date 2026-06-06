@@ -13,83 +13,85 @@
           </button>
         </div>
 
-        <label>
-          {{ t('planner.saveModal.tripTitle') }}
-          <input v-model="title" type="text" :placeholder="t('planner.saveModal.titlePlaceholder')" />
-        </label>
+        <div class="modal-body">
+          <label>
+            {{ t('planner.saveModal.tripTitle') }}
+            <input v-model="title" type="text" :placeholder="t('planner.saveModal.titlePlaceholder')" />
+          </label>
 
-        <label>
-          {{ t('planner.saveModal.description') }}
-          <textarea
-            v-model="description"
-            rows="4"
-            :placeholder="t('planner.saveModal.descriptionPlaceholder')"
-          ></textarea>
-        </label>
+          <label>
+            {{ t('planner.saveModal.description') }}
+            <textarea
+              v-model="description"
+              rows="4"
+              :placeholder="t('planner.saveModal.descriptionPlaceholder')"
+            ></textarea>
+          </label>
 
-        <label>
-          {{ t('planner.saveModal.tags') }}
-          <input
-            v-model="tagsInput"
-            type="text"
-            :placeholder="t('planner.saveModal.tagsPlaceholder')"
-          />
-          <small>{{ t('planner.saveModal.tagsHint') }}</small>
-        </label>
-
-        <div v-if="tags.length" class="tag-preview">
-          <span v-for="tag in tags" :key="tag">#{{ tag }}</span>
-        </div>
-
-        <div class="tag-suggestions" aria-label="Suggested tags">
-          <span>{{ t('planner.saveModal.suggestedTags') }}</span>
-
-          <button
-            v-for="tag in displayedSuggestedTags"
-            :key="tag"
-            type="button"
-            :class="{ selected: hasTag(tag) }"
-            :disabled="hasTag(tag)"
-            @click="addSuggestedTag(tag)"
-          >
-            #{{ tag }}
-          </button>
-        </div>
-
-        <label>
-          {{ t('planner.saveModal.coverImage') }}
-
-          <div class="image-upload">
+          <label>
+            {{ t('planner.saveModal.tags') }}
             <input
-              ref="fileInput"
-              type="file"
-              accept="image/*"
-              @change="handleImageUpload"
+              v-model="tagsInput"
+              type="text"
+              :placeholder="t('planner.saveModal.tagsPlaceholder')"
             />
+            <small>{{ t('planner.saveModal.tagsHint') }}</small>
+          </label>
 
-            <div v-if="coverPreview" class="preview">
-              <img :src="coverPreview" :alt="t('planner.saveModal.coverAlt')" />
-            </div>
-
-            <div v-else class="upload-placeholder">
-              <i class="bi bi-image"></i>
-              <span>{{ t('planner.saveModal.chooseCover') }}</span>
-            </div>
+          <div v-if="tags.length" class="tag-preview">
+            <span v-for="tag in tags" :key="tag">#{{ tag }}</span>
           </div>
-        </label>
 
-        <div v-if="!isEditing" class="visibility-options">
-          <span>{{ t('planner.saveModal.visibility') }}</span>
+          <div class="tag-suggestions" aria-label="Suggested tags">
+            <span>{{ t('planner.saveModal.suggestedTags') }}</span>
+
+            <button
+              v-for="tag in displayedSuggestedTags"
+              :key="tag"
+              type="button"
+              :class="{ selected: hasTag(tag) }"
+              :disabled="hasTag(tag)"
+              @click="addSuggestedTag(tag)"
+            >
+              #{{ tag }}
+            </button>
+          </div>
 
           <label>
-            <input v-model="visibility" type="radio" value="private" />
-            {{ t('planner.saveModal.private') }}
+            {{ t('planner.saveModal.coverImage') }}
+
+            <div class="image-upload">
+              <input
+                ref="fileInput"
+                type="file"
+                accept="image/*"
+                @change="handleImageUpload"
+              />
+
+              <div v-if="coverPreview" class="preview">
+                <img :src="coverPreview" :alt="t('planner.saveModal.coverAlt')" />
+              </div>
+
+              <div v-else class="upload-placeholder">
+                <i class="bi bi-image"></i>
+                <span>{{ t('planner.saveModal.chooseCover') }}</span>
+              </div>
+            </div>
           </label>
 
-          <label>
-            <input v-model="visibility" type="radio" value="public" />
-            {{ t('planner.saveModal.public') }}
-          </label>
+          <div v-if="!isEditing" class="visibility-options">
+            <span>{{ t('planner.saveModal.visibility') }}</span>
+
+            <label>
+              <input v-model="visibility" type="radio" value="private" />
+              {{ t('planner.saveModal.private') }}
+            </label>
+
+            <label>
+              <input v-model="visibility" type="radio" value="public" />
+              {{ t('planner.saveModal.public') }}
+            </label>
+          </div>
         </div>
 
         <div class="modal-actions">
@@ -236,20 +238,21 @@ function handleImageUpload(event) {
   z-index: 1000;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: clamp(14px, 3vw, 28px);
   background: rgba(0, 0, 0, 0.48);
   backdrop-filter: blur(8px);
 }
 
 .save-modal {
-  width: min(100%, 520px);
-  border-radius: 28px;
-  padding: 24px;
+  width: min(94vw, 780px);
+  max-height: min(86vh, 760px);
+  border-radius: 24px;
   background: rgb(var(--v-theme-surface));
   border: 1px solid rgba(var(--v-theme-on-surface), 0.14);
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.24);
   display: grid;
-  gap: 18px;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
 }
 
 .modal-head {
@@ -257,6 +260,31 @@ function handleImageUpload(event) {
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+}
+
+.modal-body {
+  display: grid;
+  gap: 18px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 22px 28px;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: rgba(var(--v-theme-on-surface), 0.06);
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  border: 3px solid rgb(var(--v-theme-surface));
+  border-radius: 999px;
+  background: rgba(var(--v-theme-primary), 0.65);
 }
 
 .eyebrow {
@@ -279,10 +307,8 @@ h2 {
   width: 36px;
   height: 36px;
   border: 0;
-  border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(var(--v-theme-on-surface), 0.08);
   color: rgb(var(--v-theme-text));
   cursor: pointer;
 }
@@ -403,6 +429,9 @@ textarea {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  padding: 18px 28px 24px;
+  border-top: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+  background: rgb(var(--v-theme-surface));
 }
 
 button {
@@ -458,8 +487,31 @@ button.secondary {
 
 .preview img {
   width: 100%;
-  height: 180px;
+  height: 220px;
   object-fit: cover;
   display: block;
+}
+
+@media (max-width: 640px) {
+  .save-modal {
+    width: min(100%, 560px);
+    max-height: 90vh;
+    border-radius: 18px;
+  }
+
+  .modal-head,
+  .modal-body,
+  .modal-actions {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <article class="post-card">
     <RouterLink class="cover-link" :to="`/community/${post.id}`">
-      <img v-if="post.cover_image || post.coverImage" :src="post.cover_image || post.coverImage" :alt="post.title" />
+      <img v-if="coverImage" :src="coverImage" :alt="post.title" />
       <div v-else class="cover-placeholder">{{ countryLabel }}</div>
     </RouterLink>
 
@@ -29,12 +29,15 @@
 
 <script setup>
 import { computed } from 'vue'
+import { resolveAssetUrl } from '@/services/apiBase'
 
 const props = defineProps({
   post: { type: Object, required: true },
 })
 
 defineEmits(['save'])
+
+const coverImage = computed(() => resolveAssetUrl(props.post.cover_image || props.post.coverImage || ''))
 
 const countryLabel = computed(() => {
   return props.post?.trip?.meta?.country || props.post?.country || 'Nordic Trip'

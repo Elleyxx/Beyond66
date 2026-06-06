@@ -21,6 +21,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { resolveAssetUrl } from '@/services/apiBase'
 
 defineProps({
   posts: { type: Array, default: () => [] },
@@ -29,7 +30,7 @@ defineProps({
 const { t } = useI18n()
 
 function coverImage(post) {
-  return post.coverImage || post.cover_image || ''
+  return resolveAssetUrl(post.coverImage || post.cover_image || '')
 }
 </script>
 

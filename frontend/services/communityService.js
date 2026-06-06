@@ -37,6 +37,13 @@ export function saveCommunityPost(postId) {
   return request(`/api/community/posts/${postId}/save`, { method: 'POST' })
 }
 
+export function updateCommunityPost(postId, payload) {
+  return request(`/api/community/posts/${postId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+}
+
 export function updatePostVisibility(postId, status) {
   return request(`/api/community/posts/${postId}/visibility`, {
     method: 'PATCH',

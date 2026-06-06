@@ -10,6 +10,7 @@
           :posts="filteredPosts"
           :loading="isLoading"
           @save="openSaveModal"
+          @edit="openEditModal"
           @use-plan="usePlan"
         />
       </div>
@@ -26,25 +27,34 @@
       @close="savingPost = null"
       @confirm="savePost"
     />
+
+    <PostEditModal
+      v-if="editingPost"
+      :post="editingPost"
+      @close="editingPost = null"
+      @save="updatePost"
+    />
   </main>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
+// import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import CommunityHero from '@/components/community/CommunityHero.vue'
 import CommunityPostGrid from '@/components/community/CommunityPostGrid.vue'
 import CommunitySidebar from '@/components/community/CommunitySidebar.vue'
+import PostEditModal from '@/components/community/PostEditModal.vue'
 import PostSaveModal from '@/components/community/PostSaveModal.vue'
 import TrendingPosts from '@/components/community/TrendingPosts.vue'
-import { getCommunityPosts, saveCommunityPost } from '@/services/communityService'
+import { getCommunityPosts, saveCommunityPost, updateCommunityPost } from '@/services/communityService'
 
 const router = useRouter()
-const { t } = useI18n()
+// const { t } = useI18n()
 const posts = ref([])
 const isLoading = ref(false)
 const savingPost = ref(null)
+const editingPost = ref(null)
 
 const filters = ref({
   search: '',
@@ -57,13 +67,26 @@ const filteredPosts = computed(() => {
   return posts.value.filter((post) => {
     const matchesSearch =
       !query ||
-      [post.title, post.description, post.country, post.authorName, ...(post.tags || []), ...(post.trip?.tags || [])]
-        .some((value) => String(value || '').toLowerCase().includes(query))
+      [
+        post.title,
+        post.description,
+        post.country,
+        post.authorName,
+        ...(post.tags || []),
+        ...(post.trip?.tags || []),
+      ].some((value) =>
+        String(value || '').toLowerCase().includes(query)
+      )
 
-    const matchesCategory =
-      filters.value.category === 'all' ||
-      post.type === filters.value.category ||
-      post.category === filters.value.category
+    let matchesCategory = true
+
+    if (filters.value.category === 'my_posts') {
+      matchesCategory = post.isOwner === true
+    } else if (filters.value.category !== 'all') {
+      matchesCategory =
+        post.postType === filters.value.category ||
+        post.post_type === filters.value.category
+    }
 
     return matchesSearch && matchesCategory
   })
@@ -71,13 +94,57 @@ const filteredPosts = computed(() => {
 
 const trendingPosts = computed(() => posts.value.slice(0, 3))
 
-const destinations = computed(() => [
-  { code: 'NO', name: t('countryNames.norway'), posts: 32 },
-  { code: 'IS', name: t('countryNames.iceland'), posts: 28 },
-  { code: 'FI', name: t('countryNames.finland'), posts: 19 },
-])
+const countryCodeMap = {
+  Norway: 'NO',
+  Iceland: 'IS',
+  Finland: 'FI',
+  Sweden: 'SE',
+  Denmark: 'DK',
+}
 
-const tags = ['NorthernLights', 'RoadTrip', 'Fjords', 'Photography', 'BudgetTravel']
+const destinations = computed(() => {
+  const map = {}
+
+  posts.value.forEach((post) => {
+    const country = post.country || post.trip?.country
+    if (!country) return
+
+    if (!map[country]) {
+      map[country] = {
+        code: countryCodeMap[country] || country.slice(0, 2).toUpperCase(),
+        name: country,
+        posts: 0,
+      }
+    }
+
+    map[country].posts += 1
+  })
+
+  return Object.values(map).sort((a, b) => b.posts - a.posts)
+})
+
+const tags = computed(() => {
+  const tagMap = new Map()
+
+  posts.value.forEach((post) => {
+    const postTags = [
+      ...(post.tags || []),
+      ...(post.trip?.tags || []),
+    ]
+
+    postTags.forEach((tag) => {
+      const cleanTag = String(tag).trim()
+      if (!cleanTag) return
+
+      tagMap.set(cleanTag, (tagMap.get(cleanTag) || 0) + 1)
+    })
+  })
+
+  return Array.from(tagMap.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([tag]) => tag)
+    .slice(0, 10)
+})
 
 onMounted(loadPosts)
 
@@ -96,9 +163,21 @@ function openSaveModal(post) {
   savingPost.value = post
 }
 
+function openEditModal(post) {
+  editingPost.value = post
+}
+
 async function savePost(post) {
   await saveCommunityPost(post.id)
   savingPost.value = null
+}
+
+async function updatePost(payload) {
+  if (!editingPost.value) return
+
+  const updatedPost = await updateCommunityPost(editingPost.value.id, payload)
+  posts.value = posts.value.map((post) => (post.id === updatedPost.id ? updatedPost : post))
+  editingPost.value = null
 }
 
 function usePlan(post) {

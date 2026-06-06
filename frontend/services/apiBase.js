@@ -20,3 +20,19 @@ function resolveApiBase(value) {
 export const API_BASE = trimTrailingSlash(resolveApiBase(import.meta.env.VITE_API_BASE))
 
 export const AI_API_BASE = trimTrailingSlash(resolveApiBase(import.meta.env.VITE_AI_API_BASE || API_BASE))
+
+export function resolveAssetUrl(value) {
+  if (!value || typeof value !== 'string') return ''
+
+  if (/^(https?:|data:|blob:)/i.test(value)) return value
+
+  if (value.startsWith('/uploads/')) {
+    return `${API_BASE}${value}`
+  }
+
+  if (value.startsWith('uploads/')) {
+    return `${API_BASE}/${value}`
+  }
+
+  return value
+}

@@ -215,10 +215,10 @@
     },
     "filters": {
       "all": "All",
-      "plan": "Trip Plans",
-      "story": "Travel Stories",
-      "photo": "Photography",
-      "mine": "My Posts"
+      "journey": "Journey",
+      "diary": "Travel Diaries",
+      "completeJourney": "Complete Journey",
+      "myPosts": "My Posts"
     },
     "trending": {
       "title": "Trending This Week",

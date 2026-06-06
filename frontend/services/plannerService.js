@@ -56,6 +56,64 @@ export async function loadPlannerDrafts() {
   return Array.isArray(result.data) ? result.data : []
 }
 
+export async function saveJourneyDiary(tripId, payload) {
+  const response = await fetch(`${API_BASE}/api/planner/${tripId}/diary`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      ...authHeaders(),
+    },
+    body: JSON.stringify(payload),
+  })
+
+  const result = await response.json()
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || 'Failed to save diary')
+  }
+
+  return result.data
+}
+
+export async function updateJourneyVisibility(tripId, visibility) {
+  const response = await fetch(`${API_BASE}/api/planner/${tripId}/visibility`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      ...authHeaders(),
+    },
+    body: JSON.stringify({ visibility }),
+  })
+
+  const result = await response.json()
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || 'Failed to update journey visibility')
+  }
+
+  return result.data
+}
+
+export async function uploadDiaryImages(files) {
+  const formData = new FormData()
+  files.forEach((file) => {
+    formData.append('images[]', file)
+  })
+
+  const response = await fetch(`${API_BASE}/api/planner/diary-images`, {
+    method: 'POST',
+    headers: {
+      ...authHeaders(),
+    },
+    body: formData,
+  })
+
+  const result = await response.json()
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || 'Failed to upload diary images')
+  }
+
+  return Array.isArray(result.data?.urls) ? result.data.urls : []
+}
+
 export async function generateAiPlanner(payload) {
   const response = await fetch(`${AI_API_BASE}/api/planner/ai/generate`, {
     method: 'POST',

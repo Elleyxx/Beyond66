@@ -7,7 +7,12 @@
       <p>{{ portfolio.content }}</p>
 
       <div v-if="portfolio.images?.length" class="image-grid">
-        <img v-for="image in portfolio.images" :key="image.id || image.image_url || image" :src="image.image_url || image" alt="" />
+        <img
+          v-for="image in portfolio.images"
+          :key="image.id || image.image_url || image"
+          :src="resolveAssetUrl(image.image_url || image)"
+          alt=""
+        />
       </div>
     </article>
   </section>
@@ -15,6 +20,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { resolveAssetUrl } from '@/services/apiBase'
 
 defineProps({
   portfolios: { type: Array, default: () => [] },

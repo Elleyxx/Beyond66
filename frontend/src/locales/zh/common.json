@@ -215,10 +215,10 @@
     },
     "filters": {
       "all": "全部",
-      "plan": "行程计划",
-      "story": "旅行故事",
-      "photo": "摄影",
-      "mine": "我的帖子"
+      "journey": "行程计划",
+      "diary": "旅行日记  ",
+      "completeJourney": "旅行完成",
+      "myPosts": "我的帖子"
     },
     "trending": {
       "title": "本周热门",

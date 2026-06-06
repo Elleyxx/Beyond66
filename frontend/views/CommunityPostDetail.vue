@@ -1,25 +1,23 @@
 <template>
   <main class="post-detail-page">
-    <PostDetailHeader :post="post" @save="isSaveModalOpen = true" />
+    <PostDetailHeader :post="post" @save="isSaveModalOpen = true" @edit="isEditModalOpen = true" />
 
     <div class="detail-content">
-      <section class="trip-overview-panel">
-        <PostTripSummary :trip="post?.trip" />
+      <div class="left-column">
+        <section class="summary-panel">
+          <PostTripSummary :trip="post?.trip" />
+        </section>
+        <section class="comments-panel">
+          <PostCommentList :comments="comments" />
+          <PostCommentBox @submit="addComment" />
+        </section>
+      </div>
+
+      <section class="itinerary-panel">
         <PostItineraryPreview :timeline="post?.trip?.timeline || []" />
       </section>
 
-      <PostPortfolio v-if="hasPortfolios" :portfolios="post?.portfolios || []" />
-
-      <section class="comments-panel">
-        <PostCommentList :comments="comments" />
-        <PostCommentBox @submit="addComment" />
-      </section>
-
-      <PostVisibilityControl
-        v-if="isOwner"
-        :status="post?.status || 'private'"
-        @update:status="updateVisibility"
-      />
+      <PostPortfolio v-if="hasPortfolios" class="portfolio-panel" :portfolios="post?.portfolios || []" />
     </div>
 
     <PostSaveModal
@@ -27,6 +25,13 @@
       :post="post"
       @close="isSaveModalOpen = false"
       @confirm="savePost"
+    />
+
+    <PostEditModal
+      v-if="isEditModalOpen"
+      :post="post"
+      @close="isEditModalOpen = false"
+      @save="updatePost"
     />
   </main>
 </template>
@@ -37,24 +42,24 @@ import { useRoute } from 'vue-router'
 import PostCommentBox from '@/components/community/PostCommentBox.vue'
 import PostCommentList from '@/components/community/PostCommentList.vue'
 import PostDetailHeader from '@/components/community/PostDetailHeader.vue'
+import PostEditModal from '@/components/community/PostEditModal.vue'
 import PostItineraryPreview from '@/components/community/PostItineraryPreview.vue'
 import PostPortfolio from '@/components/community/PostPortfolio.vue'
 import PostSaveModal from '@/components/community/PostSaveModal.vue'
 import PostTripSummary from '@/components/community/PostTripSummary.vue'
-import PostVisibilityControl from '@/components/community/PostVisibilityControl.vue'
 import {
   addPostComment,
   getCommunityPost,
   saveCommunityPost,
-  updatePostVisibility,
+  updateCommunityPost,
 } from '@/services/communityService'
 
 const route = useRoute()
 const post = ref(null)
 const comments = ref([])
 const isSaveModalOpen = ref(false)
+const isEditModalOpen = ref(false)
 
-const isOwner = computed(() => Boolean(post.value?.isOwner))
 const hasPortfolios = computed(() => Boolean(post.value?.portfolios?.length))
 
 onMounted(loadPost)
@@ -75,12 +80,11 @@ async function savePost() {
   isSaveModalOpen.value = false
 }
 
-async function updateVisibility(status) {
-  post.value = {
-    ...post.value,
-    status: await updatePostVisibility(post.value.id, status),
-  }
+async function updatePost(payload) {
+  post.value = await updateCommunityPost(post.value.id, payload)
+  isEditModalOpen.value = false
 }
+
 </script>
 
 <style scoped>
@@ -94,35 +98,61 @@ async function updateVisibility(status) {
   width: 90%;
   margin: 26px auto 0;
   display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(320px, 4fr);
+  grid-template-areas:
+    "left itinerary"
+    "portfolio portfolio";
+  gap: 28px;
+  align-items: start;
+}
+
+.left-column {
+  grid-area: left;
+  display: grid;
   gap: 28px;
 }
 
-.trip-overview-panel {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(260px, 3fr);
-  gap: 18px;
-  padding: 28px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
-  border-radius: 42px;
-  background: rgba(var(--v-theme-surface), 0.72);
+.summary-panel {
+  min-width: 0;
+}
+
+.itinerary-panel {
+  grid-area: itinerary;
 }
 
 .comments-panel {
-  display: grid;
-  gap: 16px;
+  min-width: 0;
+}
+
+.portfolio-panel {
+  grid-area: portfolio;
+}
+
+.summary-panel,
+.comments-panel,
+.itinerary-panel {
   padding: 28px;
   border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
   border-radius: 34px;
   background: rgba(var(--v-theme-surface), 0.72);
 }
 
+.comments-panel {
+  display: grid;
+  gap: 16px;
+}
+
 @media (max-width: 980px) {
-  .trip-overview-panel {
+  .detail-content {
     grid-template-columns: 1fr;
-    border-radius: 28px;
-    padding: 18px;
+    grid-template-areas:
+      "left"
+      "itinerary"
+      "portfolio";
   }
 
+  .summary-panel,
+  .itinerary-panel,
   .comments-panel {
     border-radius: 24px;
     padding: 18px;

@@ -32,6 +32,11 @@ const currentLanguageLabel = computed(() => {
 
 const searchSuggestions = computed(() => searchSite(searchQuery.value, t, { limit: 12, locale: locale.value }))
 const hasSearchQuery = computed(() => searchQuery.value.trim().length > 0)
+const isExploreActive = computed(() => route.path === '/explore' || route.path.startsWith('/country/'))
+
+function isNavActive(path) {
+  return route.path === path || route.path.startsWith(`${path}/`)
+}
 
 // Language changer logic
 function toggleLanguage() {
@@ -157,9 +162,16 @@ function handleScroll() {
   isInHeroScroll.value = scrollY > 0 && isOverHero
 }
 
+function handleResize() {
+  if (window.innerWidth > 1250 && mobileDrawer.value) {
+    mobileDrawer.value = false
+  }
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
   window.addEventListener('storage', syncAuthState)
+  window.addEventListener('resize', handleResize)
   syncAuthState()
   handleScroll()
 })
@@ -175,6 +187,7 @@ watch(
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('storage', syncAuthState)
+  window.removeEventListener('resize', handleResize)
 })
 </script>
 
@@ -187,43 +200,73 @@ onBeforeUnmount(() => {
     class="mobile-drawer"
   >
     <v-list nav>
-      <v-list-item to="/home" @click="mobileDrawer = false" :title="t('nav.home')" />
-      <v-list-item to="/explore" @click="mobileDrawer = false" :title="t('nav.explore')" />
+      <v-list-item
+        to="/home"
+        :class="{ 'drawer-link-active': isNavActive('/home') }"
+        @click="mobileDrawer = false"
+        :title="t('nav.home')"
+      />
+      <v-list-item
+        to="/explore"
+        :class="{ 'drawer-link-active': isExploreActive }"
+        @click="mobileDrawer = false"
+        :title="t('nav.explore')"
+      />
       <v-list-item
         class="sidebar-subitem"
         to="/country/norway"
+        :class="{ 'drawer-link-active': route.path === '/country/norway' }"
         :title="t('countryNames.norway')"
         @click="mobileDrawer = false"
       />
       <v-list-item
         class="sidebar-subitem"
         to="/country/sweden"
+        :class="{ 'drawer-link-active': route.path === '/country/sweden' }"
         :title="t('countryNames.sweden')"
         @click="mobileDrawer = false"
       />
       <v-list-item
         class="sidebar-subitem"
         to="/country/finland"
+        :class="{ 'drawer-link-active': route.path === '/country/finland' }"
         :title="t('countryNames.finland')"
         @click="mobileDrawer = false"
       />
       <v-list-item
         class="sidebar-subitem"
         to="/country/iceland"
+        :class="{ 'drawer-link-active': route.path === '/country/iceland' }"
         :title="t('countryNames.iceland')"
         @click="mobileDrawer = false"
       />
       <v-list-item
         class="sidebar-subitem"
         to="/country/denmark"
+        :class="{ 'drawer-link-active': route.path === '/country/denmark' }"
         :title="t('countryNames.denmark')"
         @click="mobileDrawer = false"
       />
 
-      <v-list-item to="/trip-planner" @click="mobileDrawer = false" :title="t('nav.planner')" />
-      <v-list-item to="/community" @click="mobileDrawer = false" :title="t('nav.community')" />
+      <v-list-item
+        to="/trip-planner"
+        :class="{ 'drawer-link-active': isNavActive('/trip-planner') }"
+        @click="mobileDrawer = false"
+        :title="t('nav.planner')"
+      />
+      <v-list-item
+        to="/community"
+        :class="{ 'drawer-link-active': isNavActive('/community') }"
+        @click="mobileDrawer = false"
+        :title="t('nav.community')"
+      />
       <v-divider class="my-2" />
-      <v-list-item to="/dashboard" @click="mobileDrawer = false" :title="t('nav.dashboard')" />
+      <v-list-item
+        to="/dashboard"
+        :class="{ 'drawer-link-active': isNavActive('/dashboard') }"
+        @click="mobileDrawer = false"
+        :title="t('nav.dashboard')"
+      />
       <v-list-item @click="toggleLanguage" :title="currentLanguageLabel" />
       <v-list-item v-if="isLoggedIn" @click="logout" :title="t('nav.logout')" />
       <v-list-item v-else @click="goToLogin" :title="t('nav.login')" />
@@ -233,7 +276,7 @@ onBeforeUnmount(() => {
   <v-app-bar flat class="site-header" :class="{ scrolled: isScrolled, 'hero-contrast': isInHeroScroll }">
     <div class="header-inner">
       <div class="header-side header-left">
-        <v-btn to="/home" variant="text" class="nav-link">
+        <v-btn to="/home" variant="text" class="nav-link" :class="{ active: isNavActive('/home') }">
           {{ t('nav.home') }}
         </v-btn>
 
@@ -245,7 +288,13 @@ onBeforeUnmount(() => {
           content-class="explore-menu"
         >
           <template #activator="{ props }">
-            <v-btn v-bind="props" variant="text" class="nav-link" @click="router.push('/explore')">
+            <v-btn
+              v-bind="props"
+              variant="text"
+              class="nav-link"
+              :class="{ active: isExploreActive }"
+              @click="router.push('/explore')"
+            >
               {{ t('nav.explore') }}
               <v-icon>mdi-menu-down</v-icon>
             </v-btn>
@@ -260,11 +309,21 @@ onBeforeUnmount(() => {
           </v-list>
         </v-menu>
 
-        <v-btn to="/trip-planner" variant="text" class="nav-link">
+        <v-btn
+          to="/trip-planner"
+          variant="text"
+          class="nav-link"
+          :class="{ active: isNavActive('/trip-planner') }"
+        >
           {{ t('nav.planner') }}
         </v-btn>
 
-        <v-btn to="/community" variant="text" class="nav-link">
+        <v-btn
+          to="/community"
+          variant="text"
+          class="nav-link"
+          :class="{ active: isNavActive('/community') }"
+        >
           {{ t('nav.community') }}
         </v-btn>
       </div>
@@ -665,34 +724,36 @@ onBeforeUnmount(() => {
 .nav-link {
   color: rgb(var(--v-theme-headerText)) !important;
   text-decoration: none !important;
-  transition: color 0.35s ease;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.25s ease;
   margin-top: 0;
   min-height: 40px;
   display: inline-flex;
   align-items: center;
+  position: relative;
+  border-radius: 0 !important;
+  border-bottom: 2px solid transparent !important;
 }
 
 .nav-link :deep(.v-icon) {
   color: inherit !important;
-  transition: color 0.35s ease;
+  transition: color 0.3s ease;
 }
 
-.site-header.scrolled .nav-link {
-  color: rgb(var(--v-theme-text)) !important;
-  text-shadow: none;
+.nav-link:hover {
+  color: rgb(var(--v-theme-primary)) !important;
+  transform: translateY(-2px);
 }
 
-.site-header.scrolled .nav-link :deep(.v-icon) {
-  color: inherit !important;
+.nav-link:hover :deep(.v-icon) {
+  color: rgb(var(--v-theme-primary)) !important;
 }
 
-.mobile-icon-btn {
-  color: rgb(var(--v-theme-headerText)) !important;
-}
-
-.site-header.scrolled .mobile-icon-btn {
-  color: rgb(var(--v-theme-text)) !important;
-  text-shadow: none;
+.nav-link.active {
+  color: rgb(var(--v-theme-primary)) !important;
+  border-bottom: 2px solid rgb(var(--v-theme-primary)) !important;
 }
 
 .nav-link :deep(.v-btn__overlay) {
@@ -701,6 +762,12 @@ onBeforeUnmount(() => {
 
 .nav-link :deep(.v-btn--active .v-btn__overlay) {
   opacity: 0 !important;
+}
+
+.nav-link :deep(.v-btn--active),
+.nav-link :deep(.v-btn--active .v-btn__content) {
+  border: none !important;
+  text-decoration: none !important;
 }
 
 .profile-btn {
@@ -862,11 +929,30 @@ onBeforeUnmount(() => {
 }
 
 :deep(.explore-menu) {
-  min-width: 260px;
+  min-width: 280px;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  background: rgba(var(--v-theme-surface), 0.92);
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+  box-shadow: 0 15px 40px rgba(var(--v-theme-background), 0.18);
+  animation: dropdownFade 0.25s ease;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 :deep(.explore-menu .v-list) {
-  padding: 8px;
+  padding: 10px;
+  background: transparent;
 }
 
 :deep(.explore-menu .v-list-item) {
@@ -874,8 +960,22 @@ onBeforeUnmount(() => {
   text-decoration: none;
 }
 
+:deep(.explore-menu .v-list-item:hover) {
+  background: rgba(var(--v-theme-primary), 0.08);
+  transform: translateX(4px);
+}
+
 :deep(.explore-menu .v-list-item-title) {
   color: rgb(var(--v-theme-menuText)) !important;
+}
+
+:deep(.explore-menu .v-list-item--active) {
+  background: rgba(var(--v-theme-primary), 0.12) !important;
+}
+
+:deep(.explore-menu .v-list-item--active .v-list-item-title) {
+  color: rgb(var(--v-theme-primary)) !important;
+  font-weight: 600;
 }
 
 :deep(.v-list-item--active) {
@@ -887,13 +987,59 @@ onBeforeUnmount(() => {
   background: transparent !important;
 }
 
+.mobile-drawer {
+  z-index: 5000 !important;
+}
+
+.mobile-drawer :deep(.v-navigation-drawer__content) {
+  background: rgb(var(--v-theme-surface));
+}
+
+.mobile-drawer :deep(.v-list) {
+  padding: 20px 16px;
+}
+
+.mobile-drawer :deep(.v-list-item) {
+  position: relative;
+  min-height: 48px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgb(var(--v-theme-menuText)) !important;
+  border-radius: 0 !important;
+  text-decoration: none !important;
+  border-bottom: 2px solid transparent !important;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
 .mobile-drawer :deep(.v-list-item-title) {
-  color: rgb(var(--v-theme-menuText));
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.mobile-drawer :deep(a) {
+  text-decoration: none !important;
+}
+
+.mobile-drawer :deep(.drawer-link-active) {
+  color: rgb(var(--v-theme-primary)) !important;
+  border-bottom: 2px solid rgb(var(--v-theme-primary)) !important;
+}
+
+.mobile-drawer :deep(.drawer-link-active .v-list-item-title) {
+  color: rgb(var(--v-theme-primary)) !important;
+}
+
+.mobile-drawer :deep(.v-list-item__overlay) {
+  opacity: 0 !important;
 }
 
 .sidebar-subitem {
-  padding-inline-start: 28px !important;
+  padding-inline-start: 36px !important;
+  font-size: 0.88rem;
 }
+
 
 @media (max-width: 1250px) {
   .site-header {
@@ -913,6 +1059,7 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 100px;
     padding: 6px 16px 4px;
     gap: 8px;
   }
@@ -924,7 +1071,7 @@ onBeforeUnmount(() => {
 
   .mobile-top-row {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: 44px 1fr 44px;
     align-items: center;
     column-gap: 8px;
   }
@@ -936,7 +1083,14 @@ onBeforeUnmount(() => {
   .mobile-right-icons {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    justify-self: end;
     gap: 4px;
+  }
+
+  .mobile-top-row > .mobile-icon-btn {
+    justify-self: start;
+    margin-left: -4px;
   }
 
   .mobile-icon-btn {

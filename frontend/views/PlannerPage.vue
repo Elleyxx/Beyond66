@@ -70,6 +70,7 @@
 <script setup>
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import { useTheme } from 'vuetify'
 import PlannerTripListPanel from '@/components/planner/PlannerTripListPanel.vue'
 import PlannerCreatePanel from '@/components/planner/PlannerCreatePanel.vue'
@@ -79,6 +80,7 @@ import { generateAiPlanner, loadPlannerDrafts, savePlannerDraft } from '@/servic
 import { getAuroraPrediction, getTripWeather } from '@/services/weatherService'
 
 const theme = useTheme()
+const route = useRoute()
 const { t } = useI18n()
 const isDark = computed(() => theme.global.current.value.dark)
 const plannerTitleColor = computed(() =>
@@ -678,8 +680,14 @@ onMounted(async () => {
     if (!drafts.length) return
 
     trips.value = drafts.map((draft) => buildTripRecordFromDraft(draft))
-    selectedTripId.value = null
-    mode.value = 'list'
+    const requestedJourneyId = Number(route.query.journey || 0)
+    if (requestedJourneyId && trips.value.some((trip) => trip.id === requestedJourneyId)) {
+      selectedTripId.value = requestedJourneyId
+      mode.value = 'view'
+    } else {
+      selectedTripId.value = null
+      mode.value = 'list'
+    }
   } catch {
     const local = localStorage.getItem('trip_planner_draft')
     if (!local) return

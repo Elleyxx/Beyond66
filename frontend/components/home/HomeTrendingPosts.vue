@@ -50,6 +50,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink } from 'vue-router'
+import { resolveAssetUrl } from '@/services/apiBase'
 import { getCommunityPosts } from '@/services/communityService'
 
 const posts = ref([])
@@ -76,7 +77,7 @@ async function loadPosts() {
 }
 
 function coverImage(post) {
-  return post.coverImage || post.cover_image || ''
+  return resolveAssetUrl(post.coverImage || post.cover_image || '')
 }
 
 function durationLabel(post) {
