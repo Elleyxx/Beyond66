@@ -476,6 +476,7 @@
       "tags": "标签",
       "tagsPlaceholder": "极光, 自驾游, 峡湾",
       "tagsHint": "用逗号分隔标签，最多可添加 8 个。",
+      "suggestedTags": "推荐标签",
       "coverImage": "封面图片（可选）",
       "coverAlt": "行程封面",
       "chooseCover": "选择封面图片",

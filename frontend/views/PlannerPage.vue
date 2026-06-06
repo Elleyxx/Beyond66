@@ -55,6 +55,7 @@
         :default-title="defaultSaveTitle"
         :default-description="defaultSaveDescription"
         :default-tags="defaultSaveTags"
+        :suggested-tags="suggestedSaveTags"
         :default-visibility="defaultSaveVisibility"
         :is-editing="isEditing"
         @close="isSaveModalOpen = false"
@@ -235,6 +236,22 @@ const defaultSaveDescription = computed(() => {
 })
 const defaultSaveTags = computed(() => {
   return isEditing.value && Array.isArray(selectedTrip.value?.tags) ? selectedTrip.value.tags : []
+})
+const suggestedSaveTags = computed(() => {
+  if (isEditing.value && Array.isArray(selectedTrip.value?.tags)) return selectedTrip.value.tags
+
+  const routeTags = Array.isArray(tripMeta.value.countryRoute)
+    ? tripMeta.value.countryRoute
+    : [tripMeta.value.country]
+  const preferenceTags = [
+    tripMeta.value.season,
+    tripMeta.value.style,
+    tripMeta.value.transport,
+    tripMeta.value.tripType,
+    ...(Array.isArray(tripMeta.value.interests) ? tripMeta.value.interests : []),
+  ]
+
+  return normalizeTags([...routeTags, ...preferenceTags].map(toCommunityTag))
 })
 const defaultSaveVisibility = computed(() => {
   return isEditing.value ? selectedTrip.value?.visibility || 'private' : 'private'
@@ -743,6 +760,16 @@ function buildTripRecordFromDraft(draft) {
     savedAt: draft.savedAt || new Date().toISOString(),
     updatedAt: draft.updatedAt || draft.savedAt || new Date().toISOString(),
   }
+}
+
+function toCommunityTag(value) {
+  return String(value || '')
+    .trim()
+    .replace(/&/g, ' and ')
+    .split(/[^A-Za-z0-9]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('')
 }
 
 function normalizeTags(tags) {

@@ -163,7 +163,7 @@ function weatherIcon(condition) {
 
 .weather-aurora-grid {
   display: grid;
-  grid-template-columns: minmax(0, 6fr) minmax(260px, 4fr);
+  grid-template-columns: minmax(0, 7fr) minmax(320px, 3fr);
   gap: 24px;
 }
 
@@ -298,7 +298,7 @@ h2 {
 }
 
 .weather-mini-card {
-  flex: 0 0 240px;
+  flex: 0 0 300px;
   min-height: 110px;
   border: 2px solid rgba(var(--v-theme-on-surface), 0.16);
   border-radius: 24px;
@@ -387,6 +387,10 @@ h2 {
 @media (max-width: 900px) {
   .weather-aurora-grid {
     grid-template-columns: 1fr;
+  }
+
+  .weather-mini-card {
+    flex-basis: min(300px, 84vw);
   }
 
   .weather-feature-card {

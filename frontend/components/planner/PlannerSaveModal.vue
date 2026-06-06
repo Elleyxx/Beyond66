@@ -41,6 +41,21 @@
           <span v-for="tag in tags" :key="tag">#{{ tag }}</span>
         </div>
 
+        <div class="tag-suggestions" aria-label="Suggested tags">
+          <span>{{ t('planner.saveModal.suggestedTags') }}</span>
+
+          <button
+            v-for="tag in displayedSuggestedTags"
+            :key="tag"
+            type="button"
+            :class="{ selected: hasTag(tag) }"
+            :disabled="hasTag(tag)"
+            @click="addSuggestedTag(tag)"
+          >
+            #{{ tag }}
+          </button>
+        </div>
+
         <label>
           {{ t('planner.saveModal.coverImage') }}
 
@@ -102,6 +117,7 @@ const props = defineProps({
   defaultTitle: { type: String, default: '' },
   defaultDescription: { type: String, default: '' },
   defaultTags: { type: Array, default: () => [] },
+  suggestedTags: { type: Array, default: () => [] },
   defaultVisibility: { type: String, default: 'private' },
   isEditing: { type: Boolean, default: false },
 })
@@ -113,6 +129,31 @@ const title = ref(props.defaultTitle || t('planner.saveModal.defaultTitle'))
 const description = ref(props.defaultDescription)
 const tagsInput = ref(props.defaultTags.join(', '))
 const visibility = ref(props.defaultVisibility)
+const commonSuggestedTags = [
+  'NorthernLights',
+  'RoadTrip',
+  'Fjords',
+  'Photography',
+  'BudgetTravel',
+  'WinterTrip',
+  'Food',
+  'Nature',
+]
+
+const displayedSuggestedTags = computed(() => {
+  const seen = new Set()
+
+  return [...props.suggestedTags, ...commonSuggestedTags]
+    .map((tag) => String(tag || '').trim().replace(/^#/, ''))
+    .filter(Boolean)
+    .filter((tag) => {
+      const key = tag.toLowerCase()
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+    .slice(0, 12)
+})
 
 const tags = computed(() => {
   const seen = new Set()
@@ -165,6 +206,16 @@ function emitSave() {
     visibility: props.isEditing ? props.defaultVisibility : visibility.value,
     coverImage: coverImage.value,
   })
+}
+
+function hasTag(tag) {
+  return tags.value.some((currentTag) => currentTag.toLowerCase() === tag.toLowerCase())
+}
+
+function addSuggestedTag(tag) {
+  if (hasTag(tag) || tags.value.length >= 8) return
+
+  tagsInput.value = [...tags.value, tag].join(', ')
 }
 
 function handleImageUpload(event) {
@@ -274,6 +325,45 @@ textarea {
   background: rgba(var(--v-theme-primary), 0.1);
   font-size: 0.78rem;
   font-weight: 900;
+}
+
+.tag-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: -6px;
+}
+
+.tag-suggestions > span {
+  width: 100%;
+  font-size: 0.76rem;
+  font-weight: 850;
+  color: rgba(var(--v-theme-text), 0.58);
+}
+
+.tag-suggestions button {
+  border: 1px solid rgba(var(--v-theme-primary), 0.28);
+  border-radius: 999px;
+  padding: 7px 11px;
+  background: rgba(var(--v-theme-primary), 0.06);
+  color: rgba(var(--v-theme-text), 0.78);
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+.tag-suggestions button:hover:not(:disabled) {
+  background: rgba(var(--v-theme-primary), 0.14);
+  color: rgb(var(--v-theme-primary));
+}
+
+.tag-suggestions button.selected,
+.tag-suggestions button:disabled {
+  border-color: rgba(var(--v-theme-primary), 0.18);
+  background: rgba(var(--v-theme-primary), 0.16);
+  color: rgb(var(--v-theme-primary));
+  cursor: default;
+  opacity: 0.78;
 }
 
 textarea {

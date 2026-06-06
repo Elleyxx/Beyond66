@@ -476,6 +476,7 @@
       "tags": "Tags",
       "tagsPlaceholder": "Northern Lights, Road Trip, Fjords",
       "tagsHint": "Separate tags with commas. Add up to 8 tags.",
+      "suggestedTags": "Suggested tags",
       "coverImage": "Cover Image (Optional)",
       "coverAlt": "Trip Cover",
       "chooseCover": "Choose a cover image",
