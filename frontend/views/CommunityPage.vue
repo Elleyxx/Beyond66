@@ -57,7 +57,7 @@ const filteredPosts = computed(() => {
   return posts.value.filter((post) => {
     const matchesSearch =
       !query ||
-      [post.title, post.description, post.country, post.authorName]
+      [post.title, post.description, post.country, post.authorName, ...(post.tags || []), ...(post.trip?.tags || [])]
         .some((value) => String(value || '').toLowerCase().includes(query))
 
     const matchesCategory =

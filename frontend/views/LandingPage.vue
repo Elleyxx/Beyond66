@@ -1,9 +1,30 @@
 <template>
-  <main ref="landingPageRef" class="landing-page">
+  <main ref="landingPageRef" class="landing-page" :class="{ 'is-light-mode': !isDark }">
     <section class="splash-page snap-section">
       <div class="splash-overlay"></div>
 
       <div class="top-nav">
+        <div class="nav-controls">
+          <button
+            type="button"
+            class="nav-icon-button"
+            :aria-label="themeToggleLabel"
+            @click="toggleTheme"
+          >
+            <i :class="isDark ? 'bi bi-sun' : 'bi bi-moon-stars'"></i>
+          </button>
+
+          <button
+            type="button"
+            class="nav-icon-button language-button"
+            :aria-label="currentLanguageLabel"
+            @click="toggleLanguage"
+          >
+            <i class="bi bi-translate"></i>
+            <span>{{ currentLanguageShortLabel }}</span>
+          </button>
+        </div>
+
         <div class="nav-actions">
           <router-link to="/login">{{ t('landing.login') }} <i class="bi bi-person"></i></router-link>
           <router-link to="/explore">{{ t('landing.explore') }} <i class="bi bi-snow2"></i></router-link>
@@ -78,7 +99,7 @@
       <div class="destination-enter-slot">
         <v-btn
           class="enter-btn destination-enter-btn"
-          :class="{ 'is-visible': showDelayedEnterJourney && activeSectionIndex === index + 1 }"
+          :class="{ 'is-visible': activeSectionIndex === index + 1 }"
           variant="outlined"
           size="large"
           rounded="pill"
@@ -89,23 +110,46 @@
         </v-btn>
       </div>
     </section>
-
-    <BackToTopButton target=".landing-page" />
   </main>
 </template>
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import BackToTopButton from '@/components/common/BackToTopButton.vue'
+import { useTheme } from 'vuetify'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const theme = useTheme()
 const landingPageRef = ref(null)
 const activeSectionIndex = ref(0)
-const showDelayedEnterJourney = ref(false)
 const lastScrollTop = ref(0)
 let isAnimatingScroll = false
-let dwellTimer = null
+
+const isDark = computed(() => theme.global.current.value.dark)
+
+const currentLanguageLabel = computed(() => {
+  return locale.value === 'zh' ? t('menu.languageEnglish') : t('menu.languageChinese')
+})
+
+const currentLanguageShortLabel = computed(() => {
+  return locale.value === 'zh' ? 'EN' : t('menu.languageChinese')
+})
+
+const themeToggleLabel = computed(() => {
+  return isDark.value ? t('menu.lightMode') : t('menu.darkMode')
+})
+
+const toggleLanguage = () => {
+  const nextLanguage = locale.value === 'en' ? 'zh' : 'en'
+  locale.value = nextLanguage
+  localStorage.setItem('locale', nextLanguage)
+}
+
+const toggleTheme = () => {
+  const nextTheme = isDark.value ? 'light' : 'dark'
+  theme.global.name.value = nextTheme
+  localStorage.setItem('theme', nextTheme)
+}
 
 const getSnapSections = () => {
   const container = landingPageRef.value
@@ -113,16 +157,6 @@ const getSnapSections = () => {
 }
 
 const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
-
-const startDwellTimer = () => {
-  if (dwellTimer) {
-    clearTimeout(dwellTimer)
-  }
-  showDelayedEnterJourney.value = false
-  dwellTimer = setTimeout(() => {
-    showDelayedEnterJourney.value = true
-  }, 5000)
-}
 
 const updateActiveSection = () => {
   const container = landingPageRef.value
@@ -132,7 +166,6 @@ const updateActiveSection = () => {
 
   const currentTop = container.scrollTop
   if (Math.abs(currentTop - lastScrollTop.value) > 1) {
-    startDwellTimer()
     lastScrollTop.value = currentTop
   }
 
@@ -154,7 +187,6 @@ const updateActiveSection = () => {
 
   if (nextIndex !== activeSectionIndex.value) {
     activeSectionIndex.value = nextIndex
-    startDwellTimer()
   }
 }
 
@@ -229,7 +261,6 @@ const handleSectionWheel = (event) => {
 }
 
 onMounted(() => {
-  startDwellTimer()
   updateActiveSection()
   landingPageRef.value?.addEventListener('wheel', handleSectionWheel, { passive: false })
   landingPageRef.value?.addEventListener('scroll', updateActiveSection)
@@ -238,9 +269,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   landingPageRef.value?.removeEventListener('wheel', handleSectionWheel)
   landingPageRef.value?.removeEventListener('scroll', updateActiveSection)
-  if (dwellTimer) {
-    clearTimeout(dwellTimer)
-  }
 })
 
 const scrollToDestination = (countrySlug) => {
@@ -336,6 +364,10 @@ const destinations = computed(() => [
   overflow-y: auto;
 }
 
+.landing-page.is-light-mode {
+  --v-theme-primary: 118, 198, 252;
+}
+
 .splash-page {
   min-height: 100vh;
   position: relative;
@@ -361,14 +393,68 @@ const destinations = computed(() => [
   right: 42px;
   z-index: 50;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: 22px;
+}
+
+.nav-controls,
+.nav-actions {
+  display: flex;
   align-items: center;
 }
 
+.nav-controls {
+  gap: 12px;
+}
+
 .nav-actions {
-  display: flex;
   gap: 34px;
+}
+
+.nav-icon-button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.34);
+  border-radius: 50%;
+  color: rgb(var(--v-theme-on-surface));
+  background: rgba(var(--v-theme-background), 0.22);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.nav-icon-button i {
+  font-size: 1.08rem;
+  color: inherit;
+}
+
+.nav-icon-button:hover {
+  color: rgb(var(--v-theme-primary));
+  border-color: rgba(var(--v-theme-primary), 0.82);
+  background: rgba(var(--v-theme-primary), 0.12);
+  box-shadow: 0 0 20px rgba(var(--v-theme-primary), 0.24);
+}
+
+.language-button {
+  width: auto;
+  min-width: 76px;
+  border-radius: 999px;
+  gap: 8px;
+  padding: 0 15px;
+}
+
+.language-button span {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
 .nav-actions a {
@@ -496,7 +582,7 @@ h1 {
 
 .enter-btn {
   color: white !important;
-  border-color: #2cf6b3 !important;
+  border-color: rgb(var(--v-theme-primary)) !important;
   padding-inline: 34px;
   letter-spacing: 0.18em;
   font-weight: 700;
@@ -579,8 +665,10 @@ h1 {
   margin-top: 2px;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(6px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateY(12px);
+  transition:
+    opacity 0.42s ease-in,
+    transform 0.42s ease-in;
 }
 
 .destination-enter-btn.is-visible {
@@ -613,10 +701,27 @@ h1 {
     top: 24px;
     left: 22px;
     right: 22px;
+    align-items: flex-start;
+  }
+
+  .nav-controls {
+    gap: 8px;
   }
 
   .nav-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 18px;
+  }
+
+  .nav-icon-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .language-button {
+    min-width: 66px;
+    padding: 0 12px;
   }
 
   .splash-content {

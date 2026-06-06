@@ -133,11 +133,7 @@ const pageData = computed(() => {
     destinations: normalizedDestinations,
     experiences,
     gallery,
-    travelTips: [
-      { title: 'Weather', text: 'Bring layers for coastal wind and cooler Nordic evenings.' },
-      { title: 'Transport', text: 'Book long-distance train legs early during summer holidays.' },
-      { title: 'Planning', text: 'Reserve Lapland stays and winter activities ahead of peak season.' },
-    ],
+    travelTips: Array.isArray(data.travelTips) ? data.travelTips : [],
   }
 })
 

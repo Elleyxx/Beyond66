@@ -133,11 +133,7 @@ const pageData = computed(() => {
     destinations: normalizedDestinations,
     experiences,
     gallery,
-    travelTips: [
-      { title: 'Weather', text: 'Pack layers for quick changes between sun, wind, and cold.' },
-      { title: 'Sauna Culture', text: 'Follow sauna etiquette and book popular spa slots in advance.' },
-      { title: 'Winter Prep', text: 'Choose thermal gear and proper footwear for snow activities.' },
-    ],
+    travelTips: Array.isArray(data.travelTips) ? data.travelTips : [],
   }
 })
 

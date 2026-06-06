@@ -200,18 +200,11 @@
           </div>
         </section>
 
-        <section :id="sectionIds.travelTips" class="section-card tab-section">
-          <div class="section-title-row">
-            <h2>{{ t('countryPage.tabs.travelTips') }}</h2>
-            <div class="section-title-line"></div>
-          </div>
-          <div class="tips-grid">
-            <article v-for="(tip, index) in travelTipsList" :key="`${tip.title}-${index}`" class="tip-card">
-              <h3>{{ tip.title }}</h3>
-              <p>{{ tip.text }}</p>
-            </article>
-          </div>
-        </section>
+        <CountryTravelTips
+          :section-id="sectionIds.travelTips"
+          :title="t('countryPage.tabs.travelTips')"
+          :tips="travelTipsList"
+        />
       </v-container>
     </section>
   </main>
@@ -223,6 +216,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
 import SlidingSectionTabs from '@/components/common/SlidingSectionTabs.vue'
+import CountryTravelTips from '@/components/common/CountryTravelTips.vue'
 import { isAuthenticated } from '@/utils/auth'
 import { getSavedDestinations, toggleSavedDestination } from '@/services/savedItemService'
 
@@ -513,14 +507,20 @@ function onDestinationSlideTransitionEnd(cardIndex, total) {
 const travelTipsList = computed(() => {
   if (Array.isArray(props.travelTips) && props.travelTips.length) {
     return props.travelTips.map((tip, index) => {
-      if (typeof tip === 'string') return { title: t('countryPage.tipFallback', { number: index + 1 }), text: tip }
-      return { title: tip.title || t('countryPage.tipFallback', { number: index + 1 }), text: tip.text || '' }
+      if (typeof tip === 'string') {
+        return { icon: 'bi-compass', title: t('countryPage.tipFallback', { number: index + 1 }), text: tip }
+      }
+      return {
+        icon: tip.icon || 'bi-compass',
+        title: tip.title || t('countryPage.tipFallback', { number: index + 1 }),
+        text: tip.text || '',
+      }
     })
   }
   return [
-    { title: t('countryPage.tipFallback', { number: 1 }), text: t('countryPage.defaultTipOne') },
-    { title: t('countryPage.tipFallback', { number: 2 }), text: t('countryPage.defaultTipTwo') },
-    { title: t('countryPage.tipFallback', { number: 3 }), text: t('countryPage.defaultTipThree') },
+    { icon: 'bi-layers', title: t('countryPage.tipFallback', { number: 1 }), text: t('countryPage.defaultTipOne') },
+    { icon: 'bi-calendar-check', title: t('countryPage.tipFallback', { number: 2 }), text: t('countryPage.defaultTipTwo') },
+    { icon: 'bi-clock', title: t('countryPage.tipFallback', { number: 3 }), text: t('countryPage.defaultTipThree') },
   ]
 })
 
@@ -712,7 +712,7 @@ watch(experiencesList, (list) => {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-bottom: 18px;
+  margin-bottom: 50px;
 }
 
 .section-title-row h2 {
@@ -1090,8 +1090,14 @@ watch(experiencesList, (list) => {
 
 .experience-overlay h3 {
   font-size: clamp(2rem, 4vw, 4rem);
-  line-height: 0;
+  line-height: 1.05;
   margin-bottom: 16px;
+}
+
+.experience-overlay p {
+  max-width: 58ch;
+  margin: 0;
+  line-height: 1.55;
 }
 
 .experience-grid {
@@ -1177,31 +1183,6 @@ watch(experiencesList, (list) => {
   grid-column: span 2;
 }
 
-/* Travel tips */
-.tips-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-top: 28px;
-}
-
-.tip-card {
-  border-radius: 24px;
-  padding: 24px;
-  background: rgba(var(--v-theme-surface), 0.96);
-  border: 1px solid rgba(var(--v-theme-text), 0.12);
-}
-
-.tip-card h3 {
-  margin: 0 0 10px;
-}
-
-.tip-card p {
-  margin: 0;
-  line-height: 1.6;
-  opacity: 0.75;
-}
-
 /* Responsive */
 @media (max-width: 960px) {
   .section-card,
@@ -1216,8 +1197,7 @@ watch(experiencesList, (list) => {
 
   .quickfacts-grid,
   .highlight-cards,
-  .destination-grid,
-  .tips-grid {
+  .destination-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1235,5 +1215,3 @@ watch(experiencesList, (list) => {
   }
 }
 </style>
-
-

@@ -177,6 +177,23 @@
                     "title": "Photograph Waterfalls and Black Beaches",
                     "image": "/assets/images/Iceland/vik1.jpg"
                 }
+            ],
+            "travelTips": [
+                {
+                    "icon": "bi-cloud-lightning-rain",
+                    "title": "Check weather and road conditions daily",
+                    "text": "Iceland's weather can change dramatically within hours."
+                },
+                {
+                    "icon": "bi-wind",
+                    "title": "Bring waterproof and windproof clothing",
+                    "text": "Strong winds and sudden rain are common throughout the year."
+                },
+                {
+                    "icon": "bi-signpost-split",
+                    "title": "Stay on marked paths",
+                    "text": "Iceland's unique volcanic landscapes and moss fields are fragile and easily damaged."
+                }
             ]
         }   
     }

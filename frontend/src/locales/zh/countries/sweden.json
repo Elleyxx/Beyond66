@@ -190,5 +190,22 @@
       "title": "体验瑞典 Fika 咖啡文化",
       "image": "/assets/images/Sweden/stockholm2.jpg"
     }
+  ],
+  "travelTips": [
+    {
+      "icon": "bi-credit-card",
+      "title": "使用无现金支付",
+      "text": "大多数商店、餐厅和公共交通都接受银行卡或移动支付。"
+    },
+    {
+      "icon": "bi-train-front",
+      "title": "善用公共交通",
+      "text": "瑞典的火车、巴士和地铁系统可靠方便，很适合旅行者使用。"
+    },
+    {
+      "icon": "bi-volume-mute",
+      "title": "尊重个人空间",
+      "text": "瑞典人重视隐私与安静，尤其是在公共交通和共享空间中。"
+    }
   ]
 }

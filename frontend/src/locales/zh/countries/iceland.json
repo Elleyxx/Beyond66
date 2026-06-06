@@ -192,6 +192,23 @@
                     "title": "拍摄瀑布与黑沙海岸",
                     "image": "/assets/images/Iceland/vik1.jpg"
                 }
+            ],
+            "travelTips": [
+                {
+                    "icon": "bi-cloud-lightning-rain",
+                    "title": "每天查看天气和路况",
+                    "text": "冰岛天气可能在数小时内剧烈变化。"
+                },
+                {
+                    "icon": "bi-wind",
+                    "title": "携带防水防风衣物",
+                    "text": "强风和突如其来的降雨全年都很常见。"
+                },
+                {
+                    "icon": "bi-signpost-split",
+                    "title": "留在标记步道上",
+                    "text": "冰岛独特的火山地貌和苔藓地非常脆弱，容易受损。"
+                }
             ]
     }
   }

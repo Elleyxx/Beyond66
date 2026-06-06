@@ -189,5 +189,22 @@
       "title": "搭乘渡轮前往芬兰堡",
       "image": "/assets/images/Finland/suomenlinna1.jpg"
     }
+  ],
+  "travelTips": [
+    {
+      "icon": "bi-fire",
+      "title": "体验传统桑拿",
+      "text": "桑拿文化是芬兰生活的重要部分，也是很值得体验的文化活动。"
+    },
+    {
+      "icon": "bi-thermometer-snow",
+      "title": "准备应对季节极端",
+      "text": "夏季日照漫长，冬季夜晚较长且气温严寒。"
+    },
+    {
+      "icon": "bi-backpack",
+      "title": "为户外活动打包",
+      "text": "芬兰的湖泊、森林和国家公园最适合搭配合适的户外衣物与鞋履体验。"
+    }
   ]
 }

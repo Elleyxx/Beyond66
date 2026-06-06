@@ -189,5 +189,22 @@
       "title": "徒步布道石与恶魔之舌",
       "image": "/assets/images/Norway/preikestolen1.jpeg"
     }
+  ],
+  "travelTips": [
+    {
+      "icon": "bi-calendar-check",
+      "title": "提早预订交通与住宿",
+      "text": "热门峡湾路线、景观铁路和极光目的地在旺季很快订满。"
+    },
+    {
+      "icon": "bi-cloud-sun",
+      "title": "准备应对多变天气",
+      "text": "山区和海岸沿线天气变化很快，建议分层穿搭。"
+    },
+    {
+      "icon": "bi-wallet2",
+      "title": "仔细规划预算",
+      "text": "挪威是欧洲消费较高的国家之一，餐饮和住宿尤其需要预留预算。"
+    }
   ]
 }

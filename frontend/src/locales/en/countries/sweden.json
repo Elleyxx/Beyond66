@@ -174,5 +174,22 @@
       "title": "Experience Swedish Fika Culture",
       "image": "/assets/images/Sweden/stockholm2.jpg"
     }
+  ],
+  "travelTips": [
+    {
+      "icon": "bi-credit-card",
+      "title": "Go cashless",
+      "text": "Most shops, restaurants, and public transport systems accept card or mobile payments."
+    },
+    {
+      "icon": "bi-train-front",
+      "title": "Use public transportation",
+      "text": "Sweden's trains, buses, and metro systems are reliable and convenient for travellers."
+    },
+    {
+      "icon": "bi-volume-mute",
+      "title": "Respect personal space",
+      "text": "Swedes value privacy and quietness, especially on public transport and in shared spaces."
+    }
   ]
 }

@@ -174,5 +174,22 @@
       "title": "Hike Preikestolen or Trolltunga",
       "image": "/assets/images/Norway/preikestolen1.jpeg"
     }
+  ],
+  "travelTips": [
+    {
+      "icon": "bi-calendar-check",
+      "title": "Book transport and accommodation early",
+      "text": "Popular fjord routes, scenic railways, and Northern Lights destinations fill up quickly during peak seasons."
+    },
+    {
+      "icon": "bi-cloud-sun",
+      "title": "Prepare for changing weather",
+      "text": "Conditions can shift rapidly, especially in the mountains and along the coast, so dress in layers."
+    },
+    {
+      "icon": "bi-wallet2",
+      "title": "Budget carefully",
+      "text": "Norway is one of the most expensive countries in Europe, particularly for dining and accommodation."
+    }
   ]
 }

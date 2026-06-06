@@ -19,6 +19,10 @@ import { isAuthenticated } from '../utils/auth'
 const router = createRouter({
   history: createWebHistory(),
   scrollBehavior(to, from, savedPosition) {
+    if (to.hash) {
+      return { el: to.hash, top: 96, behavior: 'smooth' }
+    }
+
     if (to.name === 'trip-planner') {
       return { top: 0, left: 0, behavior: 'auto' }
     }

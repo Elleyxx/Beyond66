@@ -54,6 +54,7 @@
         v-if="isSaveModalOpen"
         :default-title="defaultSaveTitle"
         :default-description="defaultSaveDescription"
+        :default-tags="defaultSaveTags"
         :default-visibility="defaultSaveVisibility"
         :is-editing="isEditing"
         @close="isSaveModalOpen = false"
@@ -231,6 +232,9 @@ const defaultSaveTitle = computed(() => {
 })
 const defaultSaveDescription = computed(() => {
   return isEditing.value ? selectedTrip.value?.description || aiSummary.value : aiSummary.value
+})
+const defaultSaveTags = computed(() => {
+  return isEditing.value && Array.isArray(selectedTrip.value?.tags) ? selectedTrip.value.tags : []
 })
 const defaultSaveVisibility = computed(() => {
   return isEditing.value ? selectedTrip.value?.visibility || 'private' : 'private'
@@ -577,6 +581,7 @@ async function saveTrip(saveOptions = {}) {
   const wasEditing = isEditing.value
   const title = saveOptions.title || defaultSaveTitle.value
   const description = saveOptions.description || ''
+  const tags = normalizeTags(saveOptions.tags)
   const visibility = saveOptions.visibility || 'private'
   const coverImage = saveOptions.coverImage || ''
 
@@ -589,6 +594,7 @@ async function saveTrip(saveOptions = {}) {
     weatherForecast: weatherForecast.value,
     auroraForecast: auroraForecast.value,
     summary: aiSummary.value,
+    tags,
     title,
     description,
     visibility,
@@ -617,6 +623,7 @@ async function saveTrip(saveOptions = {}) {
         ? auroraForecast.value.map((item) => ({ ...item }))
         : auroraForecast.value,
       summary: aiSummary.value,
+      tags,
       description,
       visibility,
       coverImage,
@@ -687,6 +694,7 @@ onMounted(async () => {
         weatherForecast: Array.isArray(parsed.weatherForecast) ? parsed.weatherForecast : [],
         auroraForecast: parsed.auroraForecast || null,
         summary: parsed.summary || '',
+        tags: normalizeTags(parsed.tags),
         description: parsed.description || '',
         visibility: parsed.visibility || 'private',
         coverImage: parsed.coverImage || '',
@@ -728,12 +736,28 @@ function buildTripRecordFromDraft(draft) {
     weatherForecast: Array.isArray(draft.weatherForecast) ? draft.weatherForecast : [],
     auroraForecast: draft.auroraForecast || null,
     summary: draft.summary || '',
+    tags: normalizeTags(draft.tags),
     description: draft.description || '',
     visibility: draft.visibility || 'private',
     coverImage: draft.coverImage || '',
     savedAt: draft.savedAt || new Date().toISOString(),
     updatedAt: draft.updatedAt || draft.savedAt || new Date().toISOString(),
   }
+}
+
+function normalizeTags(tags) {
+  if (!Array.isArray(tags)) return []
+  const seen = new Set()
+  return tags
+    .map((tag) => String(tag || '').trim().replace(/^#/, ''))
+    .filter(Boolean)
+    .filter((tag) => {
+      const key = tag.toLowerCase()
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+    .slice(0, 8)
 }
 </script>
 

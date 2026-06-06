@@ -133,11 +133,7 @@ const pageData = computed(() => {
     destinations: normalizedDestinations,
     experiences,
     gallery,
-    travelTips: [
-      { title: 'Weather', text: 'Carry a light jacket for sudden coastal wind and rain.' },
-      { title: 'Cycling', text: 'Use bike lanes and rent city bikes for short-distance exploring.' },
-      { title: 'Bookings', text: 'Reserve top restaurants and weekend stays in advance.' },
-    ],
+    travelTips: Array.isArray(data.travelTips) ? data.travelTips : [],
   }
 })
 

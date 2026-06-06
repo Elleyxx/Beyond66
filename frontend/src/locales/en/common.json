@@ -242,8 +242,8 @@
       "usePlan": "Use Plan"
     },
     "sidebar": {
-      "destinations": "Popular Destinations",
-      "tags": "Popular Tags",
+      "destinations": "Top Destinations",
+      "tags": "Trending Topics",
       "creators": "Top Creators",
       "posts": "{count} posts"
     },
@@ -473,6 +473,9 @@
       "titlePlaceholder": "Norway Winter Escape",
       "description": "Description",
       "descriptionPlaceholder": "Write something about your journey...",
+      "tags": "Tags",
+      "tagsPlaceholder": "Northern Lights, Road Trip, Fjords",
+      "tagsHint": "Separate tags with commas. Add up to 8 tags.",
       "coverImage": "Cover Image (Optional)",
       "coverAlt": "Trip Cover",
       "chooseCover": "Choose a cover image",

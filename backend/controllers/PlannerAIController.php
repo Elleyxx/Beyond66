@@ -126,7 +126,7 @@ class PlannerAIController
 
     private function callGemini($apiKey, $payload)
     {
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key='
             . urlencode($apiKey);
 
         $ch = curl_init($url);

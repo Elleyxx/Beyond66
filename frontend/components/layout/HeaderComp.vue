@@ -30,7 +30,7 @@ const currentLanguageLabel = computed(() => {
   return locale.value === 'zh' ? t('menu.languageEnglish') : t('menu.languageChinese')
 })
 
-const searchSuggestions = computed(() => searchSite(searchQuery.value, t, { limit: 5 }))
+const searchSuggestions = computed(() => searchSite(searchQuery.value, t, { limit: 12, locale: locale.value }))
 const hasSearchQuery = computed(() => searchQuery.value.trim().length > 0)
 
 // Language changer logic
@@ -72,6 +72,8 @@ function submitSearch() {
   const query = searchQuery.value.trim()
   isSearchOpen.value = false
   mobileDrawer.value = false
+  searchQuery.value = ''
+  document.activeElement?.blur?.()
   router.push({
     path: '/search',
     query: query ? { q: query } : {},
@@ -83,6 +85,56 @@ function openSearchResult(result) {
   isSearchOpen.value = false
   mobileDrawer.value = false
   router.push(result.path)
+}
+
+function getHighlightedParts(text) {
+  const value = String(text || '')
+  const terms = searchQuery.value
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+
+  if (!value || !terms.length) {
+    return [{ text: value, matched: false }]
+  }
+
+  const escapedTerms = terms.map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  const pattern = new RegExp(`(${escapedTerms.join('|')})`, 'ig')
+
+  return value.split(pattern).filter(Boolean).map((part) => ({
+    text: part,
+    matched: terms.some((term) => part.toLowerCase() === term.toLowerCase()),
+  }))
+}
+
+function getSearchSnippet(text, maxLength = 96) {
+  const value = String(text || '').trim()
+  const terms = searchQuery.value
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+
+  if (!value || value.length <= maxLength || !terms.length) {
+    return value
+  }
+
+  const lowerValue = value.toLowerCase()
+  const firstMatchIndex = terms.reduce((bestIndex, term) => {
+    const index = lowerValue.indexOf(term.toLowerCase())
+    if (index < 0) return bestIndex
+    return bestIndex < 0 ? index : Math.min(bestIndex, index)
+  }, -1)
+
+  if (firstMatchIndex < 0 || firstMatchIndex <= 18) {
+    return `${value.slice(0, maxLength).trim()}...`
+  }
+
+  const start = Math.max(0, firstMatchIndex - 18)
+  const end = Math.min(value.length, start + maxLength)
+  const prefix = start > 0 ? '...' : ''
+  const suffix = end < value.length ? '...' : ''
+
+  return `${prefix}${value.slice(start, end).trim()}${suffix}`
 }
 
 function syncAuthState() {
@@ -250,9 +302,18 @@ onBeforeUnmount(() => {
               class="search-result"
               @mousedown.prevent="openSearchResult(result)"
             >
-              <span>{{ result.category }}</span>
-              <strong>{{ result.title }}</strong>
-              <small>{{ result.description }}</small>
+              <strong>
+                <template v-for="(part, partIndex) in getHighlightedParts(getSearchSnippet(result.title, 58))" :key="`${result.path}-title-${partIndex}`">
+                  <mark v-if="part.matched">{{ part.text }}</mark>
+                  <template v-else>{{ part.text }}</template>
+                </template>
+              </strong>
+              <small>
+                <template v-for="(part, partIndex) in getHighlightedParts(getSearchSnippet(result.description))" :key="`${result.path}-desc-${partIndex}`">
+                  <mark v-if="part.matched">{{ part.text }}</mark>
+                  <template v-else>{{ part.text }}</template>
+                </template>
+              </small>
             </button>
             <button
               v-if="hasSearchQuery"
@@ -343,8 +404,18 @@ onBeforeUnmount(() => {
             @mousedown.prevent="openSearchResult(result)"
           >
             <span>{{ result.category }}</span>
-            <strong>{{ result.title }}</strong>
-            <small>{{ result.description }}</small>
+            <strong>
+              <template v-for="(part, partIndex) in getHighlightedParts(getSearchSnippet(result.title, 58))" :key="`${result.path}-mobile-title-${partIndex}`">
+                <mark v-if="part.matched">{{ part.text }}</mark>
+                <template v-else>{{ part.text }}</template>
+              </template>
+            </strong>
+            <small>
+              <template v-for="(part, partIndex) in getHighlightedParts(getSearchSnippet(result.description))" :key="`${result.path}-mobile-desc-${partIndex}`">
+                <mark v-if="part.matched">{{ part.text }}</mark>
+                <template v-else>{{ part.text }}</template>
+              </template>
+            </small>
           </button>
           <button
             v-if="hasSearchQuery"
@@ -365,6 +436,8 @@ onBeforeUnmount(() => {
   background: transparent !important;
   box-shadow: none !important;
   border: none !important;
+  overflow: visible !important;
+  z-index: 3000 !important;
   transition:
     background 0.35s ease,
     box-shadow 0.35s ease,
@@ -411,6 +484,7 @@ onBeforeUnmount(() => {
   min-height: 48px !important;
   padding-top: 2px;
   padding-bottom: 2px;
+  overflow: visible !important;
 }
 
 .site-header.scrolled :deep(.v-toolbar__content) {
@@ -511,13 +585,28 @@ onBeforeUnmount(() => {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  z-index: 100;
+  z-index: 5000;
   width: min(320px, 80vw);
-  overflow: hidden;
+  max-height: 50vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
   border-radius: 8px;
   background: rgb(var(--v-theme-surface));
   box-shadow: 0 18px 42px rgba(var(--v-theme-background), 0.22);
+}
+
+.search-popover::-webkit-scrollbar {
+  width: 8px;
+}
+
+.search-popover::-webkit-scrollbar-track {
+  background: rgba(var(--v-theme-on-surface), 0.08);
+}
+
+.search-popover::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(var(--v-theme-primary), 0.58);
 }
 
 .search-result,
@@ -558,6 +647,12 @@ onBeforeUnmount(() => {
 .search-result small {
   color: rgba(var(--v-theme-text), 0.62);
   line-height: 1.35;
+}
+
+.search-result mark {
+  padding: 0 2px;
+  color: rgb(var(--v-theme-background));
+  background: rgb(var(--v-theme-primary), 0.8);
 }
 
 .search-submit-row {

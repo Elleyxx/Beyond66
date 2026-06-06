@@ -43,11 +43,11 @@ import { searchSite } from '@/services/siteSearch'
 
 const route = useRoute()
 const router = useRouter()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const queryInput = ref(String(route.query.q || ''))
 
-const results = computed(() => searchSite(queryInput.value, t))
+const results = computed(() => searchSite(queryInput.value, t, { limit: 80, locale: locale.value }))
 const resultHeading = computed(() => {
   return queryInput.value.trim()
     ? t('search.resultsFor', { query: queryInput.value.trim() })

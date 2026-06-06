@@ -189,5 +189,22 @@
       "title": "探访城堡与维京历史遗迹",
       "image": "/assets/images/Denmark/kronborg3.jpeg"
     }
+  ],
+  "travelTips": [
+    {
+      "icon": "bi-bicycle",
+      "title": "骑自行车探索",
+      "text": "骑行是体验丹麦城市最轻松也最地道的方式之一。"
+    },
+    {
+      "icon": "bi-cloud-drizzle",
+      "title": "全年携带轻便外套",
+      "text": "沿海风会让体感温度比预期更凉。"
+    },
+    {
+      "icon": "bi-sign-turn-right",
+      "title": "遵守骑行礼仪",
+      "text": "丹麦非常重视自行车道规则，骑行前建议先了解基本骑行礼仪。"
+    }
   ]
 }

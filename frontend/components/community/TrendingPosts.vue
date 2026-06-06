@@ -2,7 +2,6 @@
   <section class="community-section">
     <div class="section-head">
       <h2>{{ t('community.trending.title') }}</h2>
-      <button type="button">{{ t('community.trending.viewAll') }}</button>
     </div>
     <div class="section-divider"></div>
 

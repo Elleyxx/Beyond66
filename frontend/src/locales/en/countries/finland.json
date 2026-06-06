@@ -174,5 +174,22 @@
       "title": "Take a Ferry to Suomenlinna",
       "image": "/assets/images/Finland/suomenlinna1.jpg"
     }
+  ],
+  "travelTips": [
+    {
+      "icon": "bi-fire",
+      "title": "Experience a traditional sauna",
+      "text": "Sauna culture is an essential part of Finnish life and a must-try cultural experience."
+    },
+    {
+      "icon": "bi-thermometer-snow",
+      "title": "Prepare for seasonal extremes",
+      "text": "Summers offer endless daylight, while winters bring long nights and freezing temperatures."
+    },
+    {
+      "icon": "bi-backpack",
+      "title": "Pack for outdoor adventures",
+      "text": "Finland's lakes, forests, and national parks are best enjoyed with proper outdoor clothing and footwear."
+    }
   ]
 }

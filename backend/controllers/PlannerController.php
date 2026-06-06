@@ -21,6 +21,7 @@ class PlannerController
         $weatherForecast = is_array($payload['weatherForecast'] ?? null) ? $payload['weatherForecast'] : [];
         $auroraForecast = is_array($payload['auroraForecast'] ?? null) ? $payload['auroraForecast'] : [];
         $summary = is_string($payload['summary'] ?? null) ? $payload['summary'] : '';
+        $tags = is_array($payload['tags'] ?? null) ? $payload['tags'] : [];
         $planId = isset($payload['plan_id']) ? (int) $payload['plan_id'] : null;
         $title = is_string($payload['title'] ?? null) ? $payload['title'] : '';
         $description = is_string($payload['description'] ?? null) ? $payload['description'] : '';
@@ -43,6 +44,7 @@ class PlannerController
                 $weatherForecast,
                 $auroraForecast,
                 $summary,
+                $tags,
                 $planId,
                 $title,
                 $description,

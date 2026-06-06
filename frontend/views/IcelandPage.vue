@@ -141,11 +141,7 @@ const pageData = computed(() => {
     destinations: destinationNames,
     experiences: experienceCards,
     gallery,
-    travelTips: [
-      { title: 'Weather', text: 'Wear layers and waterproof outerwear year-round.' },
-      { title: 'Road Safety', text: 'Check road and weather alerts before long drives.' },
-      { title: 'Bookings', text: 'Book geothermal spas and peak-season stays early.' },
-    ],
+    travelTips: Array.isArray(icelandData.value.travelTips) ? icelandData.value.travelTips : [],
   }
 })
 

@@ -17,6 +17,10 @@
       </RouterLink>
       <p>{{ post.description || t('community.card.fallbackDescription') }}</p>
 
+      <div v-if="tags.length" class="post-tags">
+        <span v-for="tag in tags" :key="tag">#{{ tag }}</span>
+      </div>
+
       <div class="post-meta">
         <span>{{ durationLabel }}</span>
         <span>{{ post.country || post.trip?.meta?.country || t('countryNames.nordic') }}</span>
@@ -46,6 +50,15 @@ const { t } = useI18n()
 
 const coverImage = computed(() => props.post.coverImage || props.post.cover_image || '')
 const authorInitial = computed(() => String(props.post.authorName || props.post.author_name || 'T').slice(0, 1).toUpperCase())
+const tags = computed(() => {
+  const rawTags = Array.isArray(props.post.tags)
+    ? props.post.tags
+    : Array.isArray(props.post.trip?.tags)
+      ? props.post.trip.tags
+      : []
+
+  return rawTags.map((tag) => String(tag || '').trim().replace(/^#/, '')).filter(Boolean).slice(0, 5)
+})
 const durationLabel = computed(() => {
   const duration = props.post.duration || props.post.trip?.meta?.duration
   return duration ? t('community.card.days', { count: duration }) : t('community.card.flexible')
@@ -135,10 +148,15 @@ const durationLabel = computed(() => {
 }
 
 .post-meta,
-.post-actions {
+.post-actions,
+.post-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.post-tags {
+  margin-bottom: 12px;
 }
 
 .post-meta span {
@@ -148,6 +166,12 @@ const durationLabel = computed(() => {
   border-radius: 999px;
   background: rgba(var(--v-theme-primary), 0.1);
   color: rgb(var(--v-theme-primary));
+}
+
+.post-tags span {
+  font-size: 0.72rem;
+  font-weight: 850;
+  color: rgba(var(--v-theme-text), 0.72);
 }
 
 .post-actions {

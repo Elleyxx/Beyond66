@@ -174,5 +174,22 @@
       "title": "Visit Castles and Viking Heritage Sites",
       "image": "/assets/images/Denmark/kronborg3.jpeg"
     }
+  ],
+  "travelTips": [
+    {
+      "icon": "bi-bicycle",
+      "title": "Explore by bicycle",
+      "text": "Cycling is one of the easiest and most authentic ways to experience Danish cities."
+    },
+    {
+      "icon": "bi-cloud-drizzle",
+      "title": "Pack a light jacket year-round",
+      "text": "Coastal winds can make the weather feel cooler than expected."
+    },
+    {
+      "icon": "bi-sign-turn-right",
+      "title": "Follow cycling etiquette",
+      "text": "Bike lanes are taken seriously, so learn basic cycling rules before riding."
+    }
   ]
 }

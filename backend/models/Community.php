@@ -123,6 +123,7 @@ class Community
             'season' => (string) ($meta['season'] ?? 'Any season'),
             'likes' => (int) ($post['likes'] ?? 0),
             'comments' => (int) ($post['comments'] ?? 0),
+            'tags' => is_array($trip['tags'] ?? null) ? $trip['tags'] : [],
             'createdAt' => $post['created_at'] ?? null,
             'trip' => [
                 'meta' => $meta,
@@ -130,6 +131,7 @@ class Community
                 'budget' => is_array($trip['budget'] ?? null) ? $trip['budget'] : [],
                 'checklist' => is_array($trip['checklist'] ?? null) ? $trip['checklist'] : [],
                 'summary' => (string) ($trip['summary'] ?? ''),
+                'tags' => is_array($trip['tags'] ?? null) ? $trip['tags'] : [],
             ],
         ];
     }

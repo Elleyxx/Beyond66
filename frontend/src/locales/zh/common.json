@@ -243,7 +243,7 @@
     },
     "sidebar": {
       "destinations": "热门目的地",
-      "tags": "热门标签",
+      "tags": "热门话题",
       "creators": "热门创作者",
       "posts": "{count} 个帖子"
     },
@@ -473,6 +473,9 @@
       "titlePlaceholder": "挪威冬日之旅",
       "description": "描述",
       "descriptionPlaceholder": "写下关于这段旅程的内容...",
+      "tags": "标签",
+      "tagsPlaceholder": "极光, 自驾游, 峡湾",
+      "tagsHint": "用逗号分隔标签，最多可添加 8 个。",
       "coverImage": "封面图片（可选）",
       "coverAlt": "行程封面",
       "chooseCover": "选择封面图片",

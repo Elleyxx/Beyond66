@@ -142,11 +142,7 @@ const pageData = computed(() => {
     destinations: normalizedDestinations,
     experiences,
     gallery,
-    travelTips: [
-      { title: 'Weather', text: 'Pack waterproof layers and warm outerwear year-round.' },
-      { title: 'Road Safety', text: 'Check weather and ferry schedules before long fjord drives.' },
-      { title: 'Bookings', text: 'Reserve scenic rail and Arctic activities early in peak season.' },
-    ],
+    travelTips: Array.isArray(data.travelTips) ? data.travelTips : [],
   }
 })
 

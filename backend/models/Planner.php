@@ -32,6 +32,7 @@ class Planner
         array $weatherForecast = [],
         array $auroraForecast = [],
         string $summary = '',
+        array $tags = [],
         ?int $planId = null,
         string $title = '',
         string $description = '',
@@ -53,7 +54,8 @@ class Planner
                 $packingList,
                 $weatherForecast,
                 $auroraForecast,
-                $summary
+                $summary,
+                $tags
             );
 
             if ($planId) {
@@ -144,7 +146,8 @@ class Planner
         array $packingList,
         array $weatherForecast,
         array $auroraForecast,
-        string $summary
+        string $summary,
+        array $tags
     ): string {
         return json_encode([
             'meta' => $tripMeta,
@@ -154,7 +157,35 @@ class Planner
             'aurora' => $auroraForecast,
             'checklist' => $packingList,
             'summary' => $summary,
+            'tags' => $this->normalizeTags($tags),
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    private function normalizeTags(array $tags): array
+    {
+        $normalized = [];
+        $seen = [];
+
+        foreach ($tags as $tag) {
+            $value = trim(ltrim((string) $tag, '#'));
+            if ($value === '') {
+                continue;
+            }
+
+            $key = function_exists('mb_strtolower') ? mb_strtolower($value) : strtolower($value);
+            if (isset($seen[$key])) {
+                continue;
+            }
+
+            $seen[$key] = true;
+            $normalized[] = $value;
+
+            if (count($normalized) >= 8) {
+                break;
+            }
+        }
+
+        return $normalized;
     }
 
     private function syncCommunityPost(
@@ -228,6 +259,7 @@ class Planner
             'weatherForecast' => is_array($tripData['weather'] ?? null) ? $tripData['weather'] : [],
             'auroraForecast' => $tripData['aurora'] ?? null,
             'summary' => (string) ($tripData['summary'] ?? ''),
+            'tags' => is_array($tripData['tags'] ?? null) ? $tripData['tags'] : [],
             'description' => (string) ($trip['description'] ?? ''),
             'visibility' => (string) ($trip['visibility'] ?? 'private'),
             'coverImage' => (string) ($trip['cover_image'] ?? ''),

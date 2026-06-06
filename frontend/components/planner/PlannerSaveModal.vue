@@ -28,6 +28,20 @@
         </label>
 
         <label>
+          {{ t('planner.saveModal.tags') }}
+          <input
+            v-model="tagsInput"
+            type="text"
+            :placeholder="t('planner.saveModal.tagsPlaceholder')"
+          />
+          <small>{{ t('planner.saveModal.tagsHint') }}</small>
+        </label>
+
+        <div v-if="tags.length" class="tag-preview">
+          <span v-for="tag in tags" :key="tag">#{{ tag }}</span>
+        </div>
+
+        <label>
           {{ t('planner.saveModal.coverImage') }}
 
           <div class="image-upload">
@@ -78,7 +92,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const coverImage = ref(null)
@@ -87,6 +101,7 @@ const coverPreview = ref('')
 const props = defineProps({
   defaultTitle: { type: String, default: '' },
   defaultDescription: { type: String, default: '' },
+  defaultTags: { type: Array, default: () => [] },
   defaultVisibility: { type: String, default: 'private' },
   isEditing: { type: Boolean, default: false },
 })
@@ -96,7 +111,23 @@ const { t } = useI18n()
 
 const title = ref(props.defaultTitle || t('planner.saveModal.defaultTitle'))
 const description = ref(props.defaultDescription)
+const tagsInput = ref(props.defaultTags.join(', '))
 const visibility = ref(props.defaultVisibility)
+
+const tags = computed(() => {
+  const seen = new Set()
+  return tagsInput.value
+    .split(',')
+    .map((tag) => tag.trim().replace(/^#/, ''))
+    .filter(Boolean)
+    .filter((tag) => {
+      const key = tag.toLowerCase()
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+    .slice(0, 8)
+})
 
 watch(
   () => props.defaultTitle,
@@ -113,6 +144,13 @@ watch(
 )
 
 watch(
+  () => props.defaultTags,
+  (nextTags) => {
+    tagsInput.value = Array.isArray(nextTags) ? nextTags.join(', ') : ''
+  },
+)
+
+watch(
   () => props.defaultVisibility,
   (nextVisibility) => {
     visibility.value = nextVisibility
@@ -123,6 +161,7 @@ function emitSave() {
   emit('save-trip', {
     title: title.value.trim() || props.defaultTitle || t('planner.saveModal.defaultTitle'),
     description: description.value.trim(),
+    tags: tags.value,
     visibility: props.isEditing ? props.defaultVisibility : visibility.value,
     coverImage: coverImage.value,
   })
@@ -205,6 +244,11 @@ label {
   color: rgba(var(--v-theme-text), 0.72);
 }
 
+label small {
+  color: rgba(var(--v-theme-text), 0.52);
+  font-weight: 700;
+}
+
 input,
 textarea {
   width: 100%;
@@ -215,6 +259,21 @@ textarea {
   color: rgb(var(--v-theme-text));
   font: inherit;
   outline: none;
+}
+
+.tag-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-preview span {
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: rgb(var(--v-theme-primary));
+  background: rgba(var(--v-theme-primary), 0.1);
+  font-size: 0.78rem;
+  font-weight: 900;
 }
 
 textarea {

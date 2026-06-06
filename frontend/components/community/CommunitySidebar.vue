@@ -21,19 +21,6 @@
         </button>
       </div>
     </section>
-
-    <section v-if="creators.length" class="sidebar-card">
-      <h3>{{ t('community.sidebar.creators') }}</h3>
-
-      <div v-for="creator in creators" :key="creator.name" class="creator-row">
-        <div class="avatar">{{ creator.name.slice(0, 1) }}</div>
-
-        <div>
-          <strong>{{ creator.name }}</strong>
-          <span>{{ t('community.sidebar.posts', { count: creator.posts }) }}</span>
-        </div>
-      </div>
-    </section>
   </aside>
 </template>
 
@@ -43,7 +30,6 @@ import { useI18n } from 'vue-i18n'
 defineProps({
   destinations: { type: Array, default: () => [] },
   tags: { type: Array, default: () => [] },
-  creators: { type: Array, default: () => [] },
 })
 
 const { t } = useI18n()
@@ -69,7 +55,7 @@ const { t } = useI18n()
 }
 
 .sidebar-card h3 {
-  margin: 0 0 14px;
+  margin: 0 0 32px;
 }
 
 .sidebar-card ul {
@@ -80,15 +66,13 @@ const { t } = useI18n()
   gap: 12px;
 }
 
-.sidebar-card li,
-.creator-row {
+.sidebar-card li {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.country-code,
-.avatar {
+.country-code {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -100,15 +84,10 @@ const { t } = useI18n()
   font-weight: 900;
 }
 
-.sidebar-card small,
-.creator-row span {
+.sidebar-card small {
   margin-left: auto;
   color: rgba(var(--v-theme-text), 0.55);
   font-size: 0.78rem;
-}
-
-.creator-row div:last-child {
-  display: grid;
 }
 
 .tag-list {
@@ -123,7 +102,7 @@ const { t } = useI18n()
   padding: 7px 10px;
   background: rgba(var(--v-theme-primary), 0.1);
   color: rgb(var(--v-theme-primary));
-  font-weight: 800;
+  font-weight: 650;
 }
 
 @media (max-width: 1000px) {
