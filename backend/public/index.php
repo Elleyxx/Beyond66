@@ -8,9 +8,11 @@ $allowedOrigins = [
     'https://beyond66-j79m.vercel.app',
 ];
 
-$isAllowedVercelOrigin = (bool) preg_match('/^https:\/\/[a-z0-9-]+\.vercel\.app$/i', $origin);
+$isAllowedVercelOrigin  = (bool) preg_match('/^https:\/\/[a-z0-9-]+\.vercel\.app$/i', $origin);
+$isAllowedRailwayOrigin = (bool) preg_match('/^https:\/\/[a-z0-9-]+\.up\.railway\.app$/i', $origin);
+$isAllowedFreedevOrigin = (bool) preg_match('/^https:\/\/[a-z0-9-]+\.freedev\.app$/i', $origin);
 
-if (in_array($origin, $allowedOrigins, true) || $isAllowedVercelOrigin) {
+if (in_array($origin, $allowedOrigins, true) || $isAllowedVercelOrigin || $isAllowedRailwayOrigin || $isAllowedFreedevOrigin) {
     header("Access-Control-Allow-Origin: $origin");
     header('Vary: Origin');
 }
