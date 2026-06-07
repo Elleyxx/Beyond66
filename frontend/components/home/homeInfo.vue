@@ -96,14 +96,104 @@ const { t } = useI18n()
   font-size: 1.5rem;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1250px) {
   .home-about {
     grid-template-columns: 1fr;
-    padding: 64px 24px 80px;
+    gap: 34px;
+    padding: 70px 6vw 90px;
+  }
+
+  .about-copy {
+    max-width: 900px;
   }
 
   .about-copy h2 {
-    font-size: 2.4rem;
+    max-width: 850px;
+    font-size: clamp(2.6rem, 6vw, 4.2rem);
+  }
+
+  .about-copy p:last-child {
+    max-width: 760px;
+  }
+
+  .about-stats {
+    max-width: 760px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .home-about {
+    gap: 30px;
+    padding: 60px 5vw 80px;
+  }
+
+  .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+  }
+
+  .about-copy h2 {
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+  }
+
+  .about-copy p:last-child {
+    margin-top: 18px;
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .about-stats {
+    max-width: 620px;
+  }
+
+  .about-stats article {
+    padding: 18px 0;
+  }
+
+  .about-stats strong {
+    font-size: 2.1rem;
+  }
+
+  .about-stats span {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-about {
+    gap: 24px;
+    padding: 50px 20px 70px;
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+
+  .about-copy h2 {
+    font-size: clamp(1.9rem, 9vw, 2.8rem);
+  }
+
+  .about-copy p:last-child {
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .about-stats article {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 0;
+  }
+
+  .about-stats strong {
+    font-size: 2rem;
+  }
+
+  .about-stats span {
+    text-align: left;
+    font-size: 1rem;
   }
 }
 </style>

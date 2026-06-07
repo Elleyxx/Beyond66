@@ -1,45 +1,45 @@
 <template>
   <main class="profile-page">
-    <div v-if="isLoading" class="state-panel">
-      <v-progress-circular indeterminate color="primary" />
-      <p>Loading your profile...</p>
+    <div class="profile-wrap">
+      <div v-if="isLoading" class="state-panel">
+        <v-progress-circular indeterminate color="primary" />
+        <p>Loading your profile...</p>
+      </div>
+
+      <div v-else-if="error" class="state-panel">
+        <v-icon size="36">mdi-alert-circle-outline</v-icon>
+        <p>{{ error }}</p>
+        <v-btn color="primary" variant="flat" @click="loadProfile">Try Again</v-btn>
+      </div>
+
+      <template v-else>
+        <ProfileHero :user="profile.user" />
+
+        <ProfileStats :stats="profile.stats" />
+
+        <section class="profile-grid">
+          <PassportSection :countries="profile.passportCountries" />
+          <AchievementsSection :achievements="profile.achievements" />
+        </section>
+
+        <MyJourneys
+          :journeys="profile.journeys"
+          @view="openJourney"
+          @edit="openJourney"
+          @toggle-share="toggleJourneyShare"
+          @add-diary="openDiaryModal"
+        />
+
+        <SavedDestinations :destinations="profile.savedDestinations" @unsave="unsaveDestination" />
+
+        <JourneyDiaryModal
+          v-if="editingDiaryJourney"
+          :journey="editingDiaryJourney"
+          @close="editingDiaryJourney = null"
+          @save="saveDiary"
+        />
+      </template>
     </div>
-
-    <div v-else-if="error" class="state-panel">
-      <v-icon size="36">mdi-alert-circle-outline</v-icon>
-      <p>{{ error }}</p>
-      <v-btn color="primary" variant="flat" @click="loadProfile">Try Again</v-btn>
-    </div>
-
-    <template v-else>
-      <ProfileHero :user="profile.user" />
-
-      <ProfileStats :stats="profile.stats" /> 
-
-      <section class="profile-grid">
-        <PassportSection :countries="profile.passportCountries" />
-        <AchievementsSection :achievements="profile.achievements" />
-      </section>
-
-      <MyJourneys
-        :journeys="profile.journeys"
-        @view="openJourney"
-        @edit="openJourney"
-        @toggle-share="toggleJourneyShare"
-        @add-diary="openDiaryModal"
-      />
-
-      <SavedDestinations :destinations="profile.savedDestinations" />
-
-      <PublicPosts :posts="profile.publicPosts" />
-
-      <JourneyDiaryModal
-        v-if="editingDiaryJourney"
-        :journey="editingDiaryJourney"
-        @close="editingDiaryJourney = null"
-        @save="saveDiary"
-      />
-    </template>
   </main>
 </template>
 
@@ -53,9 +53,9 @@ import AchievementsSection from '@/components/profile/AchievementsSection.vue'
 import MyJourneys from '@/components/profile/MyJourneys.vue'
 import JourneyDiaryModal from '@/components/profile/JourneyDiaryModal.vue'
 import SavedDestinations from '@/components/profile/SavedDestinations.vue'
-import PublicPosts from '@/components/profile/PublicPosts.vue'
 import { loadProfileDashboard } from '@/services/profileService'
 import { saveJourneyDiary, updateJourneyVisibility } from '@/services/plannerService'
+import { toggleSavedDestination } from '@/services/savedItemService'
 
 const router = useRouter()
 const isLoading = ref(true)
@@ -117,6 +117,16 @@ async function saveDiary(payload) {
   }
 }
 
+async function unsaveDestination(slug) {
+  if (!slug) return
+  profile.savedDestinations = profile.savedDestinations.filter((d) => d.slug !== slug)
+  try {
+    await toggleSavedDestination(slug)
+  } catch {
+    await loadProfile()
+  }
+}
+
 async function toggleJourneyShare(journey) {
   try {
     await updateJourneyVisibility(journey.id, journey.isPublic ? 'private' : 'public')
@@ -130,9 +140,15 @@ async function toggleJourneyShare(journey) {
 <style scoped>
 .profile-page {
   min-height: 100vh;
-  padding: 110px 6vw 70px;
+  padding-top: 50px;
+  padding-bottom: 70px;
   color: rgb(var(--v-theme-text));
   background: rgb(var(--v-theme-background));
+}
+
+.profile-wrap {
+  width: 90%;
+  margin: 0 auto;
 }
 
 .profile-grid {
@@ -164,13 +180,36 @@ async function toggleJourneyShare(journey) {
   opacity: 0.76;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1250px) {
   .profile-page {
-    padding: 120px 18px 50px;
+    padding-top: 108px;
   }
 
   .profile-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .profile-page {
+    padding-top: 120px;
+    padding-bottom: 56px;
+  }
+
+  .profile-wrap {
+    width: 95%;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-page {
+    padding-top: 108px;
+    padding-bottom: 48px;
+  }
+
+  .profile-wrap {
+    width: 100%;
+    padding: 0 16px;
   }
 }
 </style>

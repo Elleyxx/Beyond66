@@ -39,7 +39,8 @@ class Community
                 u.username AS author_username,
                 t.trip_data,
                 COUNT(DISTINCT pl.id) AS likes,
-                COUNT(DISTINCT pc.id) AS comments
+                COUNT(DISTINCT pc.id) AS comments,
+                (SELECT COUNT(*) FROM post_likes WHERE post_id = cp.id AND user_id = :viewer_id) AS liked
              FROM community_posts cp
              INNER JOIN users u ON u.id = cp.user_id
              INNER JOIN trips t ON t.id = cp.trip_id
@@ -53,6 +54,7 @@ class Community
         $stmt->execute([
             'current_user_id_check' => (int) ($currentUserId ?? 0),
             'current_user_id_owner' => (int) ($currentUserId ?? 0),
+            'viewer_id'             => (int) ($currentUserId ?? 0),
         ]);
 
         return array_map(fn ($post) => $this->formatPost($post, $currentUserId), $stmt->fetchAll());
@@ -74,7 +76,8 @@ class Community
                 u.username AS author_username,
                 t.trip_data,
                 COUNT(DISTINCT pl.id) AS likes,
-                COUNT(DISTINCT pc.id) AS comments
+                COUNT(DISTINCT pc.id) AS comments,
+                (SELECT COUNT(*) FROM post_likes WHERE post_id = cp.id AND user_id = :viewer_id) AS liked
              FROM community_posts cp
              INNER JOIN users u ON u.id = cp.user_id
              INNER JOIN trips t ON t.id = cp.trip_id
@@ -86,9 +89,10 @@ class Community
              LIMIT 1"
         );
         $stmt->execute([
-            'id' => $postId,
+            'id'                    => $postId,
             'current_user_id_check' => (int) ($currentUserId ?? 0),
             'current_user_id_owner' => (int) ($currentUserId ?? 0),
+            'viewer_id'             => (int) ($currentUserId ?? 0),
         ]);
         $post = $stmt->fetch();
 
@@ -212,6 +216,88 @@ class Community
         return $stmt->rowCount() > 0;
     }
 
+    public function getComments(int $postId): array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT pc.id, pc.comment, pc.created_at, u.display_name AS username, u.avatar_url
+             FROM post_comments pc
+             INNER JOIN users u ON u.id = pc.user_id
+             WHERE pc.post_id = :post_id
+             ORDER BY pc.created_at ASC'
+        );
+        $stmt->execute(['post_id' => $postId]);
+
+        return array_map(fn ($row) => $this->formatComment($row), $stmt->fetchAll());
+    }
+
+    public function addComment(int $postId, int $userId, string $comment): array
+    {
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO post_comments (post_id, user_id, comment) VALUES (:post_id, :user_id, :comment)'
+        );
+        $stmt->execute([
+            'post_id' => $postId,
+            'user_id' => $userId,
+            'comment' => $comment,
+        ]);
+
+        $id = (int) $this->pdo->lastInsertId();
+
+        $fetch = $this->pdo->prepare(
+            'SELECT pc.id, pc.comment, pc.created_at, u.display_name AS username, u.avatar_url
+             FROM post_comments pc
+             INNER JOIN users u ON u.id = pc.user_id
+             WHERE pc.id = :id
+             LIMIT 1'
+        );
+        $fetch->execute(['id' => $id]);
+
+        return $this->formatComment($fetch->fetch());
+    }
+
+    private function formatComment(array $row): array
+    {
+        return [
+            'id'        => (int) $row['id'],
+            'username'  => (string) $row['username'],
+            'avatar'    => (string) ($row['avatar_url'] ?? ''),
+            'comment'   => (string) $row['comment'],
+            'createdAt' => $row['created_at'],
+        ];
+    }
+
+    public function toggleLike(int $postId, int $userId): array
+    {
+        $check = $this->pdo->prepare(
+            'SELECT id FROM post_likes WHERE post_id = :post_id AND user_id = :user_id LIMIT 1'
+        );
+        $check->execute(['post_id' => $postId, 'user_id' => $userId]);
+
+        if ($check->fetch()) {
+            $stmt = $this->pdo->prepare(
+                'DELETE FROM post_likes WHERE post_id = :post_id AND user_id = :user_id'
+            );
+            $stmt->execute(['post_id' => $postId, 'user_id' => $userId]);
+            $liked = false;
+        } else {
+            $stmt = $this->pdo->prepare(
+                'INSERT INTO post_likes (post_id, user_id) VALUES (:post_id, :user_id)'
+            );
+            $stmt->execute(['post_id' => $postId, 'user_id' => $userId]);
+            $liked = true;
+        }
+
+        $count = $this->pdo->prepare(
+            'SELECT COUNT(*) AS cnt FROM post_likes WHERE post_id = :post_id'
+        );
+        $count->execute(['post_id' => $postId]);
+
+        return [
+            'liked' => $liked,
+            'likes' => (int) $count->fetch()['cnt'],
+        ];
+    }
+
     private function getTripForUpdate(int $tripId, int $userId): ?array
     {
         $stmt = $this->pdo->prepare(
@@ -276,6 +362,7 @@ class Community
             'type' => $hasDiary && !$hasPlanner ? 'diary' : 'plan',
             'typeLabel' => $postType,
             'category' => $hasDiary && !$hasPlanner ? 'diary' : 'plan',
+            'postCategory' => $hasPlanner && $hasDiary ? 'complete_journey' : ($hasPlanner ? 'journey' : ($hasDiary ? 'diary' : 'discussion')),
             'authorName' => (string) ($post['author_name'] ?? 'Traveller'),
             'author_name' => (string) ($post['author_name'] ?? 'Traveller'),
             'country' => (string) ($meta['country'] ?? 'Nordic'),
@@ -283,6 +370,7 @@ class Community
             'season' => (string) ($meta['season'] ?? 'Any season'),
             'likes' => (int) ($post['likes'] ?? 0),
             'comments' => (int) ($post['comments'] ?? 0),
+            'liked' => (bool) ($post['liked'] ?? false),
             'tags' => is_array($trip['tags'] ?? null) ? $trip['tags'] : [],
             'createdAt' => $post['created_at'] ?? null,
             'trip' => [

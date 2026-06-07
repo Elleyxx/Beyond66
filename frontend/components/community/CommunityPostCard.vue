@@ -28,7 +28,10 @@
       </div>
 
       <div class="post-actions">
-        <button type="button"><i class="bi bi-heart"></i> {{ post.likes || 0 }}</button>
+        <button type="button" :class="{ liked: post.liked }" @click.stop="$emit('like')">
+          <i :class="post.liked ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+          {{ post.likes || 0 }}
+        </button>
         <button type="button"><i class="bi bi-chat"></i> {{ post.comments || 0 }}</button>
         <button v-if="post.isOwner" type="button" @click="$emit('edit')">
           <i class="bi bi-pencil-square"></i>
@@ -53,7 +56,7 @@ const props = defineProps({
   post: { type: Object, required: true },
 })
 
-defineEmits(['save', 'edit', 'use-plan'])
+defineEmits(['save', 'edit', 'use-plan', 'like'])
 const { t } = useI18n()
 
 const coverImage = computed(() => resolveAssetUrl(props.post.coverImage || props.post.cover_image || ''))
@@ -192,5 +195,10 @@ const durationLabel = computed(() => {
   border-radius: 999px;
   padding: 7px 10px;
   cursor: pointer;
+  transition: color 0.18s;
+}
+
+.post-actions button.liked {
+  color: #e05252;
 }
 </style>

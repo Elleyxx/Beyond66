@@ -1,7 +1,7 @@
 <template>
   <footer class="nordic-footer" :class="{ 'nordic-footer-home': isHome }">
     <v-container fluid class="footer-content px-6 px-md-10 px-lg-14">
-      <v-row class="footer-top" dense>
+      <v-row class="footer-top footer-desktop" dense>
         <v-col cols="12" sm="6" md="3">
           <h4 class="footer-title">{{ t('footer.explore') }}</h4>
           <div class="footer-line"></div>
@@ -57,6 +57,24 @@
           </div>
         </v-col>
       </v-row>
+
+      <div class="footer-mobile">
+        <h2 class="mobile-brand-logo">{{ t('brand.name') }}</h2>
+
+        <div class="mobile-links">
+          <router-link to="/explore">
+            {{ t('footer.explore') }}
+          </router-link>
+
+          <router-link to="/trip-planner">
+            {{ t('footer.planner') }}
+          </router-link>
+
+          <router-link to="/community">
+            {{ t('footer.community') }}
+          </router-link>
+        </div>
+      </div>
 
       <div class="footer-divider"></div>
 
@@ -259,10 +277,61 @@ const { t } = useI18n()
   color: rgb(var(--v-theme-accent));
 }
 
-@media (max-width: 960px) {
+.footer-mobile {
+  display: none;
+}
+
+.mobile-brand-logo {
+  margin: 0;
+  text-align: center;
+  color: rgb(var(--v-theme-footer));
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+}
+
+.mobile-links {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  margin-top: 20px;
+}
+
+.mobile-links a {
+  color: rgb(var(--v-theme-footer));
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: opacity 0.2s ease;
+}
+
+.mobile-links a:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 1250px) {
+  .nordic-footer {
+    min-height: 640px;
+  }
+
+  .nordic-footer::after {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.05) 0%,
+        rgba(0, 0, 0, 0.35) 35%,
+        rgba(0, 0, 0, 0.86) 68%,
+        rgba(0, 0, 0, 0.98) 100%
+      );
+  }
+
   .footer-content {
-    min-height: 620px;
-    padding-top: 0;
+    min-height: 640px;
+    padding-top: 220px;
+    padding-bottom: 14px;
+    justify-content: flex-end;
   }
 
   .brand-section {
@@ -272,30 +341,72 @@ const { t } = useI18n()
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
+  .nordic-footer {
+    min-height: 520px;
+  }
+
   .footer-content {
     min-height: 520px;
-    padding-top: 0;
-    padding-bottom: 10px;
+    padding-top: 220px;
+    padding-bottom: 18px;
+    justify-content: flex-end;
   }
 
-  .footer-title {
-    font-size: 0.86rem;
+  .footer-desktop {
+    display: none;
   }
 
-  .brand-logo {
+  .footer-mobile {
+    display: block;
+    margin-bottom: 28px;
+  }
+
+  .footer-bottom {
+    justify-content: center;
+    text-align: center;
+    gap: 14px;
+  }
+
+  .bottom-links {
+    justify-content: center;
+  }
+}
+
+/* =========================
+   <=600px
+========================= */
+
+@media (max-width: 600px) {
+  .nordic-footer {
+    min-height: 430px;
+  }
+
+  .footer-content {
+    min-height: 430px;
+    padding-top: 160px;
+    padding-bottom: 12px;
+  }
+
+  .mobile-brand-logo {
     font-size: 1.05rem;
     letter-spacing: 0.18em;
   }
 
-  .footer-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+  .mobile-links {
+    gap: 18px;
+    flex-wrap: wrap;
   }
 
-  .bottom-links {
-    gap: 10px 16px;
+  .mobile-links a {
+    font-size: 0.78rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
   }
 }
 </style>

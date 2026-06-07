@@ -115,9 +115,9 @@ const { t } = useI18n()
   z-index: 2;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1250px) {
   .home-about {
-    padding: 64px 24px 80px;
+    padding: 70px 6vw 90px;
   }
 
   .about-container {
@@ -125,11 +125,119 @@ const { t } = useI18n()
   }
 
   .about-content {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
 
-  .about-image-wrap img {
-    min-height: 280px;
+  .about-header {
+    order: 1;
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .about-image-wrap {
+    order: 2;
+    width: min(100%, 760px);
+    margin: 0 auto;
+    padding: 14px;
+  }
+
+  .about-copy {
+    order: 3;
+  }
+
+  .about-copy p {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .home-about {
+    padding: 60px 5vw 80px;
+  }
+
+  .about-container {
+    padding: 12px;
+  }
+
+  .about-content {
+    gap: 20px;
+  }
+
+  .about-image-wrap {
+    width: min(100%, 560px);
+    padding: 12px;
+  }
+
+  .about-header h2 {
+    font-size: clamp(3.8rem, 10vw, 6rem);
+    padding-bottom: 18px;
+  }
+
+  .about-copy p {
+    font-size: 1rem;
+    line-height: 1.75;
+    padding-bottom: 18px;
+  }
+
+  .about-image-wrap::before {
+    width: 130px;
+    height: 110px;
+  }
+
+  .about-image-wrap::after {
+    width: 130px;
+    height: 110px;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-about {
+    padding: 50px 20px 70px;
+  }
+
+  .about-container {
+    padding: 0;
+  }
+
+  .about-content {
+    gap: 16px;
+  }
+
+  .about-header {
+    text-align: left;
+  }
+
+  .about-header h2 {
+    font-size: clamp(2.8rem, 12vw, 4.2rem);
+    padding-bottom: 12px;
+  }
+
+  .about-image-wrap {
+    width: min(100%, 360px);
+    padding: 10px;
+  }
+
+  .about-copy p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    padding-bottom: 16px;
+    text-align: left;
+  }
+
+  .about-image-wrap::before {
+    width: 80px;
+    height: 70px;
+    border-top-width: 4px;
+    border-left-width: 4px;
+  }
+
+  .about-image-wrap::after {
+    width: 80px;
+    height: 70px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
   }
 }
 </style>

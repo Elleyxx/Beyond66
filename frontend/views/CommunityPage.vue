@@ -12,6 +12,7 @@
           @save="openSaveModal"
           @edit="openEditModal"
           @use-plan="usePlan"
+          @like="handleLike"
         />
       </div>
 
@@ -47,7 +48,7 @@ import CommunitySidebar from '@/components/community/CommunitySidebar.vue'
 import PostEditModal from '@/components/community/PostEditModal.vue'
 import PostSaveModal from '@/components/community/PostSaveModal.vue'
 import TrendingPosts from '@/components/community/TrendingPosts.vue'
-import { getCommunityPosts, saveCommunityPost, updateCommunityPost } from '@/services/communityService'
+import { getCommunityPosts, saveCommunityPost, togglePostLike, updateCommunityPost } from '@/services/communityService'
 
 const router = useRouter()
 // const { t } = useI18n()
@@ -57,38 +58,14 @@ const savingPost = ref(null)
 const editingPost = ref(null)
 
 const filters = ref({
-  search: '',
   category: 'all',
 })
 
 const filteredPosts = computed(() => {
-  const query = filters.value.search.trim().toLowerCase()
-
   return posts.value.filter((post) => {
-    const matchesSearch =
-      !query ||
-      [
-        post.title,
-        post.description,
-        post.country,
-        post.authorName,
-        ...(post.tags || []),
-        ...(post.trip?.tags || []),
-      ].some((value) =>
-        String(value || '').toLowerCase().includes(query)
-      )
-
-    let matchesCategory = true
-
-    if (filters.value.category === 'my_posts') {
-      matchesCategory = post.isOwner === true
-    } else if (filters.value.category !== 'all') {
-      matchesCategory =
-        post.postType === filters.value.category ||
-        post.post_type === filters.value.category
-    }
-
-    return matchesSearch && matchesCategory
+    if (filters.value.category === 'my_posts') return post.isOwner === true
+    if (filters.value.category !== 'all') return post.postCategory === filters.value.category
+    return true
   })
 })
 
@@ -180,6 +157,17 @@ async function updatePost(payload) {
   editingPost.value = null
 }
 
+async function handleLike(post) {
+  try {
+    const result = await togglePostLike(post.id)
+    posts.value = posts.value.map((p) =>
+      p.id === post.id ? { ...p, liked: result.liked, likes: result.likes } : p,
+    )
+  } catch {
+    // unauthenticated or network error — silently ignore
+  }
+}
+
 function usePlan(post) {
   router.push({
     path: '/trip-planner',
@@ -191,8 +179,9 @@ function usePlan(post) {
 <style scoped>
 .community-page {
   min-height: 100vh;
-  padding: 78px clamp(24px, 5vw, 72px) 100px;
+  padding: 78px var(--page-gutter) 100px;
   background: rgb(var(--v-theme-background));
+  margin-top: 50px;
 }
 
 .community-layout {
@@ -210,10 +199,34 @@ function usePlan(post) {
   min-width: 0;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1250px) {
+  .community-page {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
   .community-layout {
-    width: 90%;
+    width: 100%;
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .community-page {
+    padding-top: 50px;
+    padding-bottom: 84px;
+    margin-top: 0;
+  }
+
+  .community-layout {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .community-page {
+    padding-top: 104px;
+    padding-bottom: 72px;
   }
 }
 </style>

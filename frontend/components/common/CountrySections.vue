@@ -14,7 +14,7 @@
           </h2>
           <p class="country-intro">{{ country.description }}</p>
           <router-link :to="`/country/${country.slug}`" class="more-btn">
-            MORE →
+            {{ t('explore.moreBtn') }}
           </router-link>
         </div>
 
@@ -40,35 +40,33 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, watch } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import norwayData from '../../src/locales/en/countries/norway.json'
-import swedenData from '../../src/locales/en/countries/sweden.json'
-import finlandData from '../../src/locales/en/countries/finland.json'
-import denmarkData from '../../src/locales/en/countries/denmark.json'
-import icelandRaw from '../../src/locales/en/countries/iceland.json'
 
-const { t } = useI18n()
+const { t, tm, locale } = useI18n()
 
-const fallbackCountries = [
-  { id: 'is', slug: 'iceland', name: 'Iceland', displayName: ['ICE', 'LAND'], description: '', image: '/assets/images/Iceland/iceland.jpg', randomDestinations: [] },
-  { id: 'no', slug: 'norway', name: 'Norway', displayName: ['NOR', 'WAY'], description: '', image: '/assets/images/Norway/norway.jpg', randomDestinations: [] },
-  { id: 'se', slug: 'sweden', name: 'Sweden', displayName: ['SWE', 'DEN'], description: '', image: '/assets/images/Sweden/sweden.jpg', randomDestinations: [] },
-  { id: 'fi', slug: 'finland', name: 'Finland', displayName: ['FIN', 'LAND'], description: '', image: '/assets/images/Finland/finland.jpg', randomDestinations: [] },
-  { id: 'dk', slug: 'denmark', name: 'Denmark', displayName: ['DEN', 'MARK'], description: '', image: '/assets/images/Denmark/denmark.jpg', randomDestinations: [] },
-]
+const slugOrder = ['norway', 'sweden', 'finland', 'denmark', 'iceland']
 
-const countries = ref([...fallbackCountries])
+const displayNames = {
+  iceland: ['ICE', 'LAND'],
+  norway: ['NOR', 'WAY'],
+  sweden: ['SWE', 'DEN'],
+  finland: ['FIN', 'LAND'],
+  denmark: ['DEN', 'MARK'],
+}
+
+const fallbackImages = {
+  iceland: '/assets/images/Iceland/iceland.jpg',
+  norway: '/assets/images/Norway/norway.jpg',
+  sweden: '/assets/images/Sweden/sweden.jpg',
+  finland: '/assets/images/Finland/finland.jpg',
+  denmark: '/assets/images/Denmark/denmark.jpg',
+}
+
+const countries = ref([])
 const carouselIndexBySlug = ref({})
 let carouselTimer = null
-
-const countryJsonList = [
-  norwayData,
-  swedenData,
-  finlandData,
-  denmarkData,
-  icelandRaw?.countries?.iceland || icelandRaw,
-]
 
 const initializeCarouselIndexes = () => {
   const next = {}
@@ -132,33 +130,35 @@ const normalizeDestination = (destination, fallbackImage) => ({
 
 const loadCountries = () => {
   try {
-    countries.value = countryJsonList.map((country) => {
-      const destinations = Array.isArray(country?.destinations) ? country.destinations : []
+    countries.value = slugOrder.map((slug) => {
+      const data = tm(`countries.${slug}`) || {}
+      const fallbackImage = fallbackImages[slug] || '/assets/images/logo.png'
+      const destinations = Array.isArray(data.destinations) ? data.destinations : []
       const randomDestinations = randomPick(destinations, Math.min(5, destinations.length))
-      const fallback = fallbackCountries.find((item) => item.slug === country.slug)
 
       return {
-        id: fallback?.id || country.slug,
-        slug: country.slug,
-        name: country.country || country.slug,
-        displayName: fallback?.displayName || [country.country || country.slug],
-        description: country.description || '',
-        image: country.heroImage || '/assets/images/logo.png',
+        slug,
+        name: data.country || slug,
+        displayName: displayNames[slug] || [slug.toUpperCase()],
+        description: data.description || '',
+        image: data.heroImage || fallbackImage,
         randomDestinations: randomDestinations.map((item) =>
-          normalizeDestination(item, country.heroImage || '/assets/images/logo.png'),
+          normalizeDestination(item, data.heroImage || fallbackImage),
         ),
       }
     })
 
     initializeCarouselIndexes()
   } catch (error) {
-    console.error('Failed loading country sections from JSON:', error)
-    countries.value = [...fallbackCountries]
-    initializeCarouselIndexes()
+    console.error('Failed loading country sections:', error)
   }
 }
 
-onMounted(async () => {
+watch(locale, () => {
+  loadCountries()
+})
+
+onMounted(() => {
   loadCountries()
   carouselTimer = window.setInterval(tickCarousel, 3200)
 })
@@ -349,30 +349,190 @@ onBeforeUnmount(() => {
   line-height: 1.7;
   font-size: 0.92rem;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1250px) {
   .country-content {
     gap: 24px;
     padding: 20px;
   }
+
+  .country-destination-section {
+    padding: 30px 24px;
+  }
+
+  .country-row {
+    gap: 34px;
+  }
+
+  .country-row:not(.country-row-reverse) .country-name-panel {
+    padding-left: 40px;
+  }
+
+  .country-row.country-row-reverse .country-name-panel {
+    padding-right: 40px;
+  }
+
+  .split-country-name {
+    font-size: clamp(4rem, 9vw, 7rem);
+  }
+
+  .carousel-track {
+    height: 480px;
+  }
+
+  .destination-card {
+    width: min(92%, 400px);
+    height: 430px;
+  }
 }
 
 @media (max-width: 900px) {
+  .country-content {
+    gap: 22px;
+    padding: 18px;
+  }
+
   .country-destination-section {
-    padding: 24px;
+    padding: 32px 20px;
   }
 
   .country-row,
   .country-row.country-row-reverse {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .country-row .country-name-panel,
+  .country-row.country-row-reverse .country-name-panel {
+    order: 1;
+    width: 100%;
+    padding: 0;
+    align-items: center;
+    text-align: center;
+  }
+
+  .country-row .carousel-panel,
+  .country-row.country-row-reverse .carousel-panel {
+    order: 2;
+    width: 100%;
+  }
+
+  .country-row .split-country-name,
+  .country-row.country-row-reverse .split-country-name {
+    align-items: center;
+    text-align: center;
+    font-size: clamp(3.6rem, 14vw, 6.5rem);
+    letter-spacing: -0.06em;
+  }
+
+  .country-row .country-intro,
+  .country-row.country-row-reverse .country-intro {
+    max-width: 620px;
+    margin: 20px auto 0;
+    text-align: center;
+  }
+
+  .country-row .more-btn,
+  .country-row.country-row-reverse .more-btn {
+    align-self: center;
+    margin-top: 24px;
+  }
+
+  .carousel-panel {
+    display: flex;
+    justify-content: center;
   }
 
   .carousel-track {
+    width: 100%;
     height: 470px;
+    justify-content: center;
   }
 
   .destination-card {
     width: min(94%, 500px);
     height: 420px;
+  }
+}
+
+@media (max-width: 600px) {
+  .country-content {
+    gap: 18px;
+    padding: 12px;
+  }
+
+  .country-destination-section {
+    padding: 26px 10px;
+  }
+
+  .country-row,
+  .country-row.country-row-reverse {
+    gap: 22px;
+    align-items: center;
+  }
+
+  .country-row .country-name-panel,
+  .country-row.country-row-reverse .country-name-panel {
+    align-items: center !important;
+    text-align: center !important;
+    padding: 0 !important;
+  }
+
+  .country-row .split-country-name,
+  .country-row.country-row-reverse .split-country-name {
+    align-items: center !important;
+    text-align: center !important;
+    font-size: clamp(3rem, 18vw, 4.8rem);
+    letter-spacing: -0.05em;
+  }
+
+  .country-row .country-intro,
+  .country-row.country-row-reverse .country-intro {
+    max-width: 340px;
+    margin: 16px auto 0 !important;
+    text-align: center !important;
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .country-row .more-btn,
+  .country-row.country-row-reverse .more-btn {
+    align-self: center !important;
+    margin-top: 20px;
+    font-size: 0.82rem;
+  }
+
+  .carousel-panel {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .carousel-track {
+    width: 100%;
+    height: 380px;
+    justify-content: center;
+  }
+
+  .destination-card {
+    width: min(94%, 340px);
+    height: 340px;
+  }
+
+  .destination-card-body {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+  }
+
+  .destination-card-body h3 {
+    font-size: 1.15rem;
+  }
+
+  .destination-card-body p {
+    font-size: 0.82rem;
+    line-height: 1.55;
   }
 }
 </style>

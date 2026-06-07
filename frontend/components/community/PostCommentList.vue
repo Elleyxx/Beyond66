@@ -4,7 +4,18 @@
     <p v-if="!comments.length" class="empty">{{ t('community.detail.comments.empty') }}</p>
 
     <article v-for="comment in comments" :key="comment.id || comment.created_at" class="comment">
-      <strong>{{ comment.author || comment.username || t('community.detail.comments.authorFallback') }}</strong>
+      <div class="comment-author">
+        <img
+          v-if="comment.avatar"
+          :src="resolveAssetUrl(comment.avatar)"
+          :alt="comment.author || comment.username"
+          class="avatar"
+        />
+        <div v-else class="avatar avatar-fallback">
+          {{ (comment.author || comment.username || '?').slice(0, 1).toUpperCase() }}
+        </div>
+        <strong>{{ comment.author || comment.username || t('community.detail.comments.authorFallback') }}</strong>
+      </div>
       <p>{{ comment.comment || comment.body }}</p>
     </article>
   </section>
@@ -12,6 +23,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { resolveAssetUrl } from '@/services/apiBase'
 
 defineProps({
   comments: { type: Array, default: () => [] },
@@ -46,6 +58,41 @@ h2 {
 
 .comment + .comment {
   margin-top: 10px;
+}
+
+.comment-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  display: grid;
+  place-items: center;
+  background: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-background));
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.comment strong {
+  font-size: 0.9rem;
+}
+
+.comment p {
+  margin: 0;
+  padding-left: 44px;
+  color: rgba(var(--v-theme-text), 0.82);
+  line-height: 1.5;
 }
 
 .empty {

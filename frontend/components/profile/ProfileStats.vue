@@ -1,14 +1,18 @@
 <template>
   <section class="stats-grid">
-    <article v-for="stat in stats" :key="stat.label" class="stat-card">
+    <article v-for="stat in stats" :key="stat.key || stat.label" class="stat-card">
       <i :class="stat.icon" class="stat-icon"></i>
       <h3>{{ stat.value }}</h3>
-      <p>{{ stat.label }}</p>
+      <p>{{ stat.key ? t(stat.key) : stat.label }}</p>
     </article>
   </section>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   stats: {
     type: Array,

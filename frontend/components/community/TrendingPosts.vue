@@ -101,9 +101,30 @@ function coverImage(post) {
   margin: 4px 0 0;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1250px) {
+  .trending-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
   .trending-row {
     grid-template-columns: 1fr;
+  }
+
+  .trending-card {
+    max-width: 620px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .section-head h2 {
+    font-size: 1.2rem;
+  }
+
+  .trending-card {
+    min-height: 160px;
   }
 }
 </style>

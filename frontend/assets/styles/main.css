@@ -1,7 +1,70 @@
+ :root {
+  --screen-min-width: 600px;
+  --page-gutter: clamp(24px, 5vw, 72px);
+  --page-gutter-tablet: 24px;
+  --page-gutter-mobile: 18px;
+  --page-gutter-small: 14px;
+}
+
+html {
+  min-width: var(--screen-min-width);
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0;
+  min-width: var(--screen-min-width);
   font-family: var(--font-main);
+  overflow-x: hidden;
 }
+
+#app,
+.v-application,
+.v-application__wrap {
+  min-width: var(--screen-min-width);
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
 h1, h2, h3, h4 {
   font-family: var(--font-heading);
+}
+
+@media (max-width: 1250px) {
+  :root {
+    --page-gutter: var(--page-gutter-tablet);
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --page-gutter: var(--page-gutter-mobile);
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --page-gutter: var(--page-gutter-small);
+  }
 }

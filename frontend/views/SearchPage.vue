@@ -73,7 +73,7 @@ function submitSearch() {
 <style scoped>
 .search-page {
   min-height: 100vh;
-  padding: 120px clamp(24px, 6vw, 86px) 100px;
+  padding: 120px var(--page-gutter) 100px;
   background: rgb(var(--v-theme-background));
 }
 
@@ -222,7 +222,31 @@ h1 {
   background: rgba(var(--v-theme-surface), 0.94);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 1250px) {
+  .search-page {
+    padding-top: 120px;
+    padding-bottom: 90px;
+  }
+}
+
+@media (max-width: 900px) {
+  .search-page {
+    padding-top: 116px;
+    padding-bottom: 84px;
+  }
+
+  .section-head {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .search-page {
+    padding-top: 108px;
+    padding-bottom: 72px;
+  }
+
   .search-form {
     grid-template-columns: auto minmax(0, 1fr);
     border-radius: 24px;
@@ -230,11 +254,6 @@ h1 {
 
   .search-form button {
     grid-column: 1 / -1;
-  }
-
-  .section-head {
-    align-items: start;
-    flex-direction: column;
   }
 }
 </style>

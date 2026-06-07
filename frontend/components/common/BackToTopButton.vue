@@ -81,7 +81,7 @@ onBeforeUnmount(() => {
   background: rgba(var(--v-theme-primary), 0.22) !important;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 600px) {
   .back-to-top-btn {
     right: 16px;
     bottom: 16px;

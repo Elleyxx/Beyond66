@@ -102,16 +102,16 @@
         <label>
           <h3>{{ t('planner.controls.accommodation') }}</h3>
           <p class="field-note">{{ t('planner.controls.accommodationNote') }}</p>
-          <select :value="modelValue.accommodation || accommodations[0]" @change="emitPatch({ accommodation: $event.target.value })">
-            <option v-for="item in accommodations" :key="item" :value="item">{{ item }}</option>
+          <select :value="modelValue.accommodation || accommodations[0].value" @change="emitPatch({ accommodation: $event.target.value })">
+            <option v-for="item in accommodations" :key="item.value" :value="item.value">{{ item.label }}</option>
           </select>
         </label>
 
         <label>
           <h3>{{ t('planner.controls.transport') }}</h3>
           <p class="field-note">{{ t('planner.controls.transportNote') }}</p>
-          <select :value="modelValue.transport || transports[0]" @change="emitPatch({ transport: $event.target.value })">
-            <option v-for="item in transports" :key="item" :value="item">{{ item }}</option>
+          <select :value="modelValue.transport || transports[0].value" @change="emitPatch({ transport: $event.target.value })">
+            <option v-for="item in transports" :key="item.value" :value="item.value">{{ item.label }}</option>
           </select>
         </label>
       </div>
@@ -128,30 +128,30 @@
           <h3>{{ t('planner.controls.travelStyle') }}</h3>
           <p class="field-note">{{ t('planner.controls.travelStyleNote') }}</p>
           <select :value="modelValue.style" @change="emitPatch({ style: $event.target.value })">
-            <option v-for="item in styles" :key="item" :value="item">{{ item }}</option>
+            <option v-for="item in styles" :key="item.value" :value="item.value">{{ item.label }}</option>
           </select>
         </label>
 
         <label>
           <h3>{{ t('planner.controls.tripType') }}</h3>
           <p class="field-note">{{ t('planner.controls.tripTypeNote') }}</p>
-          <select :value="modelValue.tripType || tripTypes[0]" @change="emitPatch({ tripType: $event.target.value })">
-            <option v-for="item in tripTypes" :key="item" :value="item">{{ item }}</option>
+          <select :value="modelValue.tripType || tripTypes[0].value" @change="emitPatch({ tripType: $event.target.value })">
+            <option v-for="item in tripTypes" :key="item.value" :value="item.value">{{ item.label }}</option>
           </select>
         </label>
 
         <label>
           <h3>{{ t('planner.controls.activityLevel') }}</h3>
           <p class="field-note">{{ t('planner.controls.activityLevelNote') }}</p>
-          <select :value="modelValue.activityLevel || activityLevels[1]" @change="emitPatch({ activityLevel: $event.target.value })">
-            <option v-for="item in activityLevels" :key="item" :value="item">{{ item }}</option>
+          <select :value="modelValue.activityLevel || activityLevels[1].value" @change="emitPatch({ activityLevel: $event.target.value })">
+            <option v-for="item in activityLevels" :key="item.value" :value="item.value">{{ item.label }}</option>
           </select>
         </label>
 
       </div>
 
       <div class="interests-box field-section">
-        <h3>{{ t('planner.controls.interests') }}</h3>
+        <h3>{{ t('planner.controls.interestsLabel') }}</h3>
         <p class="field-note">{{ t('planner.controls.interestsNote') }}</p>
 
         <div class="interests-grid">
@@ -190,7 +190,14 @@ const countries = computed(() => [
   { value: 'Iceland', label: t('countryNames.iceland') },
   { value: 'Denmark', label: t('countryNames.denmark') },
 ])
-const styles = ['Adventure', 'Relax', 'Culture', 'Nature', 'Luxury', 'Balanced']
+const styles = computed(() => [
+  { value: 'Adventure', label: t('planner.controls.styles.adventure') },
+  { value: 'Relax', label: t('planner.controls.styles.relax') },
+  { value: 'Culture', label: t('planner.controls.styles.culture') },
+  { value: 'Nature', label: t('planner.controls.styles.nature') },
+  { value: 'Luxury', label: t('planner.controls.styles.luxury') },
+  { value: 'Balanced', label: t('planner.controls.styles.balanced') },
+])
 
 const budgetRange = computed(() => {
   const level = props.modelValue.budgetLevel || 3
@@ -225,21 +232,47 @@ function updateBudgetLevel(level) {
   })
 }
 
-const accommodations = ['Hotel', 'Cabin', 'Apartment', 'Hostel', 'Resort']
-const transports = ['Train', 'Rental Car', 'Bus', 'Flight', 'Ferry']
-const tripTypes = ['Couple', 'Family', 'Solo', 'Friends']
-const activityLevels = ['Easy', 'Moderate', 'Active', 'Extreme']
-const interests = [
-  { value: 'Northern Lights', label: 'Northern Lights', icon: 'bi-stars' },
-  { value: 'Nature', label: 'Nature', icon: 'bi-tree' },
-  { value: 'Photography', label: 'Photography', icon: 'bi-camera' },
-  { value: 'Food', label: 'Food', icon: 'bi-fork-knife' },
-  { value: 'Culture', label: 'Culture', icon: 'bi-bank' },
-  { value: 'Wildlife', label: 'Wildlife', icon: 'bi-binoculars' },
-  { value: 'Winter Sports', label: 'Winter Sports', icon: 'bi-snow' },
-  { value: 'Fjords', label: 'Fjords', icon: 'bi-water' },
-  { value: 'Christmas Markets', label: 'Christmas Markets', icon: 'bi-gift' },
-]
+const accommodations = computed(() => [
+  { value: 'Hotel', label: t('planner.controls.accommodations.hotel') },
+  { value: 'Cabin', label: t('planner.controls.accommodations.cabin') },
+  { value: 'Apartment', label: t('planner.controls.accommodations.apartment') },
+  { value: 'Hostel', label: t('planner.controls.accommodations.hostel') },
+  { value: 'Resort', label: t('planner.controls.accommodations.resort') },
+])
+
+const transports = computed(() => [
+  { value: 'Train', label: t('planner.controls.transports.train') },
+  { value: 'Rental Car', label: t('planner.controls.transports.rentalCar') },
+  { value: 'Bus', label: t('planner.controls.transports.bus') },
+  { value: 'Flight', label: t('planner.controls.transports.flight') },
+  { value: 'Ferry', label: t('planner.controls.transports.ferry') },
+])
+
+const tripTypes = computed(() => [
+  { value: 'Couple', label: t('planner.controls.tripTypes.couple') },
+  { value: 'Family', label: t('planner.controls.tripTypes.family') },
+  { value: 'Solo', label: t('planner.controls.tripTypes.solo') },
+  { value: 'Friends', label: t('planner.controls.tripTypes.friends') },
+])
+
+const activityLevels = computed(() => [
+  { value: 'Easy', label: t('planner.controls.activityLevels.easy') },
+  { value: 'Moderate', label: t('planner.controls.activityLevels.moderate') },
+  { value: 'Active', label: t('planner.controls.activityLevels.active') },
+  { value: 'Extreme', label: t('planner.controls.activityLevels.extreme') },
+])
+
+const interests = computed(() => [
+  { value: 'Northern Lights', label: t('planner.controls.interestOptions.northernLights'), icon: 'bi-stars' },
+  { value: 'Nature', label: t('planner.controls.interestOptions.nature'), icon: 'bi-tree' },
+  { value: 'Photography', label: t('planner.controls.interestOptions.photography'), icon: 'bi-camera' },
+  { value: 'Food', label: t('planner.controls.interestOptions.food'), icon: 'bi-fork-knife' },
+  { value: 'Culture', label: t('planner.controls.interestOptions.culture'), icon: 'bi-bank' },
+  { value: 'Wildlife', label: t('planner.controls.interestOptions.wildlife'), icon: 'bi-binoculars' },
+  { value: 'Winter Sports', label: t('planner.controls.interestOptions.winterSports'), icon: 'bi-snow' },
+  { value: 'Fjords', label: t('planner.controls.interestOptions.fjords'), icon: 'bi-water' },
+  { value: 'Christmas Markets', label: t('planner.controls.interestOptions.christmasMarkets'), icon: 'bi-gift' },
+])
 
 const countrySlots = ref([])
 const dragIndex = ref(-1)
@@ -308,10 +341,10 @@ function getSeasonFromDate(dateValue) {
 
   const month = new Date(dateValue).getMonth() + 1
 
-  if ([12, 1, 2].includes(month)) return 'Winter'
-  if ([3, 4, 5].includes(month)) return 'Spring'
-  if ([6, 7, 8].includes(month)) return 'Summer'
-  return 'Autumn'
+  if ([12, 1, 2].includes(month)) return t('planner.controls.seasons.winter')
+  if ([3, 4, 5].includes(month)) return t('planner.controls.seasons.spring')
+  if ([6, 7, 8].includes(month)) return t('planner.controls.seasons.summer')
+  return t('planner.controls.seasons.autumn')
 }
 
 function formatDate(dateValue) {

@@ -396,8 +396,59 @@
       "tripTypeNote": "Who are you travelling with?",
       "activityLevel": "Activity Level",
       "activityLevelNote": "Set the pace of your itinerary.",
-      "interests": "Interests",
-      "interestsNote": "Pick the experiences you want Beyond66 to prioritize."
+      "interestsLabel": "Interests",
+      "interestsNote": "Pick the experiences you want Beyond66 to prioritize.",
+      "styles": {
+        "adventure": "Adventure",
+        "relax": "Relax",
+        "culture": "Culture",
+        "nature": "Nature",
+        "luxury": "Luxury",
+        "balanced": "Balanced"
+      },
+      "accommodations": {
+        "hotel": "Hotel",
+        "cabin": "Cabin",
+        "apartment": "Apartment",
+        "hostel": "Hostel",
+        "resort": "Resort"
+      },
+      "transports": {
+        "train": "Train",
+        "rentalCar": "Rental Car",
+        "bus": "Bus",
+        "flight": "Flight",
+        "ferry": "Ferry"
+      },
+      "tripTypes": {
+        "couple": "Couple",
+        "family": "Family",
+        "solo": "Solo",
+        "friends": "Friends"
+      },
+      "activityLevels": {
+        "easy": "Easy",
+        "moderate": "Moderate",
+        "active": "Active",
+        "extreme": "Extreme"
+      },
+      "seasons": {
+        "winter": "Winter",
+        "spring": "Spring",
+        "summer": "Summer",
+        "autumn": "Autumn"
+      },
+      "interestOptions": {
+        "northernLights": "Northern Lights",
+        "nature": "Nature",
+        "photography": "Photography",
+        "food": "Food",
+        "culture": "Culture",
+        "wildlife": "Wildlife",
+        "winterSports": "Winter Sports",
+        "fjords": "Fjords",
+        "christmasMarkets": "Christmas Markets"
+      }
     },
     "options": {
       "budget": "Budget",
@@ -535,5 +586,103 @@
     "terms": "Terms & Conditions",
     "cookie": "Cookie Policy",
     "madeFor": "Made for Nordic explorers"
+  },
+  "explore": {
+    "moreBtn": "MORE →",
+    "goToCountry": "Go to {name}"
+  },
+  "profilePage": {
+    "hero": {
+      "eyebrow": "MY PROFILE",
+      "addJourney": "Add Journey",
+      "joined": "Joined {year}",
+      "joinedRecently": "Joined recently",
+      "titleExplorer": "Nordic Explorer",
+      "titleWayfinder": "Arctic Wayfinder",
+      "titleTraveller": "Nordic Traveller",
+      "titleFuture": "Future Nordic Explorer"
+    },
+    "stats": {
+      "countriesExplored": "Countries Explored",
+      "journeysCreated": "Journeys Created",
+      "travelDiaries": "Travel Diaries",
+      "savedPlaces": "Saved Places",
+      "publicStories": "Public Stories"
+    },
+    "badges": {
+      "nordicPassport": {
+        "title": "Nordic Passport",
+        "desc": "Explored {count} Nordic countries"
+      },
+      "routeBuilder": {
+        "title": "Route Builder",
+        "desc": "Created {count} travel journeys"
+      },
+      "dreamListCurator": {
+        "title": "Dream List Curator",
+        "desc": "Saved {count} destinations for later"
+      },
+      "storyteller": {
+        "title": "Storyteller",
+        "desc": "Shared {count} public travel stories"
+      },
+      "firstSteps": {
+        "title": "First Steps",
+        "desc": "Create a planner, save destinations, or publish a story to unlock badges"
+      }
+    },
+    "passport": {
+      "eyebrow": "MY NORDIC PASSPORT",
+      "title": "Country Stamps",
+      "discovered": "Discovered",
+      "undiscovered": "Undiscovered",
+      "journeyCreated": "Journey Created",
+      "startJourney": "Start Journey",
+      "brand": "Beyond66° Passport"
+    },
+    "achievements": {
+      "eyebrow": "ACHIEVEMENTS",
+      "title": "Travel Badges"
+    },
+    "journeys": {
+      "eyebrow": "MY JOURNEYS",
+      "title": "Planners & Travel Diaries",
+      "tagPlanner": "Planner",
+      "tagDiary": "Diary",
+      "tagPublic": "Public",
+      "tagPrivate": "Private",
+      "actionView": "View",
+      "actionEdit": "Edit",
+      "actionShare": "Share",
+      "actionUnshare": "Unshare",
+      "actionAddDiary": "Add Diary",
+      "actionEditDiary": "Edit Diary",
+      "days": "{count} Days",
+      "emptyText": "No journeys yet. Create a planner to start filling your passport.",
+      "emptyButton": "Create Journey"
+    },
+    "saved": {
+      "eyebrow": "SAVED DESTINATIONS",
+      "title": "Places to Remember",
+      "savedAt": "Saved {date}",
+      "viewCta": "View Destination",
+      "emptyText": "No saved destinations yet. Bookmark places from the country pages to collect them here.",
+      "emptyButton": "Explore Places"
+    },
+    "diary": {
+      "eyebrow": "Travel Diary",
+      "titleFallback": "Journey Diary",
+      "titleLabel": "Diary title",
+      "titlePlaceholder": "My First Aurora Experience",
+      "storyLabel": "Story",
+      "storyPlaceholder": "Tell the story behind this journey...",
+      "photosLabel": "Diary photos",
+      "photosCount": "{count}/10 images selected",
+      "processing": "Processing images...",
+      "chooseImages": "Choose Images",
+      "uploadHint": "You can upload up to 10 images. Large images are resized before saving.",
+      "cancel": "Cancel",
+      "saveDiary": "Save Diary"
+    }
   }
 }

@@ -1,8 +1,8 @@
 <template>
   <section class="profile-panel passport-panel">
     <div class="section-head">
-      <p>MY NORDIC PASSPORT</p>
-      <h2>Country Stamps</h2>
+      <p>{{ t('profilePage.passport.eyebrow') }}</p>
+      <h2>{{ t('profilePage.passport.title') }}</h2>
     </div>
 
     <div class="stamp-grid">
@@ -23,15 +23,15 @@
           <i :class="country.icon || 'bi bi-compass'" class="stamp-symbol"></i>
 
           <strong>
-            {{ country.stamped ? 'Discovered' : 'Undiscovered' }}
+            {{ country.stamped ? t('profilePage.passport.discovered') : t('profilePage.passport.undiscovered') }}
           </strong>
 
           <p>
-            {{ country.stamped ? country.activity || 'Journey Created' : 'Start Journey' }}
+            {{ country.stamped ? country.activity || t('profilePage.passport.journeyCreated') : t('profilePage.passport.startJourney') }}
           </p>
 
           <small>
-            {{ country.stamped && country.date ? country.date : 'Beyond66° Passport' }}
+            {{ country.stamped && country.date ? country.date : t('profilePage.passport.brand') }}
           </small>
         </div>
       </div>
@@ -40,6 +40,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   countries: {
     type: Array,
@@ -65,7 +69,7 @@ defineProps({
 }
 
 .section-head h2 {
-  margin-bottom: 22px;
+  margin-bottom: 55px;
   font-family: 'Playfair Display', serif;
   font-size: 2rem;
 }

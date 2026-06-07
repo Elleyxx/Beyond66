@@ -239,22 +239,102 @@ function heroCountrySubtitle(country) {
   text-decoration: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1250px) {
   .home-hero {
-    height: 76vh;
+    height: 72vh;
+    min-height: 520px;
+    margin-top: 22px; /* space for mobile header */
   }
 
   .hero-content {
-    padding: 0 24px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 48px 48px;
   }
 
   .country-nav {
-    gap: 18px;
-    overflow-x: auto;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .hero-content h1 {
-    font-size: 4rem;
+    margin: 30px 0 18px;
+  }
+}
+
+@media (max-width: 900px) {
+  .home-hero {
+    height: 66vh;
+    min-height: 460px;
+    margin-top: 22px;
+  }
+
+  .hero-content {
+    padding: 0 24px 36px;
+  }
+
+  .country-nav {
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .hero-content h1 {
+    font-size: 3.6rem;
+    margin: 22px 0 12px;
+  }
+
+  .hero-content p {
+    max-width: 420px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-hero {
+    height: 58vh;
+    min-height: 390px;
+    margin-top: 22px;
+  }
+
+  .hero-content {
+    padding: 0 18px 28px;
+  }
+
+  .country-nav {
+    gap: 10px;
+  }
+
+  .country-nav span {
+    font-size: 0.68rem;
+  }
+
+  .country-nav small {
+    font-size: 0.5rem;
+  }
+
+  .hero-content h1 {
+    font-size: 2.7rem;
+    margin: 18px 0 10px;
+  }
+
+  .hero-content p {
+    max-width: 300px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .view-btn {
+    margin-top: 8px;
+    padding: 7px 18px;
+    font-size: 0.75rem;
   }
 }
 </style>

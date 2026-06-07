@@ -23,7 +23,7 @@
           class="country-pin"
           :class="`country-pin-${marker.slug}`"
           :style="pinStyle(marker)"
-          :aria-label="`Go to ${marker.name}`"
+          :aria-label="t('explore.goToCountry', { name: t(`countryNames.${marker.slug}`) })"
           @mouseenter="onMarkerEnter(marker)"
           @mouseleave="onCountryLeave"
           @click="goToCountryBySlug(marker.slug)"
@@ -39,7 +39,7 @@
       :style="{ left: `${popup.x}px`, top: `${popup.y}px` }"
     >
       <div class="popup-text">
-        <h4>{{ popup.country.name }}</h4>
+        <h4>{{ t(`countryNames.${popup.country.slug}`) || popup.country.name }}</h4>
       </div>
     </div>
   </section>
@@ -48,11 +48,13 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useTheme } from 'vuetify'
+import { useI18n } from 'vue-i18n'
 import { SvgMap } from 'vue-svg-map'
 import world from '@svg-maps/world'
 import { API_BASE } from '../../services/apiBase'
 
 const theme = useTheme()
+const { t } = useI18n()
 
 const heroSectionRef = ref(null)
 const mapPanelRef = ref(null)
@@ -617,34 +619,39 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1250px) {
   .explore-hero-section {
-    width: calc(100% - 24px);
-    height: 58vh;
-    margin: 20px 12px 40px;
+    width: calc(100% - 48px);
+    height: 50vh;
+    min-height: 390px;
+    max-height: 520px;
+    margin: 90px 24px 40px;
+    left: auto;
+    transform: none;
   }
 
   .hero-bg-image,
   .hero-dark-overlay {
-    clip-path: polygon(0 48%, 100% 30%, 100% 100%, 0 100%);
-  }
-
-  .hero-bottom-blend {
-    height: 42%;
+    display: none;
   }
 
   .hero-map-overlay {
     width: 100%;
-    height: 58%;
-    clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+    height: 100%;
+    clip-path: none;
   }
 
   .hero-map-overlay::after {
     display: none;
   }
 
+  .hero-bottom-blend {
+    height: 24%;
+  }
+
   :deep(.svg-map) {
-    transform: scale(2.95) translate(4%, 12%);
+    max-width: 100%;
+    transform: scale(2.95) translate(3%, 16%);
   }
 
   .country-pin {
@@ -653,7 +660,62 @@ onBeforeUnmount(() => {
   }
 
   .country-pin span {
-    font-size: 1.45rem;
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .explore-hero-section {
+    width: calc(100% - 32px);
+    height: 45vh;
+    min-height: 350px;
+    max-height: 440px;
+    margin: 60px 16px 36px;
+  }
+
+  :deep(.svg-map) {
+    transform: scale(3.15) translate(2%, 14%);
+  }
+
+  .country-pin {
+    width: 28px;
+    height: 28px;
+  }
+
+  .country-pin span {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .explore-hero-section {
+    width: calc(100% - 24px);
+    height: 40vh;
+    min-height: 310px;
+    max-height: 380px;
+    margin: 45px 12px 30px;
+  }
+
+  :deep(.svg-map) {
+    transform: scale(3.45) translate(2%, 15%);
+  }
+
+  .country-pin {
+    width: 24px;
+    height: 24px;
+  }
+
+  .country-pin span {
+    font-size: 1.1rem;
+  }
+
+  .country-popup {
+    min-width: 100px;
+    padding: 8px 12px;
+  }
+
+  .country-popup h4 {
+    font-size: 0.8rem;
   }
 }
 </style>

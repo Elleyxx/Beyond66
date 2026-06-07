@@ -8,16 +8,6 @@
         {{ t('community.hero.description') }}
       </p>
 
-      <div class="hero-search">
-        <i class="bi bi-search"></i>
-        <input
-          :value="filters.search"
-          type="search"
-          :placeholder="t('community.hero.searchPlaceholder')"
-          @input="patch({ search: $event.target.value })"
-        />
-      </div>
-
       <div class="category-pills">
         <button
           v-for="pill in pills"
@@ -119,28 +109,6 @@ h1 {
   line-height: 1.6;
 }
 
-.hero-search {
-  width: min(100%, 580px);
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 16px;
-  border-radius: 999px;
-  background: rgb(var(--v-theme-surface));
-}
-
-.hero-search i {
-  color: rgb(var(--v-theme-on-surface), 0.66);
-}
-.hero-search input {
-  width: 100%;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: rgb(var(--v-theme-surface), 0.66);
-}
-
 .category-pills {
   display: flex;
   flex-wrap: wrap;
@@ -163,9 +131,30 @@ h1 {
   border-color: rgb(var(--v-theme-primary));
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1250px) {
+  .community-hero {
+    max-width: 100%;
+  }
+
   .hero-content {
-    padding: 30px 24px;
+    padding: 36px 36px;
+  }
+}
+
+@media (max-width: 900px) {
+  .community-hero {
+    min-height: 300px;
+  }
+
+  .hero-content {
+    min-height: 300px;
+    padding: 32px 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-content {
+    padding: 28px 20px;
   }
 }
 </style>

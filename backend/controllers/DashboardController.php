@@ -144,7 +144,7 @@ class DashboardController
                 'name' => $details['name'],
                 'country' => $details['country'],
                 'slug' => $slug,
-                'image' => $this->destinationImage($details['country'], $details['name']),
+                'image' => $this->destinationImage($details['country'], $details['name'], $slug),
                 'savedAt' => $row['created_at'] ?? null,
             ];
         }
@@ -212,16 +212,17 @@ class DashboardController
     {
         $joinedYear = $this->yearFromDate($user['created_at'] ?? null);
         $displayName = (string) ($user['display_name'] ?? $user['username'] ?? 'Traveller');
+        $countryCount = count($visitedCountries);
 
         return [
-            'id' => (int) $user['id'],
-            'name' => $displayName,
-            'username' => (string) ($user['username'] ?? ''),
-            'email' => (string) ($user['email'] ?? ''),
-            'title' => $this->profileTitle(count($visitedCountries)),
-            'joined' => $joinedYear ? "Joined $joinedYear" : 'Joined recently',
-            'avatar' => (string) ($user['avatar_url'] ?? ''),
-            'cover' => '/assets/images/aurora_mountain.jpg',
+            'id'         => (int) $user['id'],
+            'name'       => $displayName,
+            'username'   => (string) ($user['username'] ?? ''),
+            'email'      => (string) ($user['email'] ?? ''),
+            'titleKey'   => $this->profileTitleKey($countryCount),
+            'joinedYear' => $joinedYear,
+            'avatar'     => (string) ($user['avatar_url'] ?? ''),
+            'cover'      => '/assets/images/aurora_mountain.jpg',
         ];
     }
 
@@ -281,11 +282,11 @@ class DashboardController
     private function buildStats(array $visitedCountries, array $journeys, array $savedDestinations, array $publicPosts): array
     {
         return [
-            ['label' => 'Countries Explored', 'value' => count($visitedCountries), 'icon' => 'bi bi-globe-europe-africa'],
-            ['label' => 'Journeys Created', 'value' => count($journeys), 'icon' => 'bi bi-map'],
-            ['label' => 'Travel Diaries', 'value' => count(array_filter($journeys, fn ($journey) => $journey['hasDiary'])), 'icon' => 'bi bi-journal-richtext'],
-            ['label' => 'Saved Places', 'value' => count($savedDestinations), 'icon' => 'bi bi-bookmark-heart'],
-            ['label' => 'Public Stories', 'value' => count($publicPosts), 'icon' => 'bi bi-people'],
+            ['key' => 'profilePage.stats.countriesExplored', 'value' => count($visitedCountries), 'icon' => 'bi bi-globe-europe-africa'],
+            ['key' => 'profilePage.stats.journeysCreated', 'value' => count($journeys), 'icon' => 'bi bi-map'],
+            ['key' => 'profilePage.stats.travelDiaries', 'value' => count(array_filter($journeys, fn ($journey) => $journey['hasDiary'])), 'icon' => 'bi bi-journal-richtext'],
+            ['key' => 'profilePage.stats.savedPlaces', 'value' => count($savedDestinations), 'icon' => 'bi bi-bookmark-heart'],
+            ['key' => 'profilePage.stats.publicStories', 'value' => count($publicPosts), 'icon' => 'bi bi-people'],
         ];
     }
 
@@ -397,45 +398,55 @@ class DashboardController
 
     private function buildAchievements(array $visitedCountries, array $journeys, array $savedDestinations, array $publicPosts): array
     {
+        $countryCount      = count($visitedCountries);
+        $journeyCount      = count($journeys);
+        $savedCount        = count($savedDestinations);
+        $publicPostCount   = count($publicPosts);
+
         $achievements = [];
 
-        if (count($visitedCountries) >= 1) {
+        if ($countryCount >= 1) {
             $achievements[] = [
-                'title' => 'Nordic Passport',
-                'desc' => 'Explored ' . count($visitedCountries) . ' Nordic ' . (count($visitedCountries) === 1 ? 'country' : 'countries'),
-                'icon' => 'mdi-passport',
+                'badgeKey' => 'nordicPassport',
+                'icon'     => 'mdi-passport',
+                'current'  => $countryCount,
+                'unit'     => 'countries',
             ];
         }
 
-        if (count($journeys) >= 1) {
+        if ($journeyCount >= 1) {
             $achievements[] = [
-                'title' => 'Route Builder',
-                'desc' => 'Created ' . count($journeys) . ' travel ' . (count($journeys) === 1 ? 'journey' : 'journeys'),
-                'icon' => 'mdi-map-outline',
+                'badgeKey' => 'routeBuilder',
+                'icon'     => 'mdi-map-outline',
+                'current'  => $journeyCount,
+                'unit'     => 'journeys',
             ];
         }
 
-        if (count($savedDestinations) >= 3) {
+        if ($savedCount >= 3) {
             $achievements[] = [
-                'title' => 'Dream List Curator',
-                'desc' => 'Saved ' . count($savedDestinations) . ' destinations for later',
-                'icon' => 'mdi-bookmark-check',
+                'badgeKey' => 'dreamListCurator',
+                'icon'     => 'mdi-bookmark-check',
+                'current'  => $savedCount,
+                'unit'     => 'saved',
             ];
         }
 
-        if (count($publicPosts) >= 1) {
+        if ($publicPostCount >= 1) {
             $achievements[] = [
-                'title' => 'Storyteller',
-                'desc' => 'Shared ' . count($publicPosts) . ' public travel ' . (count($publicPosts) === 1 ? 'story' : 'stories'),
-                'icon' => 'mdi-feather',
+                'badgeKey' => 'storyteller',
+                'icon'     => 'mdi-feather',
+                'current'  => $publicPostCount,
+                'unit'     => 'stories',
             ];
         }
 
         if (!$achievements) {
             $achievements[] = [
-                'title' => 'First Steps',
-                'desc' => 'Create a planner, save destinations, or publish a story to unlock badges',
-                'icon' => 'mdi-compass-outline',
+                'badgeKey' => 'firstSteps',
+                'icon'     => 'mdi-compass-outline',
+                'current'  => 0,
+                'unit'     => 'progress',
             ];
         }
 
@@ -491,27 +502,20 @@ class DashboardController
 
     private function hasTable(string $table): bool
     {
-        $stmt = $this->pdo->prepare('SHOW TABLES LIKE :table_name');
-        $stmt->execute(['table_name' => $table]);
+        $stmt = $this->pdo->prepare(
+            'SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?'
+        );
+        $stmt->execute([$table]);
 
         return (bool) $stmt->fetchColumn();
     }
 
-    private function profileTitle(int $countryCount): string
+    private function profileTitleKey(int $countryCount): string
     {
-        if ($countryCount >= 5) {
-            return 'Nordic Explorer';
-        }
-
-        if ($countryCount >= 3) {
-            return 'Arctic Wayfinder';
-        }
-
-        if ($countryCount >= 1) {
-            return 'Nordic Traveller';
-        }
-
-        return 'Future Nordic Explorer';
+        if ($countryCount >= 5) return 'profilePage.hero.titleExplorer';
+        if ($countryCount >= 3) return 'profilePage.hero.titleWayfinder';
+        if ($countryCount >= 1) return 'profilePage.hero.titleTraveller';
+        return 'profilePage.hero.titleFuture';
     }
 
     private function countryImage(string $country): string
@@ -527,18 +531,81 @@ class DashboardController
         return $images[$country] ?? '/assets/images/aurora_mountain.jpg';
     }
 
-    private function destinationImage(string $country, string $name): string
+    private function destinationImage(string $country, string $name, string $slug = ''): string
     {
-        $normalized = strtolower($name);
-        $specific = [
-            'geirangerfjord' => '/assets/images/Norway/Geirangerfjord.jpg',
-            'abisko national park' => '/assets/images/Sweden/AbiskoNationalPark.jpg',
-            'nyhavn' => '/assets/images/Denmark/Nyhavn.jpg',
-            'rovaniemi' => '/assets/images/Finland/Rovaniemi.jpg',
-            'jokulsarlon glacier lagoon' => '/assets/images/Iceland/JokulsarlonGlacierLagoon.jpg',
+        $bySlug = [
+            // Norway
+            'norway-oslo'                  => '/assets/images/Norway/oslo1.jpg',
+            'norway-bergen'                => '/assets/images/Norway/bergen1.jpeg',
+            'norway-troms'                 => '/assets/images/Norway/tromso1.jpg',
+            'norway-lofoten-islands'       => '/assets/images/Norway/lofoten1.jpg',
+            'norway-geirangerfjord'        => '/assets/images/Norway/geirangerfjord1.jpg',
+            'norway-n-r-yfjord'            => '/assets/images/Norway/naeroyfjord1.jpeg',
+            'norway-flam-railway'          => '/assets/images/Norway/flamrailway1.jpeg',
+            'norway-preikestolen'          => '/assets/images/Norway/preikestolen1.jpeg',
+            'norway-trolltunga'            => '/assets/images/Norway/trolltunga1.jpg',
+            'norway-atlantic-ocean-road'   => '/assets/images/Norway/atlanticroad1.jpeg',
+            'norway-svalbard'              => '/assets/images/Norway/svalbard1.jpeg',
+            'norway-alesund'               => '/assets/images/Norway/alesund1.jpg',
+            // Sweden
+            'sweden-stockholm'             => '/assets/images/Sweden/stockholm1.jpg',
+            'sweden-gamla-stan'            => '/assets/images/Sweden/gamlastan1.jpeg',
+            'sweden-stockholm-archipelago' => '/assets/images/Sweden/stockholmarchipelago1.jpg',
+            'sweden-gothenburg'            => '/assets/images/Sweden/gothenburg1.jpeg',
+            'sweden-abisko-national-park'  => '/assets/images/Sweden/abisko1.jpg',
+            'sweden-kiruna'                => '/assets/images/Sweden/kiruna1.jpg',
+            'sweden-icehotel'              => '/assets/images/Sweden/icehotel1.jpeg',
+            'sweden-visby'                 => '/assets/images/Sweden/visby1.jpeg',
+            'sweden-malmo'                 => '/assets/images/Sweden/malmo1.jpg',
+            'sweden-dalarna'               => '/assets/images/Sweden/dalarna1.jpg',
+            'sweden-gotland'               => '/assets/images/Sweden/gotland1.jpeg',
+            'sweden-uppsala'               => '/assets/images/Sweden/uppsala1.jpeg',
+            // Finland
+            'finland-helsinki'             => '/assets/images/Finland/helsinki1.jpeg',
+            'finland-rovaniemi'            => '/assets/images/Finland/rovaniemi1.jpeg',
+            'finland-santa-claus-village'  => '/assets/images/Finland/santaclaus1.jpg',
+            'finland-suomenlinna-sea-fortress' => '/assets/images/Finland/suomenlinna1.jpg',
+            'finland-lake-saimaa'          => '/assets/images/Finland/saimaa1.jpg',
+            'finland-levi'                 => '/assets/images/Finland/levi1.jpeg',
+            'finland-porvoo'               => '/assets/images/Finland/porvoo1.jpg',
+            'finland-turku'                => '/assets/images/Finland/turku1.jpg',
+            'finland-nuuksio-national-park' => '/assets/images/Finland/nuuksio1.jpeg',
+            'finland-kakslauttanen'        => '/assets/images/Finland/kakslauttanen1.jpg',
+            'finland-oulanka-national-park' => '/assets/images/Finland/oulanka1.jpeg',
+            'finland-aland-islands'        => '/assets/images/Finland/aland1.jpeg',
+            // Iceland
+            'iceland-reykjavik'            => '/assets/images/Iceland/Reykjavík1.jpeg',
+            'iceland-the-golden-circle'    => '/assets/images/Iceland/goldencircle1.jpeg',
+            'iceland-jokulsarlon-glacier-lagoon' => '/assets/images/Iceland/jokulsarlon1.jpeg',
+            'iceland-diamond-beach'        => '/assets/images/Iceland/diamondbeach1.jpeg',
+            'iceland-vik-i-myrdal'         => '/assets/images/Iceland/vik1.jpg',
+            'iceland-blue-lagoon'          => '/assets/images/Iceland/bluelagoon1.jpeg',
+            'iceland-sky-lagoon'           => '/assets/images/Iceland/skylagoon1.jpeg',
+            'iceland-skogafoss'            => '/assets/images/Iceland/skogafoss1.jpg',
+            'iceland-seljalandsfoss'       => '/assets/images/Iceland/seljalandsfoss1.jpg',
+            'iceland-sn-fellsnes-peninsula' => '/assets/images/Iceland/snaefellsnes1.jpg',
+            'iceland-akureyri'             => '/assets/images/Iceland/akureyri1.jpg',
+            'iceland-reynisfjara-black-sand-beach' => '/assets/images/Iceland/reynisfjara1.jpg',
+            // Denmark
+            'denmark-copenhagen'           => '/assets/images/Denmark/copenhagen1.jpeg',
+            'denmark-nyhavn'               => '/assets/images/Denmark/nyhavn1.jpg',
+            'denmark-tivoli-gardens'       => '/assets/images/Denmark/tivoli1.jpg',
+            'denmark-aarhus'               => '/assets/images/Denmark/aarhus1.jpg',
+            'denmark-odense'               => '/assets/images/Denmark/odense1.jpeg',
+            'denmark-skagen'               => '/assets/images/Denmark/skagen1.jpeg',
+            'denmark-legoland-billund'     => '/assets/images/Denmark/legoland1.jpg',
+            'denmark-lego-house'           => '/assets/images/Denmark/legohouse1.jpg',
+            'denmark-rosenborg-castle'     => '/assets/images/Denmark/rosenborg1.jpg',
+            'denmark-kronborg-castle'      => '/assets/images/Denmark/kronborg1.jpeg',
+            'denmark-m-ns-klint'           => '/assets/images/Denmark/monsklint1.jpg',
+            'denmark-ribe'                 => '/assets/images/Denmark/ribe1.jpg',
         ];
 
-        return $specific[$normalized] ?? $this->countryImage($country);
+        if ($slug !== '' && isset($bySlug[$slug])) {
+            return $bySlug[$slug];
+        }
+
+        return $this->countryImage($country);
     }
 
     private function firstCountryFromRoute(mixed $route): ?string

@@ -430,7 +430,7 @@ button {
   background: rgb(var(--v-theme-primary));
 }
 
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .community-edit-modal {
     max-height: 90vh;
     border-radius: 18px;

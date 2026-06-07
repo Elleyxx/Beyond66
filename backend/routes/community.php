@@ -31,5 +31,15 @@ if (preg_match('#^/api/community/posts/(\d+)/visibility$#', $uri, $matches) && $
     return;
 }
 
+if (preg_match('#^/api/community/posts/(\d+)/comments$#', $uri, $matches) && $method === 'POST') {
+    $controller->addComment((int) $matches[1]);
+    return;
+}
+
+if (preg_match('#^/api/community/posts/(\d+)/likes$#', $uri, $matches) && $method === 'POST') {
+    $controller->toggleLike((int) $matches[1]);
+    return;
+}
+
 http_response_code(404);
 echo json_encode(['success' => false, 'message' => 'Community route not found']);

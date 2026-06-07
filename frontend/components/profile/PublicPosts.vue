@@ -131,7 +131,7 @@ defineProps({
   opacity: 0.72;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 600px) {
   .post-card {
     grid-template-columns: 1fr;
   }

@@ -5,7 +5,7 @@
         <h2>{{ t('home.trending.title') }}</h2>
       </div>
 
-      <RouterLink class="explore-link" to="/community">
+      <RouterLink class="explore-link explore-link-top" to="/community">
         {{ t('home.trending.explore') }}
         <i class="bi bi-arrow-right"></i>
       </RouterLink>
@@ -23,8 +23,14 @@
       >
         <div class="image-wrap">
           <img v-if="coverImage(post)" :src="coverImage(post)" :alt="post.title" />
-          <div v-else class="image-placeholder">{{ post.country || t('home.trending.fallbackCountry') }}</div>
-          <span class="likes-pill"><i class="bi bi-heart-fill"></i> {{ post.likes || 0 }}</span>
+          <div v-else class="image-placeholder">
+            {{ post.country || t('home.trending.fallbackCountry') }}
+          </div>
+
+          <span class="likes-pill">
+            <i class="bi bi-heart-fill"></i>
+            {{ post.likes || 0 }}
+          </span>
         </div>
 
         <div class="card-body">
@@ -43,6 +49,15 @@
         </div>
       </RouterLink>
     </div>
+
+    <RouterLink
+      v-if="topPosts.length"
+      class="explore-link explore-link-bottom"
+      to="/community"
+    >
+      {{ t('home.trending.explore') }}
+      <i class="bi bi-arrow-right"></i>
+    </RouterLink>
   </section>
 </template>
 
@@ -67,6 +82,7 @@ onMounted(loadPosts)
 
 async function loadPosts() {
   isLoading.value = true
+
   try {
     posts.value = await getCommunityPosts()
   } catch {
@@ -128,6 +144,14 @@ function durationLabel(post) {
   transform: translateX(4px);
 }
 
+.explore-link-top {
+  margin-bottom: 38px;
+}
+
+.explore-link-bottom {
+  display: none;
+}
+
 .post-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -172,12 +196,12 @@ function durationLabel(post) {
   font-weight: 900;
 }
 
-.trend-card:hover img {
-  transform: scale(1.06);
-}
-
 .image-wrap img {
   transition: transform 0.45s ease;
+}
+
+.trend-card:hover img {
+  transform: scale(1.06);
 }
 
 .likes-pill {
@@ -252,20 +276,110 @@ h3 {
   background: rgba(var(--v-theme-surface), 0.94);
 }
 
-@media (max-width: 1000px) {
-  .post-grid {
-    grid-template-columns: 1fr;
+/* Tablet */
+@media (max-width: 1250px) {
+  .community-trending {
+    padding: 0 6vw 95px;
+  }
+
+  .section-head {
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 26px;
+  }
+
+  .title-block h2 {
+    margin-bottom: 24px;
+    font-size: clamp(3.8rem, 8vw, 6.2rem);
+  }
+
+  .explore-link-top {
+    margin-bottom: 30px;
+    white-space: nowrap;
+  }
+
+  .image-wrap {
+    height: 210px;
   }
 }
 
-@media (max-width: 760px) {
+/* Small tablet / large mobile */
+@media (max-width: 900px) {
   .community-trending {
-    padding: 0 24px 80px;
+    padding: 0 5vw 85px;
   }
 
   .section-head {
     align-items: flex-start;
-    flex-direction: column;
+    margin-bottom: 28px;
+  }
+
+  .title-block h2 {
+    margin-bottom: 0;
+    font-size: clamp(3.2rem, 10vw, 5rem);
+  }
+
+  .explore-link-top {
+    display: none;
+  }
+
+  .post-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .trend-card {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .image-wrap {
+    height: 260px;
+  }
+
+  .explore-link-bottom {
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    margin: 30px auto 0;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .community-trending {
+    padding: 0 20px 75px;
+  }
+
+  .section-head {
+    margin-bottom: 22px;
+  }
+
+  .title-block h2 {
+    font-size: clamp(2.7rem, 13vw, 4rem);
+  }
+
+  .image-wrap {
+    height: 210px;
+  }
+
+  .card-body {
+    padding: 16px;
+  }
+
+  h3 {
+    font-size: 1.12rem;
+  }
+
+  .card-body p {
+    font-size: 0.9rem;
+  }
+
+  .explore-link-bottom {
+    margin-top: 24px;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
   }
 }
 </style>

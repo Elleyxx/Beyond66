@@ -1,5 +1,6 @@
 <template>
   <main class="planner-page" :class="{ 'is-dark': isDark }">
+    <div class="planner-wrap">
     <header class="planner-header">
       <h1 :style="{ color: plannerTitleColor }">{{ t('planner.title') }}</h1>
       <img class="planner-border-image" src="/assets/images/plan_border.png" :alt="t('planner.borderAlt')" />
@@ -64,6 +65,7 @@
     </div>
 
     <p v-if="saveMessage" class="save-msg">{{ saveMessage }}</p>
+    </div>
   </main>
 </template>
 
@@ -798,15 +800,20 @@ function normalizeTags(tags) {
 
 <style scoped>
 .planner-page {
-  padding: 75px clamp(28px, 5vw, 72px) 110px;
-  background: rgb(var(--v-theme-background));
+  width: 100%;
   min-height: calc(100vh - 24px);
-  height: auto;
+  padding: 50px 0 110px;
+  background: rgb(var(--v-theme-background));
   overflow: visible;
 }
 
+.planner-wrap {
+  width: min(90%, 1380px);
+  margin: 0 auto;
+}
+
 .planner-header {
-  margin-bottom: 80px;
+  margin-bottom: 70px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -814,7 +821,7 @@ function normalizeTags(tags) {
 }
 
 .planner-header h1 {
-  margin: 0;
+  margin-top: 40px;
   line-height: 1.3;
   font-family: 'Playfair Display', serif;
   font-size: clamp(1.8rem, 3.2vw, 2.7rem);
@@ -828,36 +835,126 @@ function normalizeTags(tags) {
   height: auto;
   margin-top: -30px;
 }
+
 .planner-layout {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
+  gap: 28px;
   align-items: start;
-  min-height: fit-content;
   overflow: visible;
-  padding-bottom: 8px;
 }
 
 .planner-layout.is-split {
-  grid-template-columns: minmax(300px, 3fr) minmax(0, 7fr);
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
 }
 
 .save-msg {
-  margin-top: 12px;
+  margin-top: 18px;
   color: rgb(var(--v-theme-primary));
   font-weight: 700;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1250px) {
   .planner-page {
-    height: auto;
-    overflow: visible;
+    padding: 108px 0 90px;
+  }
+
+  .planner-wrap {
+    width: min(95%, 920px);
+  }
+
+  .planner-header {
+    margin-bottom: 54px;
+  }
+
+  .planner-header h1 {
+    margin-top: 28px;
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+  }
+
+  .planner-border-image {
+    width: min(100%, 780px);
+    margin-top: -24px;
   }
 
   .planner-layout,
   .planner-layout.is-split {
-    grid-template-columns: 1fr;
-    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .planner-layout :deep(.triplist-panel) {
+    order: 1;
+    position: relative !important;
+    top: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    z-index: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .planner-page {
+    padding: 104px 0 84px;
+  }
+
+  .planner-wrap {
+    width: min(94%, 760px);
+  }
+
+  .planner-header {
+    margin-bottom: 44px;
+  }
+
+  .planner-header h1 {
+    margin-top: 20px;
+    font-size: clamp(1.55rem, 5vw, 2.1rem);
+  }
+
+  .planner-border-image {
+    width: min(100%, 620px);
+    margin-top: -18px;
+  }
+
+  .planner-layout,
+  .planner-layout.is-split {
+    gap: 22px;
+  }
+
+  .planner-layout > * {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .planner-page {
+    padding: 98px 0 72px;
+  }
+
+  .planner-wrap {
+    width: 100%;
+    padding: 0 16px;
+  }
+
+  .planner-header {
+    margin-bottom: 34px;
+  }
+
+  .planner-header h1 {
+    margin-top: 12px;
+    font-size: clamp(1.35rem, 6vw, 1.8rem);
+  }
+
+  .planner-border-image {
+    width: min(100%, 430px);
+    margin-top: -12px;
+  }
+
+  .planner-layout,
+  .planner-layout.is-split {
+    gap: 18px;
   }
 }
 

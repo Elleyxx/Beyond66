@@ -9,7 +9,7 @@
     "planner": "规划",
     "community": "社区",
     "search": "搜索",
-    "dashboard": "仪表板",
+    "dashboard": "个人中心",
     "login": "登录",
     "logout": "登出"
   },
@@ -339,8 +339,8 @@
     "loginRequired": "登录后可查看此页面。"
   },
   "planner": {
-    "title": "北欧行程规划器",
-    "borderAlt": "规划器边框",
+    "title": "北欧行程规划",
+    "borderAlt": "规划边框",
     "steps": {
       "basics": "基础",
       "timeline": "时间线",
@@ -396,8 +396,59 @@
       "tripTypeNote": "你和谁一起旅行？",
       "activityLevel": "活动强度",
       "activityLevelNote": "设置你的行程节奏。",
-      "interests": "兴趣",
-      "interestsNote": "选择你希望 Beyond66 优先安排的体验。"
+      "interestsLabel": "兴趣",
+      "interestsNote": "选择你希望 Beyond66 优先安排的体验。",
+      "styles": {
+        "adventure": "冒险",
+        "relax": "休闲",
+        "culture": "文化",
+        "nature": "自然",
+        "luxury": "奢华",
+        "balanced": "均衡"
+      },
+      "accommodations": {
+        "hotel": "酒店",
+        "cabin": "小木屋",
+        "apartment": "公寓",
+        "hostel": "青年旅舍",
+        "resort": "度假村"
+      },
+      "transports": {
+        "train": "火车",
+        "rentalCar": "租车",
+        "bus": "巴士",
+        "flight": "飞机",
+        "ferry": "渡轮"
+      },
+      "tripTypes": {
+        "couple": "情侣",
+        "family": "家庭",
+        "solo": "独行",
+        "friends": "朋友"
+      },
+      "activityLevels": {
+        "easy": "轻松",
+        "moderate": "适中",
+        "active": "活跃",
+        "extreme": "极限"
+      },
+      "seasons": {
+        "winter": "冬季",
+        "spring": "春季",
+        "summer": "夏季",
+        "autumn": "秋季"
+      },
+      "interestOptions": {
+        "northernLights": "极光",
+        "nature": "自然",
+        "photography": "摄影",
+        "food": "美食",
+        "culture": "文化",
+        "wildlife": "野生动物",
+        "winterSports": "冬季运动",
+        "fjords": "峡湾",
+        "christmasMarkets": "圣诞集市"
+      }
     },
     "options": {
       "budget": "节省",
@@ -535,5 +586,103 @@
     "terms": "条款与条件",
     "cookie": "Cookie 政策",
     "madeFor": "为北欧探索者打造"
+  },
+  "explore": {
+    "moreBtn": "更多 →",
+    "goToCountry": "前往 {name}"
+  },
+  "profilePage": {
+    "hero": {
+      "eyebrow": "我的主页",
+      "addJourney": "添加旅程",
+      "joined": "{year} 年加入",
+      "joinedRecently": "最近加入",
+      "titleExplorer": "北欧探险家",
+      "titleWayfinder": "北极向导",
+      "titleTraveller": "北欧旅行者",
+      "titleFuture": "未来的北欧探索者"
+    },
+    "stats": {
+      "countriesExplored": "已探索国家",
+      "journeysCreated": "已创建旅程",
+      "travelDiaries": "旅行日记",
+      "savedPlaces": "已收藏地点",
+      "publicStories": "公开故事"
+    },
+    "badges": {
+      "nordicPassport": {
+        "title": "北欧护照",
+        "desc": "已探索 {count} 个北欧国家"
+      },
+      "routeBuilder": {
+        "title": "路线建造者",
+        "desc": "已创建 {count} 段旅行旅程"
+      },
+      "dreamListCurator": {
+        "title": "梦想清单策展人",
+        "desc": "已收藏 {count} 个目的地"
+      },
+      "storyteller": {
+        "title": "旅行故事家",
+        "desc": "已分享 {count} 篇公开旅行故事"
+      },
+      "firstSteps": {
+        "title": "初学者",
+        "desc": "创建规划器、收藏目的地或发布故事以解锁徽章"
+      }
+    },
+    "passport": {
+      "eyebrow": "我的北欧护照",
+      "title": "国家印章",
+      "discovered": "已探索",
+      "undiscovered": "未探索",
+      "journeyCreated": "旅程已创建",
+      "startJourney": "开始旅程",
+      "brand": "Beyond66° 护照"
+    },
+    "achievements": {
+      "eyebrow": "成就",
+      "title": "旅行徽章"
+    },
+    "journeys": {
+      "eyebrow": "我的旅程",
+      "title": "规划与旅行日记",
+      "tagPlanner": "规划",
+      "tagDiary": "日记",
+      "tagPublic": "公开",
+      "tagPrivate": "私密",
+      "actionView": "查看",
+      "actionEdit": "编辑",
+      "actionShare": "分享",
+      "actionUnshare": "取消分享",
+      "actionAddDiary": "添加日记",
+      "actionEditDiary": "编辑日记",
+      "days": "{count} 天",
+      "emptyText": "还没有旅程。创建规划开始填写你的护照。",
+      "emptyButton": "创建旅程"
+    },
+    "saved": {
+      "eyebrow": "已保存目的地",
+      "title": "难忘的地方",
+      "savedAt": "已保存 {date}",
+      "viewCta": "查看目的地",
+      "emptyText": "还没有保存的目的地。在国家页面收藏景点，它们会出现在这里。",
+      "emptyButton": "探索地点"
+    },
+    "diary": {
+      "eyebrow": "旅行日记",
+      "titleFallback": "旅程日记",
+      "titleLabel": "日记标题",
+      "titlePlaceholder": "我的第一次极光体验",
+      "storyLabel": "故事",
+      "storyPlaceholder": "讲述这段旅程背后的故事...",
+      "photosLabel": "日记照片",
+      "photosCount": "已选择 {count}/10 张图片",
+      "processing": "正在处理图片...",
+      "chooseImages": "选择图片",
+      "uploadHint": "最多可上传 10 张图片，大图片在保存前会自动调整大小。",
+      "cancel": "取消",
+      "saveDiary": "保存日记"
+    }
   }
 }

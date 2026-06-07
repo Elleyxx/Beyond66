@@ -1184,10 +1184,28 @@ watch(experiencesList, (list) => {
 }
 
 /* Responsive */
-@media (max-width: 960px) {
-  .section-card,
-  .feature-section {
-    padding: 28px;
+
+/* Responsive */
+
+@media (max-width: 1250px) {
+  .country-hero {
+    min-height: 32vh;
+    margin-top: 22px;
+  }
+
+  .title-blob h1 {
+    font-size: clamp(3rem, 9vw, 5.6rem);
+    line-height: 0.9;
+  }
+
+  .country-body .v-container {
+    max-width: 100% !important;
+    padding-inline: 28px !important;
+  }
+
+  .tab-section {
+    scroll-margin-top: 145px;
+    margin-bottom: 70px;
   }
 
   .overview-grid,
@@ -1195,23 +1213,238 @@ watch(experiencesList, (list) => {
     grid-template-columns: 1fr;
   }
 
+  .overview-image {
+    min-height: 320px;
+  }
+
   .quickfacts-grid,
+  .besttime-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .highlight-cards,
+  .destination-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .experience-hero {
+    min-height: 420px;
+  }
+
+  .experience-card {
+    grid-template-columns: 130px 1fr;
+  }
+
+  .experience-card img {
+    width: 130px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 900px) {
+  .country-hero {
+    min-height: 28vh;
+    margin-top: 22px;
+  }
+
+  .hero-content {
+    padding: 18px;
+  }
+
+  .title-blob {
+    padding: 24px 38px;
+  }
+
+  .title-blob h1 {
+    font-size: clamp(2.6rem, 11vw, 4.8rem);
+    line-height: 0.95;
+  }
+
+  .country-body .v-container {
+    padding-inline: 20px !important;
+  }
+
+  .tab-section {
+    scroll-margin-top: 135px;
+    margin-bottom: 58px;
+  }
+
+  .section-title-row {
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .section-title-row h2 {
+    font-size: 1.45rem;
+  }
+
+  .overview-grid {
+    gap: 22px;
+  }
+
+  .overview-image {
+    min-height: 280px;
+  }
+
+  .overview-image-overlay p {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .quickfacts-grid,
+  .besttime-grid,
   .highlight-cards,
   .destination-grid {
     grid-template-columns: 1fr;
   }
 
-  .besttime-grid {
-    grid-template-columns: 1fr;
+  .highlight-card img,
+  .destination-slider {
+    height: 220px;
+  }
+
+  .experience-layout {
+    gap: 20px;
+  }
+
+  .experience-hero {
+    min-height: 360px;
+    border-radius: 28px;
+  }
+
+  .experience-overlay {
+    padding: 28px;
   }
 
   .experience-card {
-    grid-template-columns: 110px 1fr;
+    grid-template-columns: 120px 1fr;
   }
 
   .experience-card img {
-    width: 110px;
-    height: 90px;
+    width: 120px;
+    height: 92px;
+  }
+
+  .gallery-grid {
+    grid-template-rows: repeat(2, 180px);
+    grid-auto-columns: 145px;
+    gap: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .country-hero {
+    min-height: 24vh;
+    margin-top: 22px;
+  }
+
+  .hero-content {
+    padding: 14px;
+  }
+
+  .title-blob {
+    padding: 18px 24px;
+  }
+
+  .title-blob h1 {
+    font-size: clamp(2.2rem, 13vw, 3.6rem);
+    line-height: 1;
+    letter-spacing: 0.08em;
+  }
+
+  .country-body .v-container {
+    padding-inline: 14px !important;
+  }
+
+  .tab-section {
+    scroll-margin-top: 125px;
+    margin-bottom: 46px;
+  }
+
+  .section-title-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .section-title-line {
+    width: 100%;
+  }
+
+  .section-title-row h2 {
+    white-space: normal;
+    font-size: 1.32rem;
+  }
+
+  .overview-image {
+    min-height: 230px;
+  }
+
+  .overview-image-overlay {
+    padding: 16px;
+  }
+
+  .overview-image-overlay p {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .quickfact-card,
+  .besttime-card,
+  .highlight-content {
+    padding: 18px;
+  }
+
+  .highlight-card,
+  .destination-card {
+    border-radius: 22px;
+  }
+
+  .highlight-card img,
+  .destination-slider {
+    height: 190px;
+  }
+
+  .destination-card h3,
+  .destination-card p {
+    padding-inline: 18px;
+  }
+
+  .destination-card p {
+    font-size: 0.9rem;
+  }
+
+  .experience-hero {
+    min-height: 300px;
+    border-radius: 24px;
+  }
+
+  .experience-overlay {
+    padding: 22px;
+  }
+
+  .experience-overlay h3 {
+    font-size: 1.8rem;
+  }
+
+  .experience-overlay p {
+    font-size: 0.9rem;
+  }
+
+  .experience-card {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-card img {
+    width: 100%;
+    height: 170px;
+  }
+
+  .gallery-grid {
+    grid-template-rows: repeat(2, 145px);
+    grid-auto-columns: 120px;
+    gap: 12px;
   }
 }
 </style>

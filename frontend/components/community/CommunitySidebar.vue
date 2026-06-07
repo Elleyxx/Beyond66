@@ -5,9 +5,13 @@
 
       <ul>
         <li v-for="item in destinations" :key="item.name">
-          <span class="country-code">{{ item.code }}</span>
-          <strong>{{ item.name }}</strong>
-          <small>{{ t('community.sidebar.posts', { count: item.posts }) }}</small>
+          <RouterLink class="destination-link" :to="countryPath(item)">
+            <span class="country-code">{{ item.code }}</span>
+
+            <strong>{{ item.name }}</strong>
+
+            <small>{{ t('community.sidebar.posts', { count: item.posts }) }}</small>
+          </RouterLink>
         </li>
       </ul>
     </section>
@@ -25,6 +29,7 @@
 </template>
 
 <script setup>
+import { RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 defineProps({
@@ -33,6 +38,17 @@ defineProps({
 })
 
 const { t } = useI18n()
+
+function slugifyCountry(name) {
+  return String(name || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+}
+
+function countryPath(item) {
+  return `/country/${item.slug || slugifyCountry(item.name)}`
+}
 </script>
 
 <style scoped>
@@ -67,9 +83,25 @@ const { t } = useI18n()
 }
 
 .sidebar-card li {
+  margin: 0;
+}
+
+.destination-link {
   display: flex;
   align-items: center;
   gap: 10px;
+  color: inherit;
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 14px;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.destination-link:hover {
+  background: rgba(var(--v-theme-primary), 0.08);
+  transform: translateX(4px);
 }
 
 .country-code {
@@ -82,6 +114,11 @@ const { t } = useI18n()
   background: rgb(var(--v-theme-primary));
   font-size: 0.78rem;
   font-weight: 900;
+  flex: 0 0 auto;
+}
+
+.destination-link strong {
+  color: rgb(var(--v-theme-text));
 }
 
 .sidebar-card small {
@@ -105,7 +142,7 @@ const { t } = useI18n()
   font-weight: 650;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1250px) {
   .community-sidebar {
     position: static;
   }

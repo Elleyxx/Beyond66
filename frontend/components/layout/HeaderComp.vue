@@ -1048,6 +1048,7 @@ onBeforeUnmount(() => {
 
   .site-header :deep(.v-toolbar__content) {
     height: auto !important;
+    min-height: 82px !important;
     align-items: stretch;
   }
 
@@ -1059,21 +1060,23 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100px;
-    padding: 6px 16px 4px;
-    gap: 8px;
+    height: 82px;
+    padding: 4px 16px;
+    gap: 4px;
   }
 
   .site-header.scrolled .mobile-header {
-    padding-bottom: 2px;
-    gap: 6px;
+    height: 78px;
+    padding-bottom: 3px;
+    gap: 3px;
   }
 
   .mobile-top-row {
     display: grid;
-    grid-template-columns: 44px 1fr 44px;
+    grid-template-columns: 40px 1fr 40px;
     align-items: center;
     column-gap: 8px;
+    height: 38px;
   }
 
   .mobile-brand-link {
@@ -1094,18 +1097,29 @@ onBeforeUnmount(() => {
   }
 
   .mobile-icon-btn {
-    min-width: 36px !important;
-    width: 36px !important;
-    height: 36px !important;
+    min-width: 34px !important;
+    width: 34px !important;
+    height: 34px !important;
   }
 
   .mobile-icon-btn i {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .mobile-search-box {
     width: 100%;
     max-width: none;
+  }
+
+  .mobile-search-box :deep(.v-field) {
+    height: 34px !important;
+    min-height: 34px !important;
+  }
+
+  .mobile-search-box :deep(.v-field__input) {
+    min-height: 34px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 
   .mobile-search-shell {
@@ -1115,17 +1129,23 @@ onBeforeUnmount(() => {
   }
 
   .mobile-search-shell .search-popover {
+    position: fixed;
+    top: 82px;
     left: 0;
     right: 0;
     width: 100%;
   }
 
+  .site-header.scrolled .mobile-search-shell .search-popover {
+    top: 78px;
+  }
+
   .brand-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .brand-logo {
-    width: 38px;
+    width: 34px;
   }
 }
 </style>

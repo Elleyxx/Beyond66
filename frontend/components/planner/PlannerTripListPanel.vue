@@ -5,6 +5,7 @@
     <div class="triplist-content">
       <div class="triplist-head">
         <h2>{{ t('planner.list.title') }}</h2>
+
         <button class="add-trip-btn" @click="$emit('add')">
           <img class="add-trip-stamp" src="/assets/images/stamp.svg" alt="" aria-hidden="true" />
           <span>{{ t('planner.list.add') }}</span>
@@ -21,6 +22,7 @@
           <strong>{{ trip.title }}</strong>
           <span>{{ trip.country }} · {{ t('planner.list.days', { count: trip.duration }) }}</span>
         </li>
+
         <li v-if="!trips.length" class="empty-trip">
           {{ t('planner.list.empty') }}
         </li>
@@ -36,7 +38,9 @@ defineProps({
   trips: { type: Array, default: () => [] },
   selectedTripId: { type: [Number, String, null], default: null },
 })
+
 defineEmits(['select', 'add'])
+
 const { t } = useI18n()
 </script>
 
@@ -46,11 +50,11 @@ const { t } = useI18n()
   top: 100px;
   align-self: start;
   width: 100%;
-  background: rgba(var(--v-theme-surface), 0.92);
-  border: none;
   min-height: 320px;
   max-height: calc(100vh - 220px);
   overflow: auto;
+  background: rgba(var(--v-theme-surface), 0.92);
+  border: none;
   box-shadow:
     0 0 30px rgba(44, 246, 179, 0.06),
     0 12px 40px rgba(0, 0, 0, 0.08);
@@ -78,7 +82,7 @@ const { t } = useI18n()
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 10px;
 }
 
@@ -158,5 +162,83 @@ const { t } = useI18n()
   cursor: default;
   color: rgba(var(--v-theme-text), 0.7);
   text-align: center;
+}
+
+@media (max-width: 1250px) {
+  .triplist-panel {
+    position: relative;
+    top: auto;
+    min-height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .triplist-content {
+    padding: 40px 38px;
+  }
+}
+
+@media (max-width: 900px) {
+  .triplist-panel {
+    box-shadow:
+      0 0 24px rgba(44, 246, 179, 0.05),
+      0 10px 28px rgba(0, 0, 0, 0.06);
+  }
+
+  .triplist-content {
+    padding: 36px 34px;
+  }
+
+  .triplist {
+    max-height: 260px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .triplist li {
+    padding: 16px 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .triplist-panel {
+    background: rgba(var(--v-theme-surface), 0.96);
+    box-shadow: none;
+  }
+
+  .panel-border {
+    opacity: 0.75;
+  }
+
+  .triplist-content {
+    padding: 34px 28px;
+  }
+
+  .triplist-head {
+    align-items: center;
+  }
+
+  .add-trip-btn {
+    width: 108px;
+    height: 56px;
+  }
+
+  .add-trip-stamp {
+    width: 108px;
+    height: 50px;
+  }
+
+  .add-trip-btn span {
+    font-size: 0.82rem;
+  }
+
+  .triplist {
+    max-height: 210px;
+    margin: 18px 0 8px;
+  }
+
+  .triplist li {
+    padding: 14px 10px;
+  }
 }
 </style>

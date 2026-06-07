@@ -94,13 +94,19 @@ defineProps({
   opacity: 0.75;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 900px) {
   .section-card {
     padding: 28px;
   }
 
   .tips-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .section-card {
+    padding: 20px;
   }
 }
 </style>

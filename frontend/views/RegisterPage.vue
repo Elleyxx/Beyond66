@@ -210,6 +210,7 @@ async function handleRegister() {
   display: grid;
   place-items: center;
   overflow: hidden;
+  padding: 24px;
 }
 
 .register-video {
@@ -358,7 +359,17 @@ label {
   text-align: left;
 }
 
+@media (max-width: 900px) {
+  .register-page {
+    padding: 20px var(--page-gutter);
+  }
+}
+
 @media (max-width: 600px) {
+  .register-page {
+    padding: 16px var(--page-gutter);
+  }
+
   .form-grid {
     grid-template-columns: 1fr;
   }

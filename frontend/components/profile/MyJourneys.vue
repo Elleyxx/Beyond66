@@ -1,12 +1,21 @@
 <template>
   <section class="section-block">
     <div class="section-title">
-      <p>MY JOURNEYS</p>
-      <h2>Planners & Travel Diaries</h2>
+      <p>{{ t('profilePage.journeys.eyebrow') }}</p>
+      <h2>{{ t('profilePage.journeys.title') }}</h2>
     </div>
 
     <div v-if="journeys.length" class="journey-grid">
-      <article v-for="journey in journeys" :key="journey.id || journey.title" class="journey-card">
+      <article
+        v-for="journey in journeys"
+        :key="journey.id || journey.title"
+        class="journey-card"
+        :class="{ 'is-clickable': journey.postId }"
+        :role="journey.postId ? 'link' : undefined"
+        :tabindex="journey.postId ? 0 : undefined"
+        @click="openCommunityPost(journey)"
+        @keydown.enter="openCommunityPost(journey)"
+      >
         <img :src="resolveAssetUrl(journey.image)" :alt="journey.title" />
 
         <div class="journey-content">
@@ -19,21 +28,21 @@
           </div>
 
           <div class="journey-tags">
-            <span :class="{ active: journey.hasPlanner }">Planner</span>
-            <span :class="{ active: journey.hasDiary }">Diary</span>
+            <span :class="{ active: journey.hasPlanner }">{{ t('profilePage.journeys.tagPlanner') }}</span>
+            <span :class="{ active: journey.hasDiary }">{{ t('profilePage.journeys.tagDiary') }}</span>
             <span :class="{ active: journey.isPublic }">
-              {{ journey.isPublic ? 'Public' : 'Private' }}
+              {{ journey.isPublic ? t('profilePage.journeys.tagPublic') : t('profilePage.journeys.tagPrivate') }}
             </span>
           </div>
 
           <div class="journey-actions">
-            <button type="button" @click="$emit('view', journey)">View</button>
-            <button type="button" @click="$emit('edit', journey)">Edit</button>
-            <button type="button" @click="$emit('toggle-share', journey)">
-              {{ journey.isPublic ? 'Unshare' : 'Share' }}
+            <button type="button" @click.stop="$emit('view', journey)">{{ t('profilePage.journeys.actionView') }}</button>
+            <button type="button" @click.stop="$emit('edit', journey)">{{ t('profilePage.journeys.actionEdit') }}</button>
+            <button type="button" @click.stop="$emit('toggle-share', journey)">
+              {{ journey.isPublic ? t('profilePage.journeys.actionUnshare') : t('profilePage.journeys.actionShare') }}
             </button>
-            <button type="button" @click="$emit('add-diary', journey)">
-              {{ journey.hasDiary ? 'Edit Diary' : 'Add Diary' }}
+            <button type="button" @click.stop="$emit('add-diary', journey)">
+              {{ journey.hasDiary ? t('profilePage.journeys.actionEditDiary') : t('profilePage.journeys.actionAddDiary') }}
             </button>
           </div>
         </div>
@@ -42,14 +51,18 @@
 
     <div v-else class="empty-panel">
       <v-icon size="34">mdi-map-plus</v-icon>
-      <p>No journeys yet. Create a planner to start filling your passport.</p>
-      <v-btn to="/trip-planner" color="primary" variant="flat">Create Journey</v-btn>
+      <p>{{ t('profilePage.journeys.emptyText') }}</p>
+      <v-btn to="/trip-planner" color="primary" variant="flat">{{ t('profilePage.journeys.emptyButton') }}</v-btn>
     </div>
   </section>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { resolveAssetUrl } from '@/services/apiBase'
+
+const { t } = useI18n()
 
 defineProps({
   journeys: {
@@ -59,6 +72,14 @@ defineProps({
 })
 
 defineEmits(['view', 'edit', 'toggle-share', 'add-diary'])
+
+const router = useRouter()
+
+function openCommunityPost(journey) {
+  if (journey.postId) {
+    router.push(`/community/${journey.postId}`)
+  }
+}
 </script>
 
 <style scoped>
@@ -92,11 +113,18 @@ defineEmits(['view', 'edit', 'toggle-share', 'add-diary'])
   border-radius: 8px;
   background: rgb(var(--v-theme-surface));
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
 }
 
-.journey-card:hover {
+.journey-card.is-clickable {
+  cursor: pointer;
+}
+
+.journey-card.is-clickable:hover,
+.journey-card.is-clickable:focus-visible {
   transform: translateY(-6px);
   box-shadow: 0 18px 36px rgba(var(--v-theme-background), 0.18);
+  border-color: rgba(var(--v-theme-primary), 0.3);
 }
 
 .journey-card img {

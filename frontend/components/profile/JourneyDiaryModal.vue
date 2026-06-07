@@ -4,8 +4,8 @@
       <section class="diary-modal">
         <div class="modal-head">
           <div>
-            <p>Travel Diary</p>
-            <h2>{{ journey?.title || 'Journey Diary' }}</h2>
+            <p>{{ t('profilePage.diary.eyebrow') }}</p>
+            <h2>{{ journey?.title || t('profilePage.diary.titleFallback') }}</h2>
           </div>
 
           <button type="button" class="icon-btn" @click="$emit('close')">
@@ -15,19 +15,19 @@
 
         <div class="modal-body">
           <label>
-            Diary title
-            <input v-model="title" type="text" placeholder="My First Aurora Experience" />
+            {{ t('profilePage.diary.titleLabel') }}
+            <input v-model="title" type="text" :placeholder="t('profilePage.diary.titlePlaceholder')" />
           </label>
 
           <label>
-            Story
-            <textarea v-model="story" rows="8" placeholder="Tell the story behind this journey..."></textarea>
+            {{ t('profilePage.diary.storyLabel') }}
+            <textarea v-model="story" rows="8" :placeholder="t('profilePage.diary.storyPlaceholder')"></textarea>
           </label>
 
           <section class="photo-upload-section">
             <div class="photo-upload-head">
-              <span>Diary photos</span>
-              <small>{{ photos.length }}/10 images selected</small>
+              <span>{{ t('profilePage.diary.photosLabel') }}</span>
+              <small>{{ t('profilePage.diary.photosCount', { count: photos.length }) }}</small>
             </div>
 
             <label class="file-drop" :class="{ disabled: photos.length >= 10 }">
@@ -39,10 +39,10 @@
                 @change="handlePhotoUpload"
               />
               <i class="bi bi-images"></i>
-              <span>{{ isProcessingImages ? 'Processing images...' : 'Choose Images' }}</span>
+              <span>{{ isProcessingImages ? t('profilePage.diary.processing') : t('profilePage.diary.chooseImages') }}</span>
             </label>
 
-            <small class="upload-hint">You can upload up to 10 images. Large images are resized before saving.</small>
+            <small class="upload-hint">{{ t('profilePage.diary.uploadHint') }}</small>
           </section>
 
           <div v-if="photos.length" class="photo-preview">
@@ -56,8 +56,8 @@
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="secondary" @click="$emit('close')">Cancel</button>
-          <button type="button" class="primary" @click="saveDiary">Save Diary</button>
+          <button type="button" class="secondary" @click="$emit('close')">{{ t('profilePage.diary.cancel') }}</button>
+          <button type="button" class="primary" @click="saveDiary">{{ t('profilePage.diary.saveDiary') }}</button>
         </div>
       </section>
     </div>
@@ -66,7 +66,10 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { resolveAssetUrl } from '@/services/apiBase'
+
+const { t } = useI18n()
 import { uploadDiaryImages } from '@/services/plannerService'
 
 const props = defineProps({
@@ -376,7 +379,7 @@ button {
   background: rgb(var(--v-theme-primary));
 }
 
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .photo-preview {
     grid-template-columns: 1fr;
   }

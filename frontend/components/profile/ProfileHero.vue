@@ -7,14 +7,14 @@
       <div v-else class="avatar avatar-fallback">{{ initials }}</div>
 
       <div class="hero-copy">
-        <p class="eyebrow">MY PROFILE</p>
+        <p class="eyebrow">{{ t('profilePage.hero.eyebrow') }}</p>
         <h1>{{ user.name }}</h1>
-        <p>{{ user.title }} · {{ user.joined }}</p>
+        <p>{{ userTitle }} · {{ userJoined }}</p>
       </div>
 
       <v-btn class="edit-btn" variant="outlined" rounded="pill" to="/trip-planner">
         <v-icon start>mdi-map-plus</v-icon>
-        Add Journey
+        {{ t('profilePage.hero.addJourney') }}
       </v-btn>
     </div>
   </section>
@@ -22,6 +22,9 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   user: {
@@ -31,6 +34,17 @@ const props = defineProps({
 })
 
 const coverImage = computed(() => props.user.cover || '/assets/images/aurora_mountain.jpg')
+
+const userTitle = computed(() =>
+  props.user.titleKey ? t(props.user.titleKey) : (props.user.title || ''),
+)
+
+const userJoined = computed(() =>
+  props.user.joinedYear
+    ? t('profilePage.hero.joined', { year: props.user.joinedYear })
+    : props.user.joined || t('profilePage.hero.joinedRecently'),
+)
+
 const initials = computed(() =>
   String(props.user.name || 'Traveller')
     .split(/\s+/)
@@ -118,10 +132,38 @@ h1 {
   padding: 20px 18px !important;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 1250px) {
+  .hero-card {
+    padding: 34px;
+    gap: 22px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-card {
+    padding: 28px 24px;
+    gap: 18px;
+  }
+
+  .avatar {
+    width: 88px;
+    height: 88px;
+    flex: 0 0 88px;
+  }
+
+  .avatar-fallback {
+    font-size: 1.9rem;
+  }
+
+  h1 {
+    font-size: clamp(1.9rem, 5vw, 3.8rem);
+  }
+}
+
+@media (max-width: 600px) {
   .hero-card {
     flex-direction: column;
-    padding: 32px 20px;
+    padding: 28px 20px;
     text-align: center;
   }
 

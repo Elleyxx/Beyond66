@@ -1,21 +1,20 @@
 <template>
   <main class="post-detail-page">
-    <PostDetailHeader :post="post" @save="isSaveModalOpen = true" @edit="isEditModalOpen = true" />
+    <PostDetailHeader :post="post" @save="isSaveModalOpen = true" @edit="isEditModalOpen = true" @like="toggleLike" />
 
     <div class="detail-content">
       <div class="left-column">
         <section class="summary-panel">
           <PostTripSummary :trip="post?.trip" />
         </section>
+        <section class="itinerary-panel">
+          <PostItineraryPreview :timeline="post?.trip?.timeline || []" />
+        </section>
         <section class="comments-panel">
           <PostCommentList :comments="comments" />
           <PostCommentBox @submit="addComment" />
         </section>
       </div>
-
-      <section class="itinerary-panel">
-        <PostItineraryPreview :timeline="post?.trip?.timeline || []" />
-      </section>
 
       <PostPortfolio v-if="hasPortfolios" class="portfolio-panel" :portfolios="post?.portfolios || []" />
     </div>
@@ -51,6 +50,7 @@ import {
   addPostComment,
   getCommunityPost,
   saveCommunityPost,
+  togglePostLike,
   updateCommunityPost,
 } from '@/services/communityService'
 
@@ -68,6 +68,16 @@ async function loadPost() {
   const data = await getCommunityPost(route.params.id)
   post.value = data.post || data
   comments.value = data.comments || []
+}
+
+async function toggleLike() {
+  if (!post.value) return
+  try {
+    const result = await togglePostLike(post.value.id)
+    post.value = { ...post.value, liked: result.liked, likes: result.likes }
+  } catch {
+    // unauthenticated or network error — silently ignore
+  }
 }
 
 async function addComment(comment) {
@@ -90,7 +100,7 @@ async function updatePost(payload) {
 <style scoped>
 .post-detail-page {
   min-height: calc(100vh - 24px);
-  padding: 78px clamp(24px, 5vw, 72px) 100px;
+  padding: 78px var(--page-gutter) 100px;
   background: rgb(var(--v-theme-background));
 }
 
@@ -98,34 +108,15 @@ async function updatePost(payload) {
   width: 90%;
   margin: 26px auto 0;
   display: grid;
-  grid-template-columns: minmax(0, 6fr) minmax(320px, 4fr);
-  grid-template-areas:
-    "left itinerary"
-    "portfolio portfolio";
+  grid-template-columns: 1fr;
   gap: 28px;
   align-items: start;
 }
 
 .left-column {
-  grid-area: left;
   display: grid;
   gap: 28px;
-}
-
-.summary-panel {
   min-width: 0;
-}
-
-.itinerary-panel {
-  grid-area: itinerary;
-}
-
-.comments-panel {
-  min-width: 0;
-}
-
-.portfolio-panel {
-  grid-area: portfolio;
 }
 
 .summary-panel,
@@ -142,13 +133,33 @@ async function updatePost(payload) {
   gap: 16px;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1250px) {
+  .post-detail-page {
+    padding-top: 50px;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
   .detail-content {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "left"
-      "itinerary"
-      "portfolio";
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .post-detail-page {
+    padding-top: 50px;
+    padding-left: 28px;
+    padding-right: 28px;
+    padding-bottom: 84px;
+  }
+}
+
+@media (max-width: 600px) {
+  .post-detail-page {
+    padding-top: 50px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 72px;
   }
 
   .summary-panel,

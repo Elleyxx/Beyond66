@@ -117,6 +117,7 @@ async function handleLogin() {
   display: grid;
   place-items: center;
   overflow: hidden;
+  padding: 24px;
 }
 
 .login-video {
@@ -256,7 +257,17 @@ label {
   text-align: left;
 }
 
+@media (max-width: 900px) {
+  .login-page {
+    padding: 20px var(--page-gutter);
+  }
+}
+
 @media (max-width: 600px) {
+  .login-page {
+    padding: 16px var(--page-gutter);
+  }
+
   .login-card {
     padding: 26px 18px 18px;
     border-radius: 16px;

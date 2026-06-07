@@ -57,3 +57,7 @@ export function addPostComment(postId, comment) {
     body: JSON.stringify({ comment }),
   })
 }
+
+export function togglePostLike(postId) {
+  return request(`/api/community/posts/${postId}/likes`, { method: 'POST' })
+}

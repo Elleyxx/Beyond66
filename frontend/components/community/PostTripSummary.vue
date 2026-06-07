@@ -177,7 +177,7 @@ strong {
   object-fit: cover;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 600px) {
   .summary-grid {
     grid-template-columns: 1fr;
   }

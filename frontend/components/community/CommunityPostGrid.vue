@@ -17,6 +17,7 @@
         @save="$emit('save', post)"
         @edit="$emit('edit', post)"
         @use-plan="$emit('use-plan', post)"
+        @like="$emit('like', post)"
       />
     </div>
   </section>
@@ -31,7 +32,7 @@ defineProps({
   loading: { type: Boolean, default: false },
 })
 
-defineEmits(['save', 'edit', 'use-plan'])
+defineEmits(['save', 'edit', 'use-plan', 'like'])
 
 const { t } = useI18n()
 </script>
@@ -69,6 +70,12 @@ const { t } = useI18n()
 .post-grid {
   columns: 2 230px;
   column-gap: 18px;
+}
+
+@media (max-width: 600px) {
+  .post-grid {
+    columns: 1;
+  }
 }
 
 .state {

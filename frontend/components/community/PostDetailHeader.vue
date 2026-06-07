@@ -13,10 +13,16 @@
         <span class="description">{{ post?.description || t('community.detail.descriptionFallback') }}</span>
       </div>
 
-      <button class="save-button" type="button" @click="$emit(post?.isOwner ? 'edit' : 'save')">
-        <i :class="post?.isOwner ? 'bi bi-pencil-square' : 'bi bi-bookmark'"></i>
-        {{ post?.isOwner ? 'Edit Post' : t('community.detail.savePost') }}
-      </button>
+      <div class="header-actions">
+        <button class="like-button" :class="{ liked: post?.liked }" type="button" @click="$emit('like')">
+          <i :class="post?.liked ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+          {{ post?.likes || 0 }}
+        </button>
+        <button class="save-button" type="button" @click="$emit(post?.isOwner ? 'edit' : 'save')">
+          <i :class="post?.isOwner ? 'bi bi-pencil-square' : 'bi bi-bookmark'"></i>
+          {{ post?.isOwner ? 'Edit Post' : t('community.detail.savePost') }}
+        </button>
+      </div>
     </div>
   </header>
 </template>
@@ -31,7 +37,7 @@ const props = defineProps({
   post: { type: Object, default: null },
 })
 
-defineEmits(['save', 'edit'])
+defineEmits(['save', 'edit', 'like'])
 
 const router = useRouter()
 const { t } = useI18n()
@@ -46,7 +52,7 @@ function goBack() {
 .detail-header {
   width: 90%;
   min-height: 340px;
-  margin: 0 auto;
+  margin: 50px auto;
   display: grid;
   align-items: end;
   overflow: hidden;
@@ -66,37 +72,55 @@ img {
 .header-content {
   position: relative;
   z-index: 1;
-  padding: clamp(22px, 4vw, 44px);
+
+  padding:
+    clamp(22px, 4vw, 44px)
+    clamp(22px, 4vw, 44px)
+    clamp(22px, 4vw, 44px);
+
+  padding-top: 75px; /* reserve space for back button */
+
   color: #fff;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.08));
+
+  background:
+    linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.68),
+      rgba(0, 0, 0, 0.08)
+    );
+
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 24px;
-  height: 100%;
+
+  min-height: 100%;
 }
 
 .header-copy {
   min-width: 0;
+  margin-top: 15px;
 }
 
 .back-button {
   position: absolute;
   top: 20px;
   left: 22px;
-  z-index: 2;
-  margin: 0;
-  padding: 0;
+  z-index: 10;
+
   display: inline-flex;
   align-items: center;
   gap: 6px;
+
   border: 0;
-  color: rgba(255, 255, 255, 0.9);
   background: transparent;
+
+  color: rgba(255, 255, 255, 0.95);
   font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: none;
+  font-weight: 700;
+
   cursor: pointer;
+
   transition:
     color 0.2s ease,
     transform 0.2s ease;
@@ -135,6 +159,35 @@ h1 {
   line-height: 1.6;
 }
 
+.header-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.like-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  padding: 9px 14px;
+  color: #fff;
+  background: transparent;
+  font-weight: 850;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.like-button:hover,
+.like-button.liked {
+  border-color: #e05252;
+  color: #e05252;
+}
+
 .save-button {
   flex: 0 0 auto;
   border: 0;
@@ -146,10 +199,46 @@ h1 {
   cursor: pointer;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1250px) {
+  .detail-header {
+    width: 100%;
+    margin: 22px auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .detail-header {
+    min-height: 300px;
+  }
+
   .header-content {
-    align-items: start;
+    padding: clamp(18px, 3.5vw, 32px);
+    gap: 16px;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .back-button {
+    top: 18px;
+    left: 18px;
+  }
+
+  .header-content {
+    padding-top: 72px;
+    align-items: flex-start;
     flex-direction: column;
+  }
+
+  .header-copy {
+    margin-top: 15px;
   }
 }
 </style>

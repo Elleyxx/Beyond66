@@ -31,7 +31,10 @@ class CommunityController
 
         Response::json([
             'success' => true,
-            'data' => $post,
+            'data' => [
+                'post'     => $post,
+                'comments' => $this->community->getComments($postId),
+            ],
         ]);
     }
 
@@ -103,6 +106,46 @@ class CommunityController
         Response::json([
             'success' => true,
             'data' => ['status' => $status],
+        ]);
+    }
+
+    public function addComment(int $postId): void
+    {
+        $userId = $this->currentUserId();
+        if (!$userId) {
+            Response::json(['success' => false, 'message' => 'Authentication required'], 401);
+            return;
+        }
+
+        $payload = json_decode(file_get_contents('php://input'), true) ?: [];
+        $comment = trim((string) ($payload['comment'] ?? ''));
+
+        if ($comment === '') {
+            Response::json(['success' => false, 'message' => 'Comment cannot be empty'], 422);
+            return;
+        }
+
+        $newComment = $this->community->addComment($postId, $userId, $comment);
+
+        Response::json([
+            'success' => true,
+            'data'    => $newComment,
+        ]);
+    }
+
+    public function toggleLike(int $postId): void
+    {
+        $userId = $this->currentUserId();
+        if (!$userId) {
+            Response::json(['success' => false, 'message' => 'Authentication required'], 401);
+            return;
+        }
+
+        $result = $this->community->toggleLike($postId, $userId);
+
+        Response::json([
+            'success' => true,
+            'data'    => $result,
         ]);
     }
 
