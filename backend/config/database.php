@@ -30,10 +30,10 @@ if (!function_exists('backendEnvValue')) {
 }
 
 return [
-    'host' => backendEnvValue('DB_HOST', backendEnvValue('MYSQLHOST', '127.0.0.1')),
-    'port' => (int) backendEnvValue('DB_PORT', backendEnvValue('MYSQLPORT', '3306')),
-    'dbname' => backendEnvValue('DB_NAME', backendEnvValue('MYSQLDATABASE', 'beyond66')),
-    'username' => backendEnvValue('DB_USER', backendEnvValue('MYSQLUSER', 'root')),
-    'password' => backendEnvValue('DB_PASS', backendEnvValue('MYSQLPASSWORD', '')),
+    'host' => backendEnvValue('MYSQLHOST', backendEnvValue('DB_HOST', '127.0.0.1')),
+    'port' => (int) backendEnvValue('MYSQLPORT', backendEnvValue('DB_PORT', '3306')),
+    'dbname' => backendEnvValue('MYSQLDATABASE', backendEnvValue('DB_NAME', 'beyond66')),
+    'username' => backendEnvValue('MYSQLUSER', backendEnvValue('DB_USER', 'root')),
+    'password' => backendEnvValue('MYSQLPASSWORD', backendEnvValue('DB_PASS', '')),
     'charset' => backendEnvValue('DB_CHARSET', 'utf8mb4'),
 ];
