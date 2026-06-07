@@ -32,6 +32,8 @@
 
         <SavedDestinations :destinations="profile.savedDestinations" @unsave="unsaveDestination" />
 
+        <SavedPosts :posts="profile.savedPosts" @unsave="unsavePost" />
+
         <JourneyDiaryModal
           v-if="editingDiaryJourney"
           :journey="editingDiaryJourney"
@@ -53,9 +55,11 @@ import AchievementsSection from '@/components/profile/AchievementsSection.vue'
 import MyJourneys from '@/components/profile/MyJourneys.vue'
 import JourneyDiaryModal from '@/components/profile/JourneyDiaryModal.vue'
 import SavedDestinations from '@/components/profile/SavedDestinations.vue'
+import SavedPosts from '@/components/profile/SavedPosts.vue'
 import { loadProfileDashboard } from '@/services/profileService'
 import { saveJourneyDiary, updateJourneyVisibility } from '@/services/plannerService'
 import { toggleSavedDestination } from '@/services/savedItemService'
+import { unsaveCommunityPost } from '@/services/communityService'
 
 const router = useRouter()
 const isLoading = ref(true)
@@ -68,6 +72,7 @@ const profile = reactive({
   achievements: [],
   journeys: [],
   savedDestinations: [],
+  savedPosts: [],
   publicPosts: [],
 })
 
@@ -83,6 +88,7 @@ async function loadProfile() {
     profile.achievements = Array.isArray(data.achievements) ? data.achievements : []
     profile.journeys = Array.isArray(data.journeys) ? data.journeys : []
     profile.savedDestinations = Array.isArray(data.savedDestinations) ? data.savedDestinations : []
+    profile.savedPosts = Array.isArray(data.savedPosts) ? data.savedPosts : []
     profile.publicPosts = Array.isArray(data.publicPosts) ? data.publicPosts : []
   } catch (loadError) {
     error.value = loadError?.message || 'Unable to load your profile right now.'
@@ -122,6 +128,16 @@ async function unsaveDestination(slug) {
   profile.savedDestinations = profile.savedDestinations.filter((d) => d.slug !== slug)
   try {
     await toggleSavedDestination(slug)
+  } catch {
+    await loadProfile()
+  }
+}
+
+async function unsavePost(postId) {
+  if (!postId) return
+  profile.savedPosts = profile.savedPosts.filter((p) => p.id !== postId)
+  try {
+    await unsaveCommunityPost(postId)
   } catch {
     await loadProfile()
   }

@@ -658,7 +658,8 @@
       "actionAddDiary": "Add Diary",
       "actionEditDiary": "Edit Diary",
       "days": "{count} Days",
-      "emptyText": "No journeys yet. Create a planner to start filling your passport.",
+      "emptyTitle": "No Journeys Yet",
+      "emptyText": "Create a planner to start filling your passport and building your Nordic adventure.",
       "emptyButton": "Create Journey"
     },
     "saved": {
@@ -666,8 +667,18 @@
       "title": "Places to Remember",
       "savedAt": "Saved {date}",
       "viewCta": "View Destination",
-      "emptyText": "No saved destinations yet. Bookmark places from the country pages to collect them here.",
+      "emptyTitle": "No Saved Places Yet",
+      "emptyText": "Bookmark destinations from the country pages to collect them here for easy access later.",
       "emptyButton": "Explore Places"
+    },
+    "savedPosts": {
+      "eyebrow": "SAVED POSTS",
+      "title": "Community Posts You've Saved",
+      "savedAt": "Saved {date}",
+      "viewCta": "View Post",
+      "emptyTitle": "No Saved Posts Yet",
+      "emptyText": "Browse the community and save posts that inspire your next Nordic journey.",
+      "emptyButton": "Explore Community"
     },
     "diary": {
       "eyebrow": "Travel Diary",

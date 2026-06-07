@@ -112,6 +112,14 @@ class Community
         ]);
     }
 
+    public function unsavePost(int $postId, int $userId): void
+    {
+        $stmt = $this->pdo->prepare(
+            'DELETE FROM saved_posts WHERE post_id = :post_id AND user_id = :user_id'
+        );
+        $stmt->execute(['post_id' => $postId, 'user_id' => $userId]);
+    }
+
     public function updateOwnedPost(int $postId, int $userId, array $payload): ?array
     {
         $ownerStmt = $this->pdo->prepare(

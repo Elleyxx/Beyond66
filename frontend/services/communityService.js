@@ -37,6 +37,10 @@ export function saveCommunityPost(postId) {
   return request(`/api/community/posts/${postId}/save`, { method: 'POST' })
 }
 
+export function unsaveCommunityPost(postId) {
+  return request(`/api/community/posts/${postId}/save`, { method: 'DELETE' })
+}
+
 export function updateCommunityPost(postId, payload) {
   return request(`/api/community/posts/${postId}`, {
     method: 'PATCH',

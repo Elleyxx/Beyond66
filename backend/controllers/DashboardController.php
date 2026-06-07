@@ -58,6 +58,7 @@ class DashboardController
 
             $journeys = $this->getJourneys($userId);
             $savedDestinations = $this->getSavedDestinations($userId);
+            $savedPosts = $this->getSavedPosts($userId);
             $publicPosts = $this->getPublicPosts($userId);
             $visitedCountries = $this->getVisitedCountries($journeys);
 
@@ -70,6 +71,7 @@ class DashboardController
                     'achievements' => $this->buildAchievements($visitedCountries, $journeys, $savedDestinations, $publicPosts),
                     'journeys' => $journeys,
                     'savedDestinations' => $savedDestinations,
+                    'savedPosts' => $savedPosts,
                     'publicPosts' => $publicPosts,
                 ],
             ]);
@@ -150,6 +152,53 @@ class DashboardController
         }
 
         return $saved;
+    }
+
+    private function getSavedPosts(int $userId): array
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT
+                sp.post_id,
+                sp.created_at AS saved_at,
+                cp.title,
+                cp.description,
+                cp.cover_image,
+                u.display_name AS author_name,
+                t.trip_data,
+                COUNT(DISTINCT pl.id) AS likes,
+                COUNT(DISTINCT pc.id) AS comments
+             FROM saved_posts sp
+             INNER JOIN community_posts cp ON cp.id = sp.post_id AND cp.status = 'public'
+             INNER JOIN users u ON u.id = cp.user_id
+             INNER JOIN trips t ON t.id = cp.trip_id
+             LEFT JOIN post_likes pl ON pl.post_id = cp.id
+             LEFT JOIN post_comments pc ON pc.post_id = cp.id
+             WHERE sp.user_id = :user_id
+             GROUP BY sp.post_id, sp.created_at, cp.title, cp.description, cp.cover_image,
+                      u.display_name, t.trip_data
+             ORDER BY sp.created_at DESC"
+        );
+        $stmt->execute(['user_id' => $userId]);
+
+        return array_map(fn ($post) => $this->formatSavedPost($post), $stmt->fetchAll());
+    }
+
+    private function formatSavedPost(array $post): array
+    {
+        $tripData = json_decode((string) ($post['trip_data'] ?? '{}'), true) ?: [];
+        $meta = is_array($tripData['meta'] ?? null) ? $tripData['meta'] : [];
+
+        return [
+            'id'          => (int) $post['post_id'],
+            'title'       => (string) ($post['title'] ?? 'Untitled post'),
+            'description' => (string) ($post['description'] ?? ''),
+            'coverImage'  => (string) ($post['cover_image'] ?? ''),
+            'authorName'  => (string) ($post['author_name'] ?? 'Traveller'),
+            'country'     => (string) ($meta['country'] ?? 'Nordic'),
+            'likes'       => (int) ($post['likes'] ?? 0),
+            'comments'    => (int) ($post['comments'] ?? 0),
+            'savedAt'     => $post['saved_at'] ?? null,
+        ];
     }
 
     private function getDestinationDetailsBySlug(array $slugs): array

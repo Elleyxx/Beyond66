@@ -50,9 +50,17 @@
     </div>
 
     <div v-else class="empty-panel">
-      <v-icon size="34">mdi-map-plus</v-icon>
-      <p>{{ t('profilePage.journeys.emptyText') }}</p>
-      <v-btn to="/trip-planner" color="primary" variant="flat">{{ t('profilePage.journeys.emptyButton') }}</v-btn>
+      <div class="empty-icon-wrap">
+        <i class="bi bi-map"></i>
+      </div>
+      <div class="empty-text">
+        <h3>{{ t('profilePage.journeys.emptyTitle') }}</h3>
+        <p>{{ t('profilePage.journeys.emptyText') }}</p>
+      </div>
+      <RouterLink to="/trip-planner" class="empty-btn">
+        {{ t('profilePage.journeys.emptyButton') }}
+        <i class="bi bi-arrow-right"></i>
+      </RouterLink>
     </div>
   </section>
 </template>
@@ -193,22 +201,61 @@ function openCommunityPost(journey) {
 }
 
 .empty-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 64px 32px;
+  border: 2px dashed rgba(var(--v-theme-primary), 0.22);
+  border-radius: 28px;
+  background: rgba(var(--v-theme-primary), 0.03);
+  text-align: center;
+}
+
+.empty-icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
   display: grid;
-  justify-items: start;
-  gap: 14px;
-  padding: 26px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
-  border-radius: 8px;
-  background: rgb(var(--v-theme-surface));
-}
-
-.empty-panel .v-icon {
+  place-items: center;
+  background: rgba(var(--v-theme-primary), 0.1);
   color: rgb(var(--v-theme-primary));
+  font-size: 2rem;
 }
 
-.empty-panel p {
+.empty-text h3 {
+  margin: 0 0 8px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+}
+
+.empty-text p {
   margin: 0;
-  opacity: 0.72;
+  opacity: 0.62;
+  max-width: 360px;
+  line-height: 1.6;
+}
+
+.empty-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 26px;
+  color: rgb(var(--v-theme-background));
+  background: rgb(var(--v-theme-primary));
+  font-size: 0.88rem;
+  font-weight: 850;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.empty-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 900px) {

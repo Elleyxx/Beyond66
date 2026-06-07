@@ -1,59 +1,72 @@
 <template>
   <section class="section-block">
     <div class="section-title">
-      <p>{{ t('profilePage.saved.eyebrow') }}</p>
-      <h2>{{ t('profilePage.saved.title') }}</h2>
+      <p>{{ t('profilePage.savedPosts.eyebrow') }}</p>
+      <h2>{{ t('profilePage.savedPosts.title') }}</h2>
     </div>
 
-    <div v-if="destinations.length" class="destination-grid">
+    <div v-if="posts.length" class="posts-grid">
       <article
-        v-for="place in destinations"
-        :key="place.slug || place.name"
-        class="destination-card"
+        v-for="post in posts"
+        :key="post.id"
+        class="post-card"
         role="link"
         tabindex="0"
-        @click="goToDestination(place)"
-        @keydown.enter="goToDestination(place)"
+        @click="router.push(`/community/${post.id}`)"
+        @keydown.enter="router.push(`/community/${post.id}`)"
       >
         <button
           type="button"
           class="unsave-btn"
-          :aria-label="`Remove ${place.name} from saved`"
+          :aria-label="`Remove ${post.title} from saved`"
           title="Remove from saved"
-          @click.stop="$emit('unsave', place.slug)"
+          @click.stop="$emit('unsave', post.id)"
         >
           <i class="bi bi-bookmark-fill"></i>
         </button>
 
         <div class="card-image">
-          <img :src="place.image" :alt="place.name" />
+          <img v-if="post.coverImage" :src="resolveAssetUrl(post.coverImage)" :alt="post.title" />
+          <div v-else class="image-placeholder">{{ post.country }}</div>
         </div>
 
         <div class="card-body">
-          <p class="card-country">{{ place.country }}</p>
-          <h3>{{ place.name }}</h3>
-          <small v-if="place.savedAt" class="card-date">
+          <div class="author-row">
+            <div class="avatar">{{ authorInitial(post) }}</div>
+            <span class="author-name">{{ post.authorName }}</span>
+          </div>
+
+          <p class="card-country">{{ post.country }}</p>
+          <h3>{{ post.title }}</h3>
+          <p class="card-desc">{{ post.description }}</p>
+
+          <div class="card-stats">
+            <span><i class="bi bi-heart"></i> {{ post.likes }}</span>
+            <span><i class="bi bi-chat"></i> {{ post.comments }}</span>
+          </div>
+
+          <small v-if="post.savedAt" class="card-date">
             <i class="bi bi-clock"></i>
-            {{ t('profilePage.saved.savedAt', { date: formatDate(place.savedAt) }) }}
+            {{ t('profilePage.savedPosts.savedAt', { date: formatDate(post.savedAt) }) }}
           </small>
         </div>
 
         <div class="card-hover-cta">
-          <span>{{ t('profilePage.saved.viewCta') }} <i class="bi bi-arrow-right"></i></span>
+          <span>{{ t('profilePage.savedPosts.viewCta') }} <i class="bi bi-arrow-right"></i></span>
         </div>
       </article>
     </div>
 
     <div v-else class="empty-panel">
       <div class="empty-icon-wrap">
-        <i class="bi bi-geo-alt"></i>
+        <i class="bi bi-bookmark-heart"></i>
       </div>
       <div class="empty-text">
-        <h3>{{ t('profilePage.saved.emptyTitle') }}</h3>
-        <p>{{ t('profilePage.saved.emptyText') }}</p>
+        <h3>{{ t('profilePage.savedPosts.emptyTitle') }}</h3>
+        <p>{{ t('profilePage.savedPosts.emptyText') }}</p>
       </div>
-      <RouterLink to="/country/norway" class="empty-btn">
-        {{ t('profilePage.saved.emptyButton') }}
+      <RouterLink to="/community" class="empty-btn">
+        {{ t('profilePage.savedPosts.emptyButton') }}
         <i class="bi bi-arrow-right"></i>
       </RouterLink>
     </div>
@@ -63,34 +76,19 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { resolveAssetUrl } from '@/services/apiBase'
 
 const { t } = useI18n()
+const router = useRouter()
 
 defineProps({
-  destinations: {
-    type: Array,
-    required: true,
-  },
+  posts: { type: Array, required: true },
 })
 
 defineEmits(['unsave'])
 
-const router = useRouter()
-
-const countryRouteMap = {
-  norway: '/country/norway',
-  sweden: '/country/sweden',
-  finland: '/country/finland',
-  iceland: '/country/iceland',
-  denmark: '/country/denmark',
-}
-
-function goToDestination(place) {
-  const countrySlug = (place.slug || '').split('-')[0]
-  const route = countryRouteMap[countrySlug]
-  if (route) {
-    router.push({ path: route, hash: '#country-destination' })
-  }
+function authorInitial(post) {
+  return String(post.authorName || 'T').slice(0, 1).toUpperCase()
 }
 
 function formatDate(value) {
@@ -120,31 +118,32 @@ function formatDate(value) {
   font-size: 2.3rem;
 }
 
-.destination-grid {
+/* Grid — same 3-column as saved destinations */
+.posts-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 
-/* Card — matches CountryLayout destination card */
-.destination-card {
+/* Card */
+.post-card {
   position: relative;
   border-radius: 28px;
   overflow: hidden;
   background: rgba(var(--v-theme-surface), 0.96);
-  border: 1px solid rgba(var(--v-theme-text), 0.12);
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   outline: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.destination-card:hover,
-.destination-card:focus-visible {
+.post-card:hover,
+.post-card:focus-visible {
   transform: translateY(-6px);
-  box-shadow: 0 18px 36px rgba(var(--v-theme-background), 0.18);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.14);
 }
 
-/* Unsave bookmark button */
+/* Unsave button */
 .unsave-btn {
   position: absolute;
   top: 14px;
@@ -152,17 +151,16 @@ function formatDate(value) {
   z-index: 4;
   width: 38px;
   height: 38px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.38);
+  border: none;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: rgb(var(--v-theme-background));
   background: rgb(var(--v-theme-primary));
-  border-color: rgb(var(--v-theme-primary));
   backdrop-filter: blur(10px);
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .unsave-btn:hover {
@@ -172,8 +170,7 @@ function formatDate(value) {
 
 /* Image */
 .card-image {
-  position: relative;
-  height: 230px;
+  height: 210px;
   overflow: hidden;
 }
 
@@ -184,13 +181,48 @@ function formatDate(value) {
   transition: transform 0.45s ease;
 }
 
-.destination-card:hover .card-image img {
+.post-card:hover .card-image img {
   transform: scale(1.06);
 }
 
-/* Text body */
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  color: rgb(var(--v-theme-primary));
+  background: rgba(var(--v-theme-primary), 0.1);
+}
+
+/* Body */
 .card-body {
-  padding: 20px 22px 18px;
+  padding: 18px 22px 14px;
+}
+
+.author-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: rgb(var(--v-theme-background));
+  background: rgb(var(--v-theme-primary));
+  flex-shrink: 0;
+}
+
+.author-name {
+  font-size: 0.82rem;
+  opacity: 0.7;
 }
 
 .card-country {
@@ -203,9 +235,39 @@ function formatDate(value) {
 }
 
 .card-body h3 {
-  margin: 0 0 8px;
-  font-size: 1.2rem;
+  margin: 0 0 6px;
+  font-size: 1.15rem;
   line-height: 1.25;
+}
+
+.card-desc {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  opacity: 0.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.card-stats span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgb(var(--v-theme-primary));
+}
+
+.card-stats i {
+  font-size: 0.82rem;
 }
 
 .card-date {
@@ -213,18 +275,12 @@ function formatDate(value) {
   align-items: center;
   gap: 5px;
   font-size: 0.76rem;
-  opacity: 0.56;
+  opacity: 0.5;
 }
 
-.card-date i {
-  font-size: 0.72rem;
-}
-
-/* Hover CTA bar that slides up */
+/* Hover CTA */
 .card-hover-cta {
-  padding: 0 22px 20px;
-  display: flex;
-  align-items: center;
+  padding: 0 22px 18px;
 }
 
 .card-hover-cta span {
@@ -239,8 +295,8 @@ function formatDate(value) {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.destination-card:hover .card-hover-cta span,
-.destination-card:focus-visible .card-hover-cta span {
+.post-card:hover .card-hover-cta span,
+.post-card:focus-visible .card-hover-cta span {
   opacity: 1;
   transform: translateY(0);
 }
@@ -305,13 +361,13 @@ function formatDate(value) {
 }
 
 @media (max-width: 1100px) {
-  .destination-grid {
+  .posts-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 700px) {
-  .destination-grid {
+  .posts-grid {
     grid-template-columns: 1fr;
   }
 }

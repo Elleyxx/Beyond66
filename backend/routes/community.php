@@ -21,6 +21,11 @@ if (preg_match('#^/api/community/posts/(\d+)/save$#', $uri, $matches) && $method
     return;
 }
 
+if (preg_match('#^/api/community/posts/(\d+)/save$#', $uri, $matches) && $method === 'DELETE') {
+    $controller->unsavePost((int) $matches[1]);
+    return;
+}
+
 if (preg_match('#^/api/community/posts/(\d+)$#', $uri, $matches) && $method === 'PATCH') {
     $controller->updatePost((int) $matches[1]);
     return;

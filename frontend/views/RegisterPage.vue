@@ -314,7 +314,25 @@ label {
 }
 
 .field :deep(input) {
-  color: rgb(var(--v-theme-text));
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.field :deep(input::placeholder) {
+  color: rgba(0, 0, 0, 0.38);
+}
+
+.field :deep(.v-field__outline) {
+  --v-field-border-opacity: 0.32;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.field :deep(.v-field__append-inner .v-icon) {
+  color: rgba(0, 0, 0, 0.55);
+  opacity: 1;
+}
+
+.field :deep(.v-field__append-inner .v-icon:hover) {
+  color: rgba(0, 0, 0, 0.85);
 }
 
 .register-btn {

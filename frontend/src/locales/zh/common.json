@@ -658,7 +658,8 @@
       "actionAddDiary": "添加日记",
       "actionEditDiary": "编辑日记",
       "days": "{count} 天",
-      "emptyText": "还没有旅程。创建规划开始填写你的护照。",
+      "emptyTitle": "暂无旅程",
+      "emptyText": "创建规划，开始填写你的北欧护照，开启属于你的北欧冒险。",
       "emptyButton": "创建旅程"
     },
     "saved": {
@@ -666,8 +667,18 @@
       "title": "难忘的地方",
       "savedAt": "已保存 {date}",
       "viewCta": "查看目的地",
-      "emptyText": "还没有保存的目的地。在国家页面收藏景点，它们会出现在这里。",
+      "emptyTitle": "暂无收藏地点",
+      "emptyText": "在国家页面收藏目的地，它们将在这里集中展示，方便随时查看。",
       "emptyButton": "探索地点"
+    },
+    "savedPosts": {
+      "eyebrow": "已收藏帖子",
+      "title": "您收藏的社区帖子",
+      "savedAt": "收藏于 {date}",
+      "viewCta": "查看帖子",
+      "emptyTitle": "暂无收藏帖子",
+      "emptyText": "浏览社区，收藏激发您下次北欧旅行灵感的帖子。",
+      "emptyButton": "探索社区"
     },
     "diary": {
       "eyebrow": "旅行日记",

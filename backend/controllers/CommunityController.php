@@ -60,6 +60,19 @@ class CommunityController
         ]);
     }
 
+    public function unsavePost(int $postId): void
+    {
+        $userId = $this->currentUserId();
+        if (!$userId) {
+            Response::json(['success' => false, 'message' => 'Authentication required'], 401);
+            return;
+        }
+
+        $this->community->unsavePost($postId, $userId);
+
+        Response::json(['success' => true, 'message' => 'Post unsaved']);
+    }
+
     public function updatePost(int $postId): void
     {
         $userId = $this->currentUserId();
