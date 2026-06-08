@@ -90,6 +90,14 @@ Then open **http://127.0.0.1:5173** in your browser.
 
 ---
 
+## AI Trip Planner — Gemini API Key
+
+The AI trip planner feature requires a Gemini API key. The key is not included in the repository for security reasons.
+
+To enable it, open `backend/.env` and replace `your_gemini_api_key_here` with the key provided separately by the student. The rest of the site works fully without it — only the AI suggestion feature inside the planner will be unavailable.
+
+---
+
 ## Troubleshooting
 
 **MySQL connection failed** — Make sure MySQL is started in XAMPP Control Panel.
